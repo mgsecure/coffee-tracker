@@ -25,7 +25,6 @@ export default function Coffees() {
                 <FilterDisplayAdvanced/>
             </div>
 
-
             <div style={{maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto'}}>
                 <Grid container spacing={'6px'} columns={{xs: 1, sm: 1, md: 1}}
                       style={{marginTop: 0, marginLeft: 0}}>

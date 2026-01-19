@@ -9,8 +9,8 @@ import LockIcon from '@mui/icons-material/Lock'
 import IconButton from '@mui/material/IconButton'
 import {useTheme} from '@mui/material/styles'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
+import PauseIcon from '@mui/icons-material/Pause'
 import ReplayIcon from '@mui/icons-material/Replay'
-import StopIcon from '@mui/icons-material/Stop'
 import GpsFixedIcon from '@mui/icons-material/GpsFixed'
 import CancelIcon from '@mui/icons-material/Cancel'
 
@@ -31,8 +31,6 @@ export default function YieldCalculatorButton() {
 
     const handleFormChange = useCallback((event) => {
         const {name, value} = event.target
-
-        console.log('handleFormChange', {name, value})
         const valueNum = parseFloat(value.replace(/[^0-9.]/g, ''))
         const doseNum = parseInt(form.dose)
         const yieldNum = parseInt(form.yield)
@@ -224,7 +222,7 @@ export default function YieldCalculatorButton() {
                                         backgroundColor: alpha(theme.palette.primary.main, 0.2),
                                         marginTop: 10, marginRight: 15
                                     }}>
-                                    {running ? <StopIcon/> : <PlayArrowIcon/>}
+                                    {running ? <PauseIcon/> : <PlayArrowIcon/>}
                                 </IconButton>
                                 <IconButton onClick={reset} disabled={!duration || running}
                                             size='large'

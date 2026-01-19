@@ -7,6 +7,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import BrewForm from '../brews/BrewForm.jsx'
 import CoffeeForm from '../coffees/CoffeeForm.jsx'
 import FilterContext from '../context/FilterContext.jsx'
+import LogRender from '../misc/LogRender.jsx'
 
 export default function ItemDrawer({item, open, setOpen, type = 'Item', action = 'edit', defaultValue}) {
     const {isMobile} = useWindowSize()
@@ -33,47 +34,50 @@ export default function ItemDrawer({item, open, setOpen, type = 'Item', action =
                     }
                 }}
                 sx={{backgroundColor: '#00000022'}}>
+                {open &&
+                    <>
+                        <LogRender info={'drawer'}/>
+                        <div style={{
+                            display: 'flex',
+                            padding: '15px 15px',
+                            height: 64,
+                            backgroundColor: theme.palette.card?.add
+                        }} onClick={() => setOpen(false)}>
 
-                <div style={{
-                    display: 'flex',
-                    padding: '15px 15px',
-                    height: 64,
-                    backgroundColor: theme.palette.card?.add
-                }} onClick={() => setOpen(false)}>
+                            <div
+                                style={{
+                                    flexGrow: 1,
+                                    fontSize: '1.5rem',
+                                    fontWeight: 500,
+                                    color: theme.palette.text.primary
+                                }}>
+                                {`${item
+                                    ? action === 'clone'
+                                        ? 'Edit New Copy of'
+                                        : 'Edit'
+                                    : 'Add'} ${type}`}
+                            </div>
+                            <div onClick={() => setOpen(false)}>
+                                <HighlightOffIcon sx={{cursor: 'pointer', color: theme.palette.text.primary}}/>
+                            </div>
+                        </div>
 
-                    <div
-                        style={{
-                            flexGrow: 1,
-                            fontSize: '1.5rem',
-                            fontWeight: 500,
-                            color: theme.palette.text.primary
-                        }}>
-                        {`${item
-                            ? action === 'clone'
-                                ? 'Edit New Copy of'
-                                : 'Edit'
-                            : 'Add'} ${type}`}
-                    </div>
-                    <div onClick={() => setOpen(false)}>
-                        <HighlightOffIcon sx={{cursor: 'pointer', color: theme.palette.text.primary}}/>
-                    </div>
-                </div>
-
-                {(type === 'Equipment' || type === 'Gear') &&
-                    <EquipmentForm machine={item} action={action} open={open} setOpen={setOpen} type={type}/>
+                        {(type.toLowerCase() === 'equipment' || type.toLowerCase() === 'gear') &&
+                            <EquipmentForm machine={item} action={action} open={open} setOpen={setOpen} type={type}/>
+                        }
+                        {type.toLowerCase() === 'bean' &&
+                            'Ooops.'
+                        }
+                        {type.toLowerCase() === 'coffee' &&
+                            <CoffeeForm coffee={item} open={open} setOpen={setOpen} type={type}/>
+                        }
+                        {type.toLowerCase() === 'brew' &&
+                            <BrewForm entry={item} action={action} open={open} setOpen={setOpen} type={type}
+                                      coffee={defaultValue}/>
+                        }
+                    </>
                 }
-                {type === 'Bean' &&
-                    'Ooops.'
-                }
-                {type === 'Coffee' &&
-                    <CoffeeForm coffee={item} open={open} setOpen={setOpen} type={type}/>
-                }
-                {type === 'Brew' &&
-                    <BrewForm entry={item} action={action} open={open} setOpen={setOpen} type={type} coffee={defaultValue}/>
-                }
-
             </Drawer>
-
         </React.Fragment>
     )
 }

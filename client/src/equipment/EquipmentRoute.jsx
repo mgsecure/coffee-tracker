@@ -12,7 +12,7 @@ function EquipmentRoute() {
 
     return (
         <FilterProvider filterFields={equipmentFilterFields}>
-            <DataProvider allEntries={userProfile?.equipment} profile={userProfile}>
+            <DataProvider allEntries={userProfile?.equipment || []} profile={userProfile}>
                 <EquipmentPage/>
             </DataProvider>
         </FilterProvider>

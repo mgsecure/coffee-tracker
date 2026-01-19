@@ -5,15 +5,18 @@ import ItemDrawer from './ItemDrawer.jsx'
 import {useTheme} from '@mui/material/styles'
 
 export default function AddNewItemCard({label, type = 'Entry', count = 0, defaultValue}) {
+    const theme = useTheme()
     const [open, setOpen] = useState(false)
     const handleCardClick = useCallback(() => {
         setOpen(true)
     }, [])
 
-    const theme = useTheme()
-
     return (
         <React.Fragment>
+
+            <ItemDrawer open={open} setOpen={setOpen} type={type} defaultValue={defaultValue}
+                        action={'add'}/>
+
             <Card
                 onClick={handleCardClick} sx={{}}
                 style={{
@@ -23,7 +26,6 @@ export default function AddNewItemCard({label, type = 'Entry', count = 0, defaul
                     placeItems: 'center',
                     cursor: 'pointer',
                 }}>
-
                 <CardContent style={{display: 'flex', placeContent: 'center', width: '100%', padding: 15}}>
                     <div style={{
                         fontSize: '1.1rem',
@@ -35,8 +37,6 @@ export default function AddNewItemCard({label, type = 'Entry', count = 0, defaul
                 </CardContent>
 
             </Card>
-
-            <ItemDrawer open={open} setOpen={setOpen} type={type} defaultValue={defaultValue} action={'add'}/>
 
         </React.Fragment>
 

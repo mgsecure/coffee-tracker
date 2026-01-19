@@ -3,9 +3,11 @@ import EquipmentCard from './EquipmentCard.jsx'
 import AddNewItemCard from '../profile/AddNewItemCard.jsx'
 import Grid from '@mui/material/Grid'
 import DataContext from '../context/DataContext.jsx'
+import NoMatchingEntriesCard from '../profile/NoMatchingEntriesCard.jsx'
+import {motion, AnimatePresence} from 'framer-motion'
 
 export default function Equipment() {
-    const {visibleEntries = []} = useContext(DataContext)
+    const {visibleEntries = [], allEntriesCount} = useContext(DataContext)
     const [expanded, setExpanded] = useState(undefined)
     const defExpanded = useDeferredValue(expanded)
 
@@ -20,13 +22,31 @@ export default function Equipment() {
 
             <div style={{maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto'}}>
 
-                    {visibleEntries?.length > 0 &&
-                        <Grid container spacing={'6px'} columns={{xs: 4, sm: 8, md: 12}}
-                              style={{margin: '0px 4px'}}>
-                            {[...visibleEntries]
+                <Grid container spacing={'6px'} columns={1}
+                      style={{margin: '0px 4px'}}>
+                    <AnimatePresence>
+
+                        <Grid size={{xs: 4, sm: 4, md: 4}} key={'add-item-card'}>
+                            {visibleEntries?.length === 0
+                                ? <NoMatchingEntriesCard type={'Gear'} entriesCount={visibleEntries.length}
+                                                         allEntriesCount={allEntriesCount}/>
+                                : <AddNewItemCard type={'Gear'} count={visibleEntries.length}/>
+                            }
+                        </Grid>
+                        {visibleEntries?.length > 0 &&
+                            [...visibleEntries]
                                 .filter(x => x)
                                 .map((machine) =>
-                                    <Grid size={{xs: 12, sm: 12, md: 12}} key={machine.id}>
+                                    <Grid
+                                        size={{xs: 4, sm: 4, md: 4}}
+                                        key={machine.id}
+                                          component={motion.div}
+                                          layout
+                                          initial={{opacity: 0}}
+                                          animate={{opacity: 1}}
+                                          exit={{opacity: 0}}
+                                          transition={{type: 'spring', stiffness: 400, damping: 40}}
+                                    >
                                         <EquipmentCard
                                             entry={machine}
                                             expanded={machine.id === defExpanded}
@@ -34,13 +54,8 @@ export default function Equipment() {
                                         />
                                     </Grid>
                                 )}
-                            <Grid size={12} key={'add-machine-card'}>
-                                <AddNewItemCard type={'Gear'} count={visibleEntries.length}/>
-                            </Grid>
-                        </Grid>
-                    }
-
-                <div style={{display: 'block', clear: 'both'}}/>
+                    </AnimatePresence>
+                </Grid>
 
             </div>
         </div>
