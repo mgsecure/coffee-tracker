@@ -1,4 +1,4 @@
-# React Boilerplate (Client + Server + Shared)
+# Coffee Track (Client + Server + Shared)
 
 A modern Yarn 4 monorepo starter with:
 - client: Vite + React 19 + MUI
@@ -20,9 +20,9 @@ If you don't have Node, install from https://nodejs.org or via a version manager
 
 ### 1) Clone this repository
 - Using HTTPS:
-  - `git clone https://github.com/<your-org-or-user>/react-boilerplate.git`
+  - `git clone https://github.com/mgsecure/coffee-tracker.git`
 - Or with SSH:
-  - `git clone git@github.com:<your-org-or-user>/react-boilerplate.git`
+  - `git clone git@github.com:mgsecure/coffee-tracker.git`
 
 Then change into the project directory:
 - `cd react-boilerplate`
@@ -30,7 +30,7 @@ Then change into the project directory:
 ### Alternative: Start from an empty directory and add this as a remote
 If you created a new, empty repo locally:
 - `git init -b main`
-- `git remote add origin https://github.com/<your-org-or-user>/<your-repo>.git`
+- `git remote add origin https://github.com/mgsecure/coffee-tracker.git`
 - Add your first commit:
   - `git add -A`
   - `git commit -m "chore: initial commit from react boilerplate"`

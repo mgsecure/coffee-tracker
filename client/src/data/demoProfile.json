@@ -1,1027 +1,1210 @@
 {
-  "test": "yes",
-  "equipment": [
-    {
-      "type": "Grinder",
-      "year": "2024",
-      "modifiedAt": "2026-01-05 21:15:24",
-      "id": "2125fe5e",
-      "addedAt": "2025-12-30 06:46:32",
-      "model": "Encore ESP Pro",
-      "notes": "notes here!",
-      "fullName": "Baratza Encore ESP Pro",
-      "brand": "Baratza"
-    },
-    {
-      "addedAt": "2026-01-01 18:56:37",
-      "type": "Espresso",
-      "fullName": "9Barista Mk.2",
-      "model": "Mk.2",
-      "year": "2025",
-      "id": "0a3a5e2a",
-      "modifiedAt": "2026-01-08 18:19:28",
-      "brand": "9Barista"
-    },
-    {
-      "model": "Switch",
-      "modifiedAt": "2026-01-08 18:20:06",
-      "addedAt": "2026-01-05 09:28:26",
-      "altModel": false,
-      "fullName": "Hario Switch",
-      "id": "e_92a6f08f",
-      "year": "2026",
-      "brand": "Hario",
-      "altBrand": false,
-      "type": "Pour-over"
-    },
-    {
-      "model": "Linea Mini",
-      "brand": "La Marzocco",
-      "id": "e_1293e4a1",
-      "fullName": "La Marzocco Linea Mini",
-      "addedAt": "2026-01-13 20:16:57",
-      "modifiedAt": "2026-01-13 20:16:57",
-      "type": "Espresso"
-    },
-    {
-      "model": "Duo-Temp Pro",
-      "addedAt": "2026-01-14 08:39:56",
-      "id": "e_d1dada6a",
-      "fullName": "Breville Duo-Temp Pro",
-      "brand": "Breville",
-      "type": "Espresso",
-      "modifiedAt": "2026-01-14 08:39:56"
-    }
-  ],
-  "yieldCalculator": {
-    "yield": 36,
-    "ratio": "2",
-    "dose": 18
-  },
+  "username": "mgsecure",
   "brews": [
     {
-      "coffee": {
-        "id": "c_6bfec1be",
-        "roasterName": "The Boy & The Bear",
-        "name": "Light & Dark",
-        "fullName": "Light & Dark (The Boy & The Bear)"
-      },
-      "addedAt": "2026-01-13 10:58:52",
+      "yield": "220",
+      "doseUnit": "g",
       "machine": {
-        "model": "Switch",
+        "id": "e_92a6f08f",
         "fullName": "Hario Switch",
         "brand": "Hario",
-        "id": "e_92a6f08f"
+        "model": "Switch"
       },
-      "dose": "15",
-      "yield": "220",
-      "fullName": "Light & Dark (The Boy & The Bear)",
-      "temperature": "95",
-      "temperatureUnit": "°C",
-      "brewTime": "2026-01-13 00:01:45",
-      "yieldUnit": "g",
       "brewedAt": "2026-01-13 10:58:52",
-      "modifiedAt": "2026-01-13 15:34:25",
-      "doseUnit": "g",
+      "tastingNotes": "s",
+      "yieldUnit": "g",
+      "dose": "15",
+      "temperature": "95",
+      "id": "br_0002",
+      "fullName": "Light & Dark (The Boy & The Bear)",
+      "coffee": {
+        "roasterName": "The Boy & The Bear",
+        "fullName": "Light & Dark (The Boy & The Bear)",
+        "name": "Light & Dark",
+        "id": "c_6bfec1be"
+      },
+      "addedAt": "2026-01-13 10:58:52",
+      "flagged": "star",
+      "modifiedAt": "2026-01-18 16:12:13",
+      "recipePrep": "30g / 130g / 220g (all open)",
       "grinder": {
         "id": "2125fe5e",
-        "brand": "Baratza",
+        "model": "Encore ESP Pro",
         "fullName": "Baratza Encore ESP Pro",
-        "model": "Encore ESP Pro"
+        "brand": "Baratza"
       },
-      "recipePrep": "30g / 130g / 220g (all open)",
       "grinderSetting": "50",
-      "id": "br_0002"
+      "temperatureUnit": "°C",
+      "brewTime": "2026-01-13 00:01:45"
     },
     {
       "brewedAt": "2026-01-13 13:00:50",
-      "id": "br_c59606a7",
-      "modifiedAt": "2026-01-13 15:55:17",
-      "grinder": {
-        "fullName": "Baratza Encore ESP Pro",
-        "id": "2125fe5e",
-        "brand": "Baratza",
-        "model": "Encore ESP Pro"
-      },
-      "temperature": "93",
       "doseUnit": "g",
+      "fullName": "Sugar Bee Espresso (Tony's Coffee)",
+      "yield": "36",
+      "modifiedAt": "2026-01-13 15:55:17",
       "addedAt": "2026-01-13 12:52:30",
+      "temperature": "93",
+      "machine": {
+        "id": "0a3a5e2a",
+        "brand": "9Barista",
+        "fullName": "9Barista Mk.2",
+        "model": "Mk.2"
+      },
       "coffee": {
-        "fullName": "Sugar Bee Espresso (Tony's Coffee)",
         "id": "c_eca02ef5",
+        "fullName": "Sugar Bee Espresso (Tony's Coffee)",
         "roasterName": "Tony's Coffee",
         "name": "Sugar Bee Espresso"
       },
-      "brewTime": "2026-01-13 00:00:26",
+      "dose": "18",
+      "grinder": {
+        "brand": "Baratza",
+        "model": "Encore ESP Pro",
+        "fullName": "Baratza Encore ESP Pro",
+        "id": "2125fe5e"
+      },
+      "temperatureUnit": "°C",
       "grinderSetting": "54",
       "yieldUnit": "g",
-      "dose": "18",
-      "machine": {
-        "brand": "9Barista",
-        "fullName": "9Barista Mk.2",
-        "id": "0a3a5e2a",
-        "model": "Mk.2"
-      },
-      "fullName": "Sugar Bee Espresso (Tony's Coffee)",
-      "temperatureUnit": "°C",
-      "yield": "36"
+      "id": "br_c59606a7",
+      "brewTime": "2026-01-13 00:00:26"
     },
     {
+      "recipePrep": "",
+      "brewTime": "2026-01-13 00:00:27",
+      "grinder": {
+        "model": "Encore ESP Pro",
+        "id": "2125fe5e",
+        "fullName": "Baratza Encore ESP Pro",
+        "brand": "Baratza"
+      },
+      "temperature": "93",
+      "dose": "18",
+      "grinderSetting": "28",
+      "fullName": "Sugar Bee Espresso (Tony's Coffee)",
+      "doseUnit": "g",
+      "temperatureUnit": "°C",
+      "brewedAt": "2026-01-13 13:04:22",
+      "yieldUnit": "g",
+      "addedAt": "2026-01-13 12:52:30",
+      "id": "br_850dc5b6",
+      "coffee": {
+        "fullName": "Sugar Bee Espresso (Tony's Coffee)",
+        "name": "Sugar Bee Espresso",
+        "id": "c_eca02ef5",
+        "roasterName": "Tony's Coffee"
+      },
       "yield": "40",
-      "recipePrep": "wdt",
+      "modifiedAt": "2026-01-18 16:26:41",
+      "flagged": true,
+      "machine": {
+        "id": "0a3a5e2a",
+        "model": "Mk.2",
+        "fullName": "9Barista Mk.2",
+        "brand": "9Barista"
+      }
+    },
+    {
       "grinder": {
         "model": "Encore ESP Pro",
         "brand": "Baratza",
         "fullName": "Baratza Encore ESP Pro",
         "id": "2125fe5e"
       },
-      "machine": {
-        "fullName": "9Barista Mk.2",
-        "model": "Mk.2",
-        "id": "0a3a5e2a",
-        "brand": "9Barista"
-      },
-      "brewTime": "2026-01-13 00:00:27",
-      "yieldUnit": "g",
-      "grinderSetting": "28",
-      "doseUnit": "g",
-      "dose": "18",
-      "flagged": true,
-      "temperatureUnit": "°C",
-      "coffee": {
-        "name": "Sugar Bee Espresso",
-        "roasterName": "Tony's Coffee",
-        "id": "c_eca02ef5",
-        "fullName": "Sugar Bee Espresso (Tony's Coffee)"
-      },
-      "id": "br_850dc5b6",
-      "addedAt": "2026-01-13 12:52:30",
-      "modifiedAt": "2026-01-13 16:38:44",
-      "temperature": "93",
-      "brewedAt": "2026-01-13 13:04:22",
-      "fullName": "Sugar Bee Espresso (Tony's Coffee)"
-    },
-    {
-      "doseUnit": "g",
-      "addedAt": "2026-01-13 20:10:22",
-      "dose": "18",
-      "grinderSetting": "31",
-      "temperature": "93",
-      "modifiedAt": "2026-01-13 20:18:58",
       "id": "br_10fa7779",
-      "temperatureUnit": "°C",
-      "brewedAt": "2026-01-13 20:10:22",
-      "machine": {
-        "fullName": "La Marzocco Linea Mini",
-        "id": "e_1293e4a1",
-        "brand": "La Marzocco",
-        "model": "Linea Mini"
-      },
-      "yieldUnit": "g",
+      "doseUnit": "g",
       "coffee": {
         "roasterName": "Andante",
-        "fullName": "Espresso (Andante)",
         "name": "Espresso",
+        "fullName": "Espresso (Andante)",
         "id": "c_c079258d"
       },
-      "grinder": {
-        "brand": "Baratza",
-        "model": "Encore ESP Pro",
-        "fullName": "Baratza Encore ESP Pro",
-        "id": "2125fe5e"
-      },
+      "addedAt": "2026-01-13 20:10:22",
+      "brewedAt": "2026-01-13 20:10:22",
+      "tastingNotes": "s",
+      "dose": "18",
+      "fullName": "Espresso (Andante)",
+      "temperature": "93",
       "yield": "36",
-      "fullName": "Espresso (Andante)"
+      "grinderSetting": "31",
+      "modifiedAt": "2026-01-14 09:40:18",
+      "yieldUnit": "g",
+      "machine": {
+        "brand": "La Marzocco",
+        "id": "e_1293e4a1",
+        "fullName": "La Marzocco Linea Mini",
+        "model": "Linea Mini"
+      },
+      "temperatureUnit": "°C"
     },
     {
-      "fullName": "Ethipoian Gedeb (Canyon Coffee)",
+      "temperatureUnit": "°C",
       "dose": "15",
-      "yield": "220",
-      "modifiedAt": "2026-01-14 07:33:57",
-      "addedAt": "2026-01-13 20:50:39",
+      "recipePrep": "30g bloom (closed) / 130g / 220g (open)",
       "tastingNotes": "s",
+      "machine": {
+        "fullName": "Hario Switch",
+        "model": "Switch",
+        "id": "e_92a6f08f",
+        "brand": "Hario"
+      },
+      "grinderSetting": "50",
+      "brewTime": "2026-01-14 00:03:20",
+      "yield": "220",
       "coffee": {
-        "fullName": "Ethipoian Gedeb (Canyon Coffee)",
         "name": "Ethipoian Gedeb",
+        "fullName": "Ethipoian Gedeb (Canyon Coffee)",
         "roasterName": "Canyon Coffee",
         "id": "c_ad42fb73"
       },
-      "recipePrep": "30g bloom (closed) / 130g / 220g (open)",
       "brewedAt": "2026-01-13 20:50:39",
-      "id": "br_a8e0edbf",
-      "grinder": {
-        "id": "2125fe5e",
-        "model": "Encore ESP Pro",
-        "brand": "Baratza",
-        "fullName": "Baratza Encore ESP Pro"
-      },
-      "yieldUnit": "g",
+      "fullName": "Ethipoian Gedeb (Canyon Coffee)",
+      "temperature": "95",
       "doseUnit": "g",
-      "grinderSetting": "50",
-      "machine": {
-        "brand": "Hario",
-        "id": "e_92a6f08f",
-        "fullName": "Hario Switch",
-        "model": "Switch"
+      "modifiedAt": "2026-01-14 09:51:58",
+      "addedAt": "2026-01-13 20:50:39",
+      "grinder": {
+        "brand": "Baratza",
+        "fullName": "Baratza Encore ESP Pro",
+        "model": "Encore ESP Pro",
+        "id": "2125fe5e"
       },
-      "brewTime": "2026-01-14 07:33:54",
-      "temperatureUnit": "°C",
-      "temperature": "95"
+      "id": "br_a8e0edbf",
+      "yieldUnit": "g"
     },
     {
-      "coffee": {
-        "roasterName": "Canyon Coffee",
-        "id": "c_ad42fb73",
-        "fullName": "Ethipoian Gedeb (Canyon Coffee)",
-        "name": "Ethipoian Gedeb"
+      "machine": {
+        "id": "e_92a6f08f",
+        "model": "Switch",
+        "fullName": "Hario Switch",
+        "brand": "Hario"
       },
-      "fullName": "Ethipoian Gedeb (Canyon Coffee)",
-      "yieldUnit": "g",
-      "temperatureUnit": "°C",
-      "recipePrep": "30g bloom / 130g / 220g (all open)",
+      "temperature": "95",
       "grinderSetting": "53",
+      "modifiedAt": "2026-01-16 23:12:23",
+      "temperatureUnit": "°C",
+      "yieldUnit": "g",
       "id": "br_b323c6d7",
+      "coffee": {
+        "id": "c_ad42fb73",
+        "name": "Ethipoian Gedeb",
+        "roasterName": "Canyon Coffee",
+        "fullName": "Ethipoian Gedeb (Canyon Coffee)"
+      },
+      "doseUnit": "g",
+      "grinder": {
+        "model": "Encore ESP Pro",
+        "id": "2125fe5e",
+        "fullName": "Baratza Encore ESP Pro",
+        "brand": "Baratza"
+      },
+      "dose": "15",
+      "flagged": "down",
+      "fullName": "Ethipoian Gedeb (Canyon Coffee)",
+      "addedAt": "2026-01-13 20:50:39",
+      "brewedAt": "2026-01-13 20:56:25",
+      "tastingNotes": "s",
+      "recipePrep": "30g bloom / 130g / 220g (all open)",
+      "yield": "220",
+      "brewTime": "2026-01-14 00:02:45"
+    },
+    {
+      "doseUnit": "g",
+      "coffee": {
+        "id": "c_76081721",
+        "name": "Cosmo Espresso",
+        "roasterName": "Atomic Coffee Roasters",
+        "fullName": "Cosmo Espresso (Atomic Coffee Roasters)"
+      },
+      "brewedAt": "2026-01-14 08:44:58",
+      "addedAt": "2026-01-14 08:44:58",
+      "id": "br_bc7ac60b",
+      "fullName": "Cosmo Espresso (Atomic Coffee Roasters)",
+      "yield": "36",
+      "machine": {
+        "model": "Duo-Temp Pro",
+        "fullName": "Breville Duo-Temp Pro",
+        "brand": "Breville",
+        "id": "e_d1dada6a"
+      },
+      "dose": "18",
+      "yieldUnit": "g",
+      "modifiedAt": "2026-01-14 08:44:58",
+      "grinderSetting": "27",
+      "grinder": {
+        "brand": "Baratza",
+        "id": "2125fe5e",
+        "fullName": "Baratza Encore ESP Pro",
+        "model": "Encore ESP Pro"
+      },
+      "temperatureUnit": "°C",
+      "temperature": "93",
+      "brewTime": "2026-01-14 00:00:21"
+    },
+    {
+      "id": "br_715f8059",
+      "addedAt": "2026-01-14 12:22:08",
+      "modifiedAt": "2026-01-14 12:24:25",
+      "yield": "41",
+      "coffee": {
+        "roasterName": "McLaughlin Roasting Co. ",
+        "fullName": "64th Street Espreso (McLaughlin Roasting Co. )",
+        "id": "c_168494d8",
+        "name": "64th Street Espreso"
+      },
+      "temperature": "93",
+      "brewTime": "2026-01-14 00:00:22",
+      "roastDate": "2026-01-09 00:00:00",
+      "doseUnit": "g",
+      "dose": "18",
+      "fullName": "64th Street Espreso (McLaughlin Roasting Co. )",
+      "temperatureUnit": "°C",
+      "yieldUnit": "g",
+      "brewedAt": "2026-01-14 12:22:08",
+      "grinderSetting": "27",
+      "grinder": {
+        "brand": "Baratza",
+        "model": "Encore ESP Pro",
+        "id": "2125fe5e",
+        "fullName": "Baratza Encore ESP Pro"
+      },
+      "machine": {
+        "model": "Mk.2",
+        "brand": "9Barista",
+        "fullName": "9Barista Mk.2",
+        "id": "0a3a5e2a"
+      }
+    },
+    {
+      "modifiedAt": "2026-01-14 17:19:40",
+      "brewedAt": "2026-01-14 17:19:40",
+      "dose": "18",
+      "doseUnit": "g",
+      "tastingNotes": "Better. ",
+      "machine": {
+        "fullName": "9Barista Mk.2",
+        "id": "0a3a5e2a",
+        "brand": "9Barista",
+        "model": "Mk.2"
+      },
       "grinder": {
         "id": "2125fe5e",
         "fullName": "Baratza Encore ESP Pro",
+        "model": "Encore ESP Pro",
+        "brand": "Baratza"
+      },
+      "grinderSetting": "26",
+      "addedAt": "2026-01-14 12:22:08",
+      "temperatureUnit": "°C",
+      "brewTime": "2026-01-14 00:00:26",
+      "yieldUnit": "g",
+      "coffee": {
+        "id": "c_168494d8",
+        "roasterName": "McLaughlin Roasting Co. ",
+        "name": "64th Street Espreso",
+        "fullName": "64th Street Espreso (McLaughlin Roasting Co. )"
+      },
+      "roastDate": "2026-01-09 00:00:00",
+      "yield": "37",
+      "id": "br_5be35977",
+      "temperature": "93",
+      "fullName": "64th Street Espreso (McLaughlin Roasting Co. )"
+    },
+    {
+      "temperature": "95",
+      "fullName": "Ethiopia Yirgacheffe (McLaughlin Roasting Co. )",
+      "addedAt": "2026-01-15 07:24:48",
+      "machine": {
+        "model": "Switch",
+        "brand": "Hario",
+        "fullName": "Hario Switch",
+        "id": "e_92a6f08f"
+      },
+      "modifiedAt": "2026-01-16 14:25:44",
+      "grinderSetting": "56",
+      "grinder": {
+        "model": "Encore ESP Pro",
+        "id": "2125fe5e",
+        "brand": "Baratza",
+        "fullName": "Baratza Encore ESP Pro"
+      },
+      "temperatureUnit": "°C",
+      "recipePrep": "40g / 130g / 230g",
+      "id": "br_68df9b26",
+      "brewedAt": "2026-01-15 07:24:48",
+      "coffee": {
+        "name": "Ethiopia Yirgacheffe",
+        "roasterName": "McLaughlin Roasting Co. ",
+        "fullName": "Ethiopia Yirgacheffe (McLaughlin Roasting Co. )",
+        "id": "c_2f73b96b"
+      },
+      "roastDate": "2026-01-09 00:00:00",
+      "dose": "15",
+      "doseUnit": "g",
+      "yieldUnit": "g",
+      "tastingNotes": "Way too coarse",
+      "brewTime": "2026-01-15 00:01:50",
+      "yield": "220",
+      "flagged": "up"
+    },
+    {
+      "doseUnit": "g",
+      "addedAt": "2026-01-15 07:24:48",
+      "machine": {
+        "brand": "Hario",
+        "model": "Switch",
+        "id": "e_92a6f08f",
+        "fullName": "Hario Switch"
+      },
+      "roastDate": "2026-01-09 00:00:00",
+      "grinder": {
+        "id": "2125fe5e",
+        "fullName": "Baratza Encore ESP Pro",
+        "model": "Encore ESP Pro",
+        "brand": "Baratza"
+      },
+      "brewedAt": "2026-01-15 07:28:48",
+      "temperatureUnit": "°C",
+      "dose": "15",
+      "fullName": "Ethiopia Yirgacheffe (McLaughlin Roasting Co. )",
+      "grinderSetting": "50",
+      "tastingNotes": "Better, but so dark. Try lower temp. ",
+      "modifiedAt": "2026-01-17 13:56:45",
+      "temperature": "95",
+      "brewTime": "2026-01-15 00:02:20",
+      "yield": "220",
+      "id": "br_1d726236",
+      "recipePrep": "40g / 130g / 230g",
+      "coffee": {
+        "roasterName": "McLaughlin Roasting Co. ",
+        "fullName": "Ethiopia Yirgacheffe (McLaughlin Roasting Co. )",
+        "name": "Ethiopia Yirgacheffe",
+        "id": "c_2f73b96b"
+      },
+      "yieldUnit": "g"
+    },
+    {
+      "fullName": "Kenya (McLaughlin Roasting Co. )",
+      "id": "br_43725ca2",
+      "yieldUnit": "g",
+      "dose": "15",
+      "flags": {
+        "star": true,
+        "up": true,
+        "down": false
+      },
+      "modifiedAt": "2026-01-18 23:55:35",
+      "grinder": {
+        "id": "2125fe5e",
+        "brand": "Baratza",
+        "fullName": "Baratza Encore ESP Pro",
+        "model": "Encore ESP Pro"
+      },
+      "recipePrep": "40 / 150 / 250",
+      "roastDate": "2026-01-09 00:00:00",
+      "grinderSetting": "50",
+      "addedAt": "2026-01-15 08:01:51",
+      "doseUnit": "g",
+      "temperatureUnit": "°C",
+      "temperature": "95",
+      "flagged": "down",
+      "yield": "250",
+      "coffee": {
+        "id": "c_22579ce5",
+        "name": "Kenya",
+        "fullName": "Kenya (McLaughlin Roasting Co. )",
+        "roasterName": "McLaughlin Roasting Co. "
+      },
+      "machine": {
+        "model": "Switch",
+        "brand": "Hario",
+        "fullName": "Hario Switch",
+        "id": "e_92a6f08f"
+      }
+    },
+    {
+      "id": "br_e5a863ef",
+      "brewedAt": "2026-01-15 12:10:02",
+      "coffee": {
+        "fullName": "Black Velvet Espresso (Atomic Coffee Roasters)",
+        "name": "Black Velvet Espresso",
+        "roasterName": "Atomic Coffee Roasters",
+        "id": "c_cc8d3c03"
+      },
+      "fullName": "Black Velvet Espresso (Atomic Coffee Roasters)",
+      "temperatureUnit": "°C",
+      "grinderSetting": "26",
+      "yield": "40",
+      "dose": "18",
+      "machine": {
+        "id": "0a3a5e2a",
+        "fullName": "9Barista Mk.2",
+        "brand": "9Barista",
+        "model": "Mk.2"
+      },
+      "addedAt": "2026-01-15 12:10:02",
+      "flagged": "down",
+      "grinder": {
+        "fullName": "Baratza Encore ESP Pro",
+        "brand": "Baratza",
+        "model": "Encore ESP Pro",
+        "id": "2125fe5e"
+      },
+      "doseUnit": "g",
+      "modifiedAt": "2026-01-15 12:12:02",
+      "yieldUnit": "g",
+      "temperature": "93"
+    },
+    {
+      "temperature": "93",
+      "grinderSetting": "25",
+      "dose": "18",
+      "modifiedAt": "2026-01-15 12:10:39",
+      "coffee": {
+        "name": "Black Velvet Espresso",
+        "fullName": "Black Velvet Espresso (Atomic Coffee Roasters)",
+        "id": "c_cc8d3c03",
+        "roasterName": "Atomic Coffee Roasters"
+      },
+      "id": "br_2ec8f4c3",
+      "machine": {
+        "brand": "9Barista",
+        "id": "0a3a5e2a",
+        "model": "Mk.2",
+        "fullName": "9Barista Mk.2"
+      },
+      "temperatureUnit": "°C",
+      "grinder": {
+        "fullName": "Baratza Encore ESP Pro",
+        "id": "2125fe5e",
         "brand": "Baratza",
         "model": "Encore ESP Pro"
       },
-      "modifiedAt": "2026-01-14 07:50:08",
-      "tastingNotes": "s",
-      "flagged": true,
-      "dose": "15",
-      "temperature": "95",
-      "addedAt": "2026-01-13 20:50:39",
+      "flagged": "up",
+      "yieldUnit": "g",
+      "brewedAt": "2026-01-15 12:10:18",
+      "yield": "40",
+      "addedAt": "2026-01-15 12:10:02",
+      "fullName": "Black Velvet Espresso (Atomic Coffee Roasters)",
+      "doseUnit": "g",
+      "brewTime": "2026-01-15 00:00:27"
+    },
+    {
+      "brewTime": "2026-01-15 00:02:30",
+      "dose": "14",
+      "temperatureUnit": "°C",
+      "grinderSetting": "50",
+      "fullName": "Kenya (McLaughlin Roasting Co. )",
       "machine": {
         "id": "e_92a6f08f",
         "fullName": "Hario Switch",
-        "model": "Switch",
-        "brand": "Hario"
+        "brand": "Hario",
+        "model": "Switch"
       },
-      "yield": "220",
-      "brewedAt": "2026-01-13 20:56:25",
-      "doseUnit": "g"
-    },
-    {
-      "machine": {
-        "fullName": "Breville Duo-Temp Pro",
-        "id": "e_d1dada6a",
-        "model": "Duo-Temp Pro",
-        "brand": "Breville"
-      },
-      "yieldUnit": "g",
+      "doseUnit": "g",
       "grinder": {
         "model": "Encore ESP Pro",
         "brand": "Baratza",
         "id": "2125fe5e",
         "fullName": "Baratza Encore ESP Pro"
       },
+      "recipePrep": "40 / 120 / 220",
+      "id": "br_3b05800e",
+      "brewedAt": "2026-01-15 15:12:37",
+      "yield": "229",
+      "addedAt": "2026-01-15 08:01:51",
+      "yieldUnit": "g",
+      "roastDate": "2026-01-09 00:00:00",
+      "temperature": "92",
+      "flagged": "up",
+      "modifiedAt": "2026-01-18 23:55:32",
+      "flags": {
+        "down": false,
+        "up": true,
+        "star": true
+      },
+      "coffee": {
+        "id": "c_22579ce5",
+        "roasterName": "McLaughlin Roasting Co. ",
+        "fullName": "Kenya (McLaughlin Roasting Co. )",
+        "name": "Kenya"
+      }
+    },
+    {
+      "brewedAt": "2026-01-15 15:35:07",
+      "brewTime": "2026-01-15 00:03:00",
+      "yield": "220",
+      "addedAt": "2026-01-13 20:50:39",
+      "machine": {
+        "fullName": "Hario Switch",
+        "model": "Switch",
+        "id": "e_92a6f08f",
+        "brand": "Hario"
+      },
+      "modifiedAt": "2026-01-15 19:09:53",
+      "dose": "15",
+      "yieldUnit": "g",
+      "grinderSetting": "50",
+      "coffee": {
+        "name": "Ethipoian Gedeb",
+        "roasterName": "Canyon Coffee",
+        "fullName": "Ethipoian Gedeb (Canyon Coffee)",
+        "id": "c_ad42fb73"
+      },
+      "flagged": "star",
+      "fullName": "Ethipoian Gedeb (Canyon Coffee)",
+      "temperature": "95",
+      "recipePrep": "30g bloom / 140g / 220g (all open)",
       "doseUnit": "g",
-      "brewTime": "2026-01-14 00:00:21",
+      "tastingNotes": "",
+      "grinder": {
+        "id": "2125fe5e",
+        "fullName": "Baratza Encore ESP Pro",
+        "model": "Encore ESP Pro",
+        "brand": "Baratza"
+      },
+      "temperatureUnit": "°C",
+      "id": "br_fa83bf6a"
+    },
+    {
+      "temperature": "95",
+      "tastingNotes": "Not noticeably better than smaller bloom",
+      "addedAt": "2026-01-13 20:50:39",
+      "fullName": "Ethipoian Gedeb (Canyon Coffee)",
+      "recipePrep": "45g bloom / 140g / 220g (all open)",
+      "yield": "220",
+      "modifiedAt": "2026-01-18 23:55:03",
+      "yieldUnit": "g",
+      "doseUnit": "g",
+      "brewTime": "2026-01-15 00:03:00",
+      "machine": {
+        "brand": "Hario",
+        "model": "Switch",
+        "id": "e_92a6f08f",
+        "fullName": "Hario Switch"
+      },
+      "brewedAt": "2026-01-16 07:29:35",
+      "grinderSetting": "50",
+      "flagged": "up",
+      "grinder": {
+        "model": "Encore ESP Pro",
+        "brand": "Baratza",
+        "fullName": "Baratza Encore ESP Pro",
+        "id": "2125fe5e"
+      },
+      "id": "br_e4b325f0",
+      "coffee": {
+        "name": "Ethipoian Gedeb",
+        "id": "c_ad42fb73",
+        "fullName": "Ethipoian Gedeb (Canyon Coffee)",
+        "roasterName": "Canyon Coffee"
+      },
+      "dose": "15",
+      "temperatureUnit": "°C"
+    },
+    {
+      "modifiedAt": "2026-01-16 09:46:33",
+      "addedAt": "2026-01-14 08:44:58",
+      "fullName": "Cosmo Espresso (Atomic Coffee Roasters)",
+      "id": "br_7c130541",
+      "doseUnit": "g",
+      "grinderSetting": "26",
       "temperature": "93",
-      "yield": "36",
-      "grinderSetting": "27",
+      "flagged": "star",
+      "dose": "18",
+      "brewedAt": "2026-01-16 09:46:33",
+      "grinder": {
+        "id": "2125fe5e",
+        "brand": "Baratza",
+        "fullName": "Baratza Encore ESP Pro",
+        "model": "Encore ESP Pro"
+      },
+      "yieldUnit": "g",
       "coffee": {
         "name": "Cosmo Espresso",
-        "fullName": "Cosmo Espresso (Atomic Coffee Roasters)",
         "roasterName": "Atomic Coffee Roasters",
-        "id": "c_76081721"
+        "id": "c_76081721",
+        "fullName": "Cosmo Espresso (Atomic Coffee Roasters)"
       },
-      "addedAt": "2026-01-14 08:44:58",
+      "machine": {
+        "id": "e_d1dada6a",
+        "model": "Duo-Temp Pro",
+        "fullName": "Breville Duo-Temp Pro",
+        "brand": "Breville"
+      },
+      "temperatureUnit": "°C",
+      "brewTime": "2026-01-16 00:00:30",
+      "yield": "38"
+    },
+    {
+      "brewTime": "2026-01-15 00:02:30",
+      "addedAt": "2026-01-15 08:01:51",
+      "grinder": {
+        "fullName": "Baratza Encore ESP Pro",
+        "brand": "Baratza",
+        "id": "2125fe5e",
+        "model": "Encore ESP Pro"
+      },
+      "flagged": "up",
+      "brewedAt": "2026-01-16 13:06:42",
+      "id": "br_14c3e0a6",
+      "flags": {
+        "star": true,
+        "up": true,
+        "down": false
+      },
+      "roastDate": "2026-01-09 00:00:00",
+      "yield": "220",
+      "fullName": "Kenya (McLaughlin Roasting Co. )",
+      "dose": "15",
+      "doseUnit": "g",
+      "coffee": {
+        "name": "Kenya",
+        "fullName": "Kenya (McLaughlin Roasting Co. )",
+        "id": "c_22579ce5",
+        "roasterName": "McLaughlin Roasting Co. "
+      },
+      "grinderSetting": "50",
+      "yieldUnit": "g",
+      "temperature": "90",
+      "machine": {
+        "fullName": "Hario Switch",
+        "id": "e_92a6f08f",
+        "brand": "Hario",
+        "model": "Switch"
+      },
+      "recipePrep": "40 / 120 / 220 - better. Try higher ratio ?",
+      "temperatureUnit": "°C",
+      "modifiedAt": "2026-01-16 13:06:42"
+    },
+    {
+      "yield": "306",
+      "grinder": {
+        "id": "e_de855387",
+        "brand": "Baratza",
+        "model": "Encore ESP Pro",
+        "fullName": "Baratza Encore ESP Pro"
+      },
+      "temperature": "195",
+      "doseUnit": "g",
+      "addedAt": "2026-01-17 16:45:23",
+      "brewTime": "2026-01-18 00:03:35",
+      "id": "br_2fbd62af",
+      "recipePrep": "Too fine? But good!",
+      "flagged": "up",
+      "modifiedAt": "2026-01-18 17:09:39",
+      "machine": {
+        "id": "e_92a6f08f",
+        "fullName": "Hario Switch",
+        "brand": "Hario",
+        "model": "Switch"
+      },
+      "brewedAt": "2026-01-17 16:45:23",
+      "temperatureUnit": "°F",
+      "fullName": "La Piragua Pink Bourbon (The Boy & The Bear)",
+      "coffee": {
+        "roasterName": "The Boy & The Bear",
+        "name": "La Piragua Pink Bourbon",
+        "id": "c_d56bd3a8",
+        "fullName": "La Piragua Pink Bourbon (The Boy & The Bear)"
+      },
       "dose": "18",
-      "modifiedAt": "2026-01-14 08:44:58",
-      "brewedAt": "2026-01-14 08:44:58",
-      "fullName": "Cosmo Espresso (Atomic Coffee Roasters)",
-      "id": "br_bc7ac60b",
-      "temperatureUnit": "°C"
+      "grinderSetting": "48"
+    },
+    {
+      "grinder": {
+        "fullName": "Baratza Encore ESP Pro",
+        "brand": "Baratza",
+        "id": "e_de855387",
+        "model": "Encore ESP Pro"
+      },
+      "doseUnit": "g",
+      "yield": "225",
+      "addedAt": "2026-01-18 08:10:41",
+      "brewedAt": "2026-01-18 08:10:41",
+      "machine": {
+        "brand": "Hario",
+        "fullName": "Hario Switch",
+        "id": "e_92a6f08f",
+        "model": "Switch"
+      },
+      "grinderSetting": "50",
+      "id": "br_23ac2836",
+      "coffee": {
+        "roasterName": "The Boy & The Bear",
+        "fullName": "Yenifer Rojas (The Boy & The Bear)",
+        "id": "c_fa23c12f",
+        "name": "Yenifer Rojas"
+      },
+      "fullName": "Yenifer Rojas (The Boy & The Bear)",
+      "recipePrep": "40/120/220 - too fine, a little muddy",
+      "modifiedAt": "2026-01-18 14:51:44",
+      "roastDate": "2025-12-22 00:00:00",
+      "temperatureUnit": "°C",
+      "brewTime": "2026-01-18 00:03:30",
+      "dose": "15",
+      "temperature": "195"
+    },
+    {
+      "recipePrep": "Still a little too fine?",
+      "grinder": {
+        "id": "e_de855387",
+        "brand": "Baratza",
+        "model": "Encore ESP Pro",
+        "fullName": "Baratza Encore ESP Pro"
+      },
+      "modifiedAt": "2026-01-18 17:11:27",
+      "roastDate": "2025-12-29 00:00:00",
+      "temperature": "195",
+      "grinderSetting": "50",
+      "coffee": {
+        "roasterName": "The Boy & The Bear",
+        "fullName": "La Piragua Pink Bourbon (The Boy & The Bear)",
+        "id": "c_d56bd3a8",
+        "name": "La Piragua Pink Bourbon"
+      },
+      "addedAt": "2026-01-17 16:45:23",
+      "brewedAt": "2026-01-18 17:09:13",
+      "doseUnit": "g",
+      "yield": "255",
+      "dose": "15",
+      "temperatureUnit": "°F",
+      "machine": {
+        "model": "Switch",
+        "brand": "Hario",
+        "fullName": "Hario Switch",
+        "id": "e_92a6f08f"
+      },
+      "flagged": "star",
+      "fullName": "La Piragua Pink Bourbon (The Boy & The Bear)",
+      "brewTime": "2026-01-17 00:03:20",
+      "id": "br_180dca39"
+    },
+    {
+      "grinder": {
+        "model": "Encore ESP Pro",
+        "brand": "Baratza",
+        "id": "e_de855387",
+        "fullName": "Baratza Encore ESP Pro"
+      },
+      "brewedAt": "2026-01-18 17:18:45",
+      "modifiedAt": "2026-01-18 17:42:50",
+      "dose": "18",
+      "brewTime": "2026-01-18 00:00:20",
+      "id": "br_247e9e66",
+      "doseUnit": "g",
+      "temperature": "93",
+      "grinderSetting": "26",
+      "coffee": {
+        "fullName": "Dynamic Espresso (The Boy & The Bear)",
+        "id": "c_d63ad31c",
+        "name": "Dynamic Espresso",
+        "roasterName": "The Boy & The Bear"
+      },
+      "addedAt": "2026-01-18 17:18:45",
+      "fullName": "Dynamic Espresso (The Boy & The Bear)",
+      "machine": {
+        "fullName": "9Barista Mk.2",
+        "id": "0a3a5e2a",
+        "brand": "9Barista",
+        "model": "Mk.2"
+      },
+      "flagged": "up",
+      "roastDate": "2025-12-29 00:00:00",
+      "temperatureUnit": "°C",
+      "yield": "36"
     }
   ],
-  "username": "mgsecure",
+  "equipment": [
+    {
+      "brand": "9Barista",
+      "model": "Mk.2",
+      "fullName": "9Barista Mk.2",
+      "type": "Espresso",
+      "id": "0a3a5e2a",
+      "modifiedAt": "2026-01-08 18:19:28",
+      "year": "2025",
+      "addedAt": "2026-01-01 18:56:37"
+    },
+    {
+      "altBrand": false,
+      "model": "Switch",
+      "brand": "Hario",
+      "year": "2026",
+      "altModel": false,
+      "id": "e_92a6f08f",
+      "type": "Pour-over",
+      "modifiedAt": "2026-01-17 16:46:03",
+      "addedAt": "2026-01-05 09:28:26",
+      "fullName": "Hario Switch"
+    },
+    {
+      "id": "e_d1dada6a",
+      "model": "Duo-Temp Pro",
+      "modifiedAt": "2026-01-14 08:39:56",
+      "brand": "Breville",
+      "type": "Espresso",
+      "addedAt": "2026-01-14 08:39:56",
+      "fullName": "Breville Duo-Temp Pro"
+    },
+    {
+      "model": "Encore ESP Pro",
+      "fullName": "Baratza Encore ESP Pro",
+      "brand": "Baratza",
+      "year": "2025",
+      "modifiedAt": "2026-01-17 16:46:33",
+      "id": "e_de855387",
+      "type": "Grinder",
+      "addedAt": "2026-01-17 16:46:33"
+    }
+  ],
+  "test": "yes",
   "coffees": [
     {
-      "decaf": false,
-      "brews": [
-        {
-          "dose": "15",
-          "brewedAt": "2026-01-13 10:58:52",
-          "grinderSetting": "50",
-          "brewTime": "2026-01-13 00:01:45",
-          "yield": "220",
-          "grinder": {
-            "model": "Encore ESP Pro",
-            "brand": "Baratza",
-            "fullName": "Baratza Encore ESP Pro",
-            "id": "2125fe5e"
-          },
-          "temperatureUnit": "°C",
-          "modifiedAt": "2026-01-13 15:34:25",
-          "temperature": "95",
-          "restedDays": 0,
-          "doseUnit": "g",
-          "recipePrep": "30g / 130g / 220g (all open)",
-          "id": "br_0002",
-          "originalEntry": {
-            "dose": "15",
-            "grinder": {
-              "model": "Encore ESP Pro",
-              "id": "2125fe5e",
-              "fullName": "Baratza Encore ESP Pro",
-              "brand": "Baratza"
-            },
-            "brewedAt": "2026-01-13 10:58:52",
-            "temperatureUnit": "°C",
-            "recipePrep": "30g / 130g / 220g (all open)",
-            "id": "br_0002",
-            "brewTime": "2026-01-13 00:01:45",
-            "yield": "220",
-            "temperature": "95",
-            "coffee": {
-              "fullName": "Light & Dark (The Boy & The Bear)",
-              "name": "Light & Dark",
-              "roasterName": "The Boy & The Bear",
-              "id": "c_6bfec1be"
-            },
-            "grinderSetting": "50",
-            "modifiedAt": "2026-01-13 15:34:25",
-            "fullName": "Light & Dark (The Boy & The Bear)",
-            "yieldUnit": "g",
-            "doseUnit": "g",
-            "addedAt": "2026-01-13 10:58:52",
-            "machine": {
-              "model": "Switch",
-              "id": "e_92a6f08f",
-              "brand": "Hario",
-              "fullName": "Hario Switch"
-            }
-          },
-          "isFlagged": "No",
-          "fullName": "Light & Dark (The Boy & The Bear)",
-          "addedAt": "2026-01-13 10:58:52",
-          "machine": {
-            "model": "Switch",
-            "fullName": "Hario Switch",
-            "brand": "Hario",
-            "id": "e_92a6f08f"
-          },
-          "fuzzy": "Light & Dark (The Boy & The Bear)",
-          "coffee": {
-            "name": "Light & Dark",
-            "fullName": "Light & Dark (The Boy & The Bear)",
-            "roasterName": "The Boy & The Bear",
-            "id": "c_6bfec1be"
-          },
-          "yieldUnit": "g"
-        }
-      ],
-      "origin": "Colombia & Brazil",
-      "priceUnit": "USD ($)",
-      "altRoaster": false,
-      "sortDate": "2026-01-13 15:34:25",
-      "originalEntry": {
-        "roastLevel": "Medium",
-        "ratings": {
-          "flavor": 7,
-          "finish": 4,
-          "rating": 9,
-          "acidity": 10
-        },
-        "originalEntry": {
-          "modifiedAt": "2026-01-11 15:00:40",
-          "id": "c_6bfec1be",
-          "productLink": "http://localhost:3000/coffees",
-          "name": "Light & Dark",
-          "notes": "Some notes go here.",
-          "addedAt": "2026-01-08 09:25:06",
-          "ratings": {
-            "finish": 4,
-            "rating": 8,
-            "flavor": 7,
-            "acidity": 10
-          },
-          "roastLevel": "Medium",
-          "tastingNotes": "My tasting notes",
-          "fullName": "Light & Dark (The Boy & The Bear)",
-          "restedDays": 0,
-          "isFlagged": "No",
-          "decaf": false,
-          "fuzzy": "Light & Dark,The Boy & The Bear",
-          "weight": "12",
-          "altRoaster": false,
-          "origin": "Colombia & Brazil",
-          "roaster": {
-            "id": "9f564b89",
-            "name": "The Boy & The Bear",
-            "fullName": "The Boy & The Bear"
-          },
-          "roasterTastingNotes": "Peach, almond, dark chocolate body",
-          "price": "18",
-          "priceUnit": "USD ($)",
-          "weightUnit": "oz"
-        },
-        "modifiedAt": "2026-01-12 17:22:49",
-        "origin": "Colombia & Brazil",
-        "price": "18",
-        "productLink": "http://localhost:3000/coffees",
-        "tastingNotes": "My tasting notes",
-        "roaster": {
-          "id": "9f564b89",
-          "fullName": "The Boy & The Bear",
-          "name": "The Boy & The Bear"
-        },
-        "brews": [],
-        "priceUnit": "USD ($)",
-        "roasterTastingNotes": "Peach, almond, dark chocolate body",
-        "id": "c_6bfec1be",
-        "fullName": "Light & Dark (The Boy & The Bear)",
-        "caffeine": "Regular",
-        "notes": "Some notes go here.",
-        "isFlagged": "No",
-        "fuzzy": "Light & Dark,The Boy & The Bear",
-        "altRoaster": false,
-        "addedAt": "2026-01-08 09:25:06",
-        "roasterName": "The Boy & The Bear",
-        "name": "Light & Dark",
-        "weight": "12",
-        "weightUnit": "oz",
-        "decaf": false,
-        "restedDays": 0
-      },
-      "price": "18",
-      "name": "Light & Dark",
-      "id": "c_6bfec1be",
-      "roasterTastingNotes": "Peach, almond, dark chocolate body",
-      "restedDays": 0,
-      "fullName": "Light & Dark (The Boy & The Bear)",
-      "productLink": "http://localhost:3000/coffees",
-      "ratings": {
-        "flavor": 7,
-        "rating": 9,
-        "finish": 4,
-        "acidity": 10
-      },
-      "notes": "Some notes go here.",
       "roasterName": "The Boy & The Bear",
-      "fuzzy": "Light & Dark,The Boy & The Bear",
-      "modifiedAt": "2026-01-13 16:40:40",
-      "roaster": {
-        "fullName": "The Boy & The Bear",
-        "id": "9f564b89",
-        "name": "The Boy & The Bear"
-      },
+      "pricePoundUSD": 24,
+      "pricePound": 24,
+      "origin": "Colombia & Brazil",
       "weight": "12",
+      "isFlagged": "No",
       "roastLevel": "Medium",
       "tastingNotes": "My tasting notes",
+      "ratings": {
+        "rating": 9,
+        "acidity": 10,
+        "finish": 4,
+        "flavor": 7
+      },
+      "modifiedAt": "2026-01-18 23:56:39",
+      "decaf": false,
+      "notes": "Some notes can go here",
+      "id": "c_6bfec1be",
+      "priceUnit": "USD ($)",
+      "roaster": {
+        "name": "The Boy & The Bear",
+        "fullName": "The Boy & The Bear",
+        "id": "9f564b89"
+      },
+      "fuzzy": "Light & Dark,The Boy & The Bear",
+      "productLink": "http://localhost:3000/coffees",
+      "restedDays": 0,
+      "name": "Light & Dark",
+      "altRoaster": false,
+      "fullName": "Light & Dark (The Boy & The Bear)",
       "weightUnit": "oz",
-      "isFlagged": "No",
       "caffeine": "Regular",
-      "addedAt": "2026-01-08 09:25:06"
+      "roasterTastingNotes": "Peach, almond, dark chocolate body",
+      "addedAt": "2026-01-08 09:25:06",
+      "price100g": 42.52,
+      "price": "18",
+      "latestBrewDate": "2026-01-13 00:01:45"
     },
     {
-      "country": "USA",
+      "modifiedAt": "2026-01-19 00:04:11",
       "tastingNotes": "Subtle flavor. Stonefruit, cherries",
-      "modifiedAt": "2026-01-13 11:00:24",
-      "restedDays": 0,
-      "fullName": "Ethipoian Gedeb (Canyon Coffee)",
-      "sortDate": "2026-01-12 07:55:12",
-      "ratings": {
-        "body": 7,
-        "flavor": 10,
-        "finish": 10,
-        "acidity": 4,
-        "rating": 8
-      },
-      "weight": "12",
-      "isFlagged": "No",
-      "altRoaster": true,
-      "weightUnit": "oz",
       "city": "Los Angeles",
-      "id": "c_ad42fb73",
+      "sortDate": "2026-01-14 09:51:58",
       "origin": "Ethipoia",
-      "roasterName": "Canyon Coffee",
       "price": "19",
-      "originalEntry": {
-        "tastingNotes": "Subtle flavor. Stonefruit, cherries",
-        "roaster": {
-          "stateRegion": "California",
-          "fullName": "Canyon Coffee",
-          "country": "USA",
-          "city": "Los Angeles",
-          "id": "r_cf7729f9",
-          "name": "Canyon Coffee"
-        },
-        "city": "Los Angeles",
-        "price": "19",
-        "fuzzy": "Ethipoian Gedeb,Canyon Coffee",
-        "altRoaster": true,
-        "isFlagged": "No",
-        "country": "USA",
-        "ratings": {
-          "finish": 10,
-          "acidity": 4,
-          "body": 7,
-          "flavor": 10,
-          "rating": 9
-        },
-        "fullName": "Ethipoian Gedeb (Canyon Coffee)",
-        "priceUnit": "USD ($)",
-        "origin": "Ethipoia",
-        "restedDays": 0,
-        "modifiedAt": "2026-01-12 07:55:12",
-        "weight": "12",
-        "id": "c_ad42fb73",
-        "stateRegion": "California",
-        "name": "Ethipoian Gedeb",
-        "addedAt": "2026-01-09 16:39:20",
-        "weightUnit": "oz"
-      },
+      "notes": "more notes",
+      "isFlagged": "No",
       "caffeine": "Regular",
-      "brews": [],
-      "roaster": {
-        "stateRegion": "California",
-        "city": "Los Angeles",
-        "name": "Canyon Coffee",
-        "fullName": "Canyon Coffee",
-        "country": "USA",
-        "id": "r_cf7729f9"
+      "latestBrewDate": "2026-01-14 00:03:20",
+      "fuzzy": "Ethipoian Gedeb,Canyon Coffee",
+      "country": "USA",
+      "ratings": {
+        "acidity": 4,
+        "rating": 9,
+        "flavor": 10,
+        "body": 7,
+        "finish": 10
       },
       "addedAt": "2026-01-09 16:39:20",
-      "fuzzy": "Ethipoian Gedeb,Canyon Coffee",
+      "stateRegion": "California",
+      "id": "c_ad42fb73",
+      "roaster": {
+        "country": "USA",
+        "name": "Canyon Coffee",
+        "city": "Los Angeles",
+        "id": "r_430af234",
+        "stateRegion": "California",
+        "fullName": "Canyon Coffee"
+      },
       "name": "Ethipoian Gedeb",
+      "altRoaster": true,
+      "weightUnit": "g",
       "priceUnit": "USD ($)",
-      "stateRegion": "California"
+      "weight": "350",
+      "fullName": "Ethipoian Gedeb (Canyon Coffee)",
+      "restedDays": 0
     },
     {
-      "addedAt": "2026-01-10 22:42:17",
+      "roastLevel": "Medium",
+      "id": "c_d63ad31c",
+      "fullName": "Dynamic Espresso (The Boy & The Bear)",
       "ratings": {
-        "acidity": 6,
         "flavor": 9,
-        "body": 8,
+        "rating": 9,
         "finish": 9,
-        "rating": 8
+        "acidity": 6,
+        "body": 8
       },
+      "notes": "s",
+      "roasterTastingNotes": "Dark Chocolate, Caramel, Red Apples",
+      "weightUnit": "oz",
+      "fuzzy": "Dynamic Espresso,The Boy & The Bear",
+      "name": "Dynamic Espresso",
+      "priceUnit": "USD ($)",
       "roaster": {
-        "fullName": "The Boy & The Bear",
         "id": "9f564b89",
+        "fullName": "The Boy & The Bear",
         "name": "The Boy & The Bear"
       },
-      "modifiedAt": "2026-01-12 17:22:43",
-      "name": "Dynamic Espresso",
-      "id": "c_d63ad31c",
-      "price": "18",
-      "weightUnit": "oz",
-      "origin": "Colombia & Brazil",
-      "weight": "12",
-      "brews": [],
-      "priceUnit": "USD ($)",
-      "decaf": false,
       "caffeine": "Regular",
-      "fuzzy": "Dynamic Espresso,The Boy & The Bear",
-      "roastLevel": "Medium",
-      "fullName": "Dynamic Espresso (The Boy & The Bear)",
-      "originalEntry": {
-        "roaster": {
-          "id": "9f564b89",
-          "fullName": "The Boy & The Bear",
-          "name": "The Boy & The Bear"
-        },
-        "name": "Dynamic Espresso",
-        "roasterTastingNotes": "Dark Chocolate, Caramel, Red Apples",
-        "fullName": "Dynamic Espresso (The Boy & The Bear)",
-        "ratings": {
-          "rating": 9,
-          "body": 8,
-          "flavor": 9,
-          "finish": 9,
-          "acidity": 6
-        },
-        "id": "c_d63ad31c",
-        "weightUnit": "oz",
-        "decaf": false,
-        "tastingNotes": "",
-        "addedAt": "2026-01-10 22:42:17",
-        "roastLevel": "Medium",
-        "priceUnit": "USD ($)",
-        "price": "18",
-        "origin": "Colombia & Brazil",
-        "modifiedAt": "2026-01-11 08:43:47",
-        "weight": "12"
-      },
-      "tastingNotes": "",
-      "roasterTastingNotes": "Dark Chocolate, Caramel, Red Apples",
-      "roasterName": "The Boy & The Bear"
+      "weight": "12",
+      "addedAt": "2026-01-10 22:42:17",
+      "origin": "Colombia & Brazil",
+      "price": "18",
+      "modifiedAt": "2026-01-18 23:58:19",
+      "decaf": false,
+      "tastingNotes": ""
     },
     {
-      "modifiedAt": "2026-01-14 07:05:47",
-      "roasterName": "Andante",
-      "roaster": {
-        "id": "r_e23c955a",
-        "city": "Los Angeles",
-        "country": "United States",
-        "fullName": "Andante",
-        "name": "Andante",
-        "stateRegion": "California"
-      },
-      "priceUnit": "USD ($)",
       "origin": "Ethiopia & Colombia",
-      "caffeine": "Regular",
-      "addedAt": "2026-01-12 13:02:10",
-      "price": "22",
-      "originalEntry": {
-        "roaster": {
-          "id": "r_e23c955a",
-          "country": "United States",
-          "city": "Los Angeles",
-          "fullName": "Andante",
-          "stateRegion": "California",
-          "name": "Andante"
-        },
-        "priceUnit": "USD ($)",
-        "roasterTastingNotes": "citrus, honey, dark chocolate",
-        "country": "United States",
-        "modifiedAt": "2026-01-12 13:02:37",
-        "id": "c_c079258d",
-        "ratings": {
-          "rating": 7
-        },
-        "fullName": "Espresso (Andante)",
-        "altRoaster": true,
-        "weight": "10",
-        "addedAt": "2026-01-12 13:02:10",
-        "stateRegion": "California",
-        "name": "Espresso",
-        "roastLevel": "Medium",
-        "origin": "Ethiopia & Colombia",
-        "weightUnit": "oz",
-        "city": "Los Angeles",
-        "price": "22"
+      "fuzzy": "Espresso,Andante",
+      "roastLevel": "Medium",
+      "name": "Espresso",
+      "weightUnit": "oz",
+      "ratings": {
+        "rating": 10,
+        "flavor": 10
       },
       "stateRegion": "California",
-      "fullName": "Espresso (Andante)",
-      "name": "Espresso",
-      "fuzzy": "Espresso,Andante",
-      "brews": [
-        {
-          "restedDays": 0,
-          "yieldUnit": "g",
-          "yield": "36",
-          "coffee": {
-            "roasterName": "Andante",
-            "id": "c_c079258d",
-            "name": "Espresso",
-            "fullName": "Espresso (Andante)"
-          },
-          "grinder": {
-            "fullName": "Baratza Encore ESP Pro",
-            "brand": "Baratza",
-            "id": "2125fe5e",
-            "model": "Encore ESP Pro"
-          },
-          "fuzzy": "Espresso (Andante)",
-          "addedAt": "2026-01-13 20:10:22",
-          "modifiedAt": "2026-01-13 20:18:58",
-          "doseUnit": "g",
-          "temperature": "93",
-          "machine": {
-            "model": "Linea Mini",
-            "brand": "La Marzocco",
-            "id": "e_1293e4a1",
-            "fullName": "La Marzocco Linea Mini"
-          },
-          "fullName": "Espresso (Andante)",
-          "dose": "18",
-          "temperatureUnit": "°C",
-          "grinderSetting": "31",
-          "isFlagged": "No",
-          "brewedAt": "2026-01-13 20:10:22",
-          "originalEntry": {
-            "yield": "36",
-            "fullName": "Espresso (Andante)",
-            "addedAt": "2026-01-13 20:10:22",
-            "id": "br_10fa7779",
-            "brewedAt": "2026-01-13 20:10:22",
-            "grinder": {
-              "fullName": "Baratza Encore ESP Pro",
-              "brand": "Baratza",
-              "model": "Encore ESP Pro",
-              "id": "2125fe5e"
-            },
-            "temperature": "93",
-            "modifiedAt": "2026-01-13 20:18:58",
-            "yieldUnit": "g",
-            "doseUnit": "g",
-            "dose": "18",
-            "coffee": {
-              "roasterName": "Andante",
-              "fullName": "Espresso (Andante)",
-              "id": "c_c079258d",
-              "name": "Espresso"
-            },
-            "temperatureUnit": "°C",
-            "machine": {
-              "brand": "La Marzocco",
-              "id": "e_1293e4a1",
-              "fullName": "La Marzocco Linea Mini",
-              "model": "Linea Mini"
-            },
-            "grinderSetting": "31"
-          },
-          "id": "br_10fa7779"
-        }
-      ],
+      "notes": "",
       "id": "c_c079258d",
-      "city": "Los Angeles",
-      "roastLevel": "Medium",
+      "country": "United States",
+      "altRoaster": true,
+      "addedAt": "2026-01-12 13:02:10",
       "sortDate": "2026-01-13 20:18:58",
+      "price": "22",
+      "modifiedAt": "2026-01-18 16:43:03",
+      "weight": "10",
+      "fullName": "Espresso (Andante)",
+      "caffeine": "Regular",
+      "priceUnit": "USD ($)",
+      "roasterTastingNotes": "citrus, honey, dark chocolate",
+      "city": "Los Angeles",
+      "roaster": {
+        "stateRegion": "California",
+        "id": "r_fbb31ee4",
+        "country": "United States",
+        "city": "Los Angeles",
+        "fullName": "Andante",
+        "name": "Andante"
+      }
+    },
+    {
+      "city": "Bellingham",
+      "notes": "s",
+      "name": "Sugar Bee Espresso",
+      "sortDate": "2026-01-13 09:39:32",
+      "ratings": {
+        "flavor": 10,
+        "rating": 9
+      },
+      "stateRegion": "Washington",
+      "altRoaster": true,
+      "addedAt": "2026-01-12 13:05:25",
+      "fullName": "Sugar Bee Espresso (Tony's Coffee)",
+      "id": "c_eca02ef5",
+      "roastLevel": "Light/Medium",
+      "country": "USA",
+      "fuzzy": "Sugar Bee Espresso,Tony's Coffee",
+      "roasterLink": "tonsycoffee.com",
+      "roasterTastingNotes": "Sweet and syrupy with complex chocolate and fruit notes",
+      "modifiedAt": "2026-01-19 00:04:04",
+      "roaster": {
+        "id": "r_11223ea0",
+        "country": "USA",
+        "link": "tonsycoffee.com",
+        "stateRegion": "Washington",
+        "fullName": "Tony's Coffee",
+        "city": "Bellingham",
+        "name": "Tony's Coffee"
+      },
+      "caffeine": "Regular",
+      "origin": "Blend"
+    },
+    {
+      "fullName": "Cosmo Espresso (Atomic Coffee Roasters)",
+      "sortDate": "2026-01-16 09:46:33",
+      "fuzzy": "Cosmo Espresso,Atomic Coffee Roasters",
+      "latestBrewDate": "2026-01-16 00:00:30",
+      "city": "Peabody",
+      "roasterLink": "atmomicroastery.com",
+      "caffeine": "Regular",
+      "id": "c_76081721",
+      "roastLevel": "Medium",
+      "addedAt": "2026-01-12 13:27:20",
+      "name": "Cosmo Espresso",
+      "altRoaster": true,
+      "roaster": {
+        "country": "USA",
+        "stateRegion": "Mass",
+        "fullName": "Atomic Coffee Roasters",
+        "link": "atmomicroastery.com",
+        "id": "r_3742f562",
+        "city": "Peabody",
+        "name": "Atomic Coffee Roasters"
+      },
+      "modifiedAt": "2026-01-16 13:07:08",
+      "stateRegion": "Mass",
+      "weight": "12",
       "weightUnit": "oz",
       "ratings": {
         "rating": 10
       },
-      "country": "United States",
-      "roasterTastingNotes": "citrus, honey, dark chocolate",
-      "altRoaster": true,
-      "weight": "10"
+      "roasterTastingNotes": "Plum, Cranberry, Marzipan",
+      "country": "USA",
+      "roasterName": "Atomic Coffee Roasters"
     },
     {
-      "fullName": "Sugar Bee Espresso (Tony's Coffee)",
-      "addedAt": "2026-01-12 13:05:25",
-      "roastLevel": "Light/Medium",
+      "fuzzy": "Black Velvet Espresso,Atomic Coffee Roasters",
       "roaster": {
-        "id": "r_ee094572",
-        "country": "USA",
-        "stateRegion": "Washington",
-        "city": "Bellingham",
-        "fullName": "Tony's Coffee",
-        "name": "Tony's Coffee",
-        "link": "tonsycoffee.com"
-      },
-      "id": "c_eca02ef5",
-      "roasterLink": "tonsycoffee.com",
-      "roasterName": "Tony's Coffee",
-      "brews": [
-        {
-          "temperatureUnit": "°C",
-          "brewedAt": "2026-01-13 09:39:32",
-          "fullName": "Sugar Bee Espresso (Tony's Coffee)",
-          "yieldUnit": "g",
-          "addedAt": "2026-01-13 09:26:55",
-          "machine": {
-            "fullName": "9Barista Mk.2",
-            "id": "0a3a5e2a",
-            "model": "Mk.2",
-            "brand": "9Barista"
-          },
-          "fuzzy": "Sugar Bee Espresso",
-          "yield": "36",
-          "doseUnit": "g",
-          "isFlagged": "No",
-          "grinderSetting": "28",
-          "originalEntry": {
-            "temperatureUnit": "°C",
-            "id": "br_fb72dba8",
-            "modifiedAt": "2026-01-13 09:39:32",
-            "brewedAt": "2026-01-13 09:39:32",
-            "brewTime": "2026-01-13 09:00:27",
-            "dose": "18",
-            "fullName": "Sugar Bee Espresso",
-            "machine": {
-              "model": "Mk.2",
-              "brand": "9Barista",
-              "id": "0a3a5e2a",
-              "fullName": "9Barista Mk.2"
-            },
-            "yieldUnit": "g",
-            "grinderSetting": "28",
-            "coffee": {
-              "fullName": "Sugar Bee Espresso (Tony's Coffee)",
-              "name": "Sugar Bee Espresso",
-              "id": "c_eca02ef5"
-            },
-            "yield": "36",
-            "addedAt": "2026-01-13 09:26:55",
-            "temperature": "93",
-            "doseUnit": "g",
-            "grinder": {
-              "fullName": "Baratza Encore ESP Pro",
-              "model": "Encore ESP Pro",
-              "brand": "Baratza",
-              "id": "2125fe5e"
-            }
-          },
-          "grinder": {
-            "fullName": "Baratza Encore ESP Pro",
-            "model": "Encore ESP Pro",
-            "brand": "Baratza",
-            "id": "2125fe5e"
-          },
-          "brewTime": "2026-01-13 09:00:27",
-          "restedDays": 0,
-          "dose": "18",
-          "id": "br_fb72dba8",
-          "temperature": "93",
-          "coffee": {
-            "name": "Sugar Bee Espresso",
-            "id": "c_eca02ef5",
-            "fullName": "Sugar Bee Espresso (Tony's Coffee)"
-          },
-          "modifiedAt": "2026-01-13 09:39:32"
-        },
-        {
-          "fullName": "Sugar Bee Espresso (Tony's Coffee)",
-          "temperatureUnit": "°C",
-          "grinderSetting": "28",
-          "dose": "18",
-          "addedAt": "2026-01-13 09:26:55",
-          "modifiedAt": "2026-01-13 09:39:18",
-          "yield": "40",
-          "brewTime": "2026-01-13 09:00:27",
-          "doseUnit": "g",
-          "isFlagged": "No",
-          "fuzzy": "Sugar Bee Espresso",
-          "yieldUnit": "g",
-          "restedDays": 0,
-          "temperature": "93",
-          "grinder": {
-            "id": "2125fe5e",
-            "model": "Encore ESP Pro",
-            "fullName": "Baratza Encore ESP Pro",
-            "brand": "Baratza"
-          },
-          "coffee": {
-            "id": "c_eca02ef5",
-            "name": "Sugar Bee Espresso",
-            "fullName": "Sugar Bee Espresso (Tony's Coffee)"
-          },
-          "machine": {
-            "model": "Mk.2",
-            "fullName": "9Barista Mk.2",
-            "brand": "9Barista",
-            "id": "0a3a5e2a"
-          },
-          "originalEntry": {
-            "yieldUnit": "g",
-            "temperature": "93",
-            "coffee": {
-              "id": "c_eca02ef5",
-              "name": "Sugar Bee Espresso",
-              "fullName": "Sugar Bee Espresso (Tony's Coffee)"
-            },
-            "doseUnit": "g",
-            "brewTime": "2026-01-13 09:00:27",
-            "grinderSetting": "28",
-            "temperatureUnit": "°C",
-            "dose": "18",
-            "grinder": {
-              "fullName": "Baratza Encore ESP Pro",
-              "brand": "Baratza",
-              "id": "2125fe5e",
-              "model": "Encore ESP Pro"
-            },
-            "addedAt": "2026-01-13 09:26:55",
-            "yield": "40",
-            "machine": {
-              "id": "0a3a5e2a",
-              "fullName": "9Barista Mk.2",
-              "model": "Mk.2",
-              "brand": "9Barista"
-            },
-            "modifiedAt": "2026-01-13 09:39:18",
-            "fullName": "Sugar Bee Espresso"
-          }
-        }
-      ],
-      "city": "Bellingham",
-      "altRoaster": true,
-      "fuzzy": "Sugar Bee Espresso,Tony's Coffee",
-      "caffeine": "Regular",
-      "roasterTastingNotes": "Sweet and syrupy with complex chocolate and fruit notes",
-      "origin": "Blend",
-      "country": "USA",
-      "originalEntry": {
-        "fullName": "Sugar Bee Espresso (Tony's Coffee)",
-        "country": "USA",
-        "modifiedAt": "2026-01-12 15:16:17",
-        "name": "Sugar Bee Espresso",
-        "roastLevel": "Light/Medium",
-        "ratings": {},
-        "roasterTastingNotes": "Sweet and syrupy with complex chocolate and fruit notes",
-        "altRoaster": true,
-        "origin": "Blend",
-        "id": "c_eca02ef5",
-        "roasterLink": "tonsycoffee.com",
-        "stateRegion": "Washington",
-        "roaster": {
-          "link": "tonsycoffee.com",
-          "city": "Bellingham",
-          "stateRegion": "Washington",
-          "name": "Tony's Coffee",
-          "country": "USA",
-          "fullName": "Tony's Coffee",
-          "id": "r_ee094572"
-        },
-        "addedAt": "2026-01-12 13:05:25",
-        "city": "Bellingham"
-      },
-      "ratings": {
-        "rating": 9
-      },
-      "modifiedAt": "2026-01-13 10:54:51",
-      "sortDate": "2026-01-13 09:39:32",
-      "name": "Sugar Bee Espresso",
-      "stateRegion": "Washington"
-    },
-    {
-      "city": "Peabody",
-      "modifiedAt": "2026-01-13 16:39:10",
-      "weight": "12",
-      "sortDate": "2026-01-12 13:27:20",
-      "altRoaster": true,
-      "roasterName": "Atomic Coffee Roasters",
-      "id": "c_76081721",
-      "fuzzy": "Cosmo Espresso,Atomic Coffee Roasters",
-      "country": "USA",
-      "weightUnit": "oz",
-      "brews": [],
-      "ratings": {
-        "rating": 8
-      },
-      "fullName": "Cosmo Espresso (Atomic Coffee Roasters)",
-      "roaster": {
-        "country": "USA",
         "name": "Atomic Coffee Roasters",
         "fullName": "Atomic Coffee Roasters",
-        "stateRegion": "Mass",
-        "city": "Peabody",
-        "id": "r_3742f562",
-        "link": "atmomicroastery.com"
+        "id": "r_3742f562"
       },
-      "originalEntry": {
-        "name": "Cosmo Espresso",
-        "roaster": {
-          "stateRegion": "Mass",
-          "country": "USA",
-          "id": "r_3742f562",
-          "fullName": "Atomic Coffee Roasters",
-          "name": "Atomic Coffee Roasters",
-          "city": "Peabody",
-          "link": "atmomicroastery.com"
-        },
-        "roastLevel": "Medium",
-        "weightUnit": "oz",
-        "fullName": "Cosmo Espresso (Atomic Coffee Roasters)",
-        "city": "Peabody",
-        "altRoaster": true,
-        "roasterTastingNotes": "Plum, Cranberry, Marzipan",
-        "addedAt": "2026-01-12 13:27:20",
-        "id": "c_76081721",
-        "roasterLink": "atmomicroastery.com",
-        "stateRegion": "Mass",
-        "ratings": {},
-        "modifiedAt": "2026-01-12 13:27:20",
-        "country": "USA",
-        "weight": "12"
-      },
-      "roastLevel": "Medium",
-      "roasterLink": "atmomicroastery.com",
-      "name": "Cosmo Espresso",
-      "caffeine": "Regular",
-      "addedAt": "2026-01-12 13:27:20",
-      "stateRegion": "Mass",
-      "roasterTastingNotes": "Plum, Cranberry, Marzipan"
-    },
-    {
-      "caffeine": "Regular",
       "id": "c_cc8d3c03",
-      "roaster": {
-        "name": "Atomic Coffee Roasters",
-        "id": "r_3742f562",
-        "fullName": "Atomic Coffee Roasters"
-      },
-      "addedAt": "2026-01-13 08:29:00",
-      "roasterName": "Atomic Coffee Roasters",
-      "fuzzy": "Black Velvet Espresso,Atomic Coffee Roasters",
-      "modifiedAt": "2026-01-13 10:55:26",
-      "brews": [],
-      "name": "Black Velvet Espresso",
       "ratings": {
         "rating": 6
       },
+      "caffeine": "Regular",
+      "addedAt": "2026-01-13 08:29:00",
+      "sortDate": "2026-01-13 08:29:00",
+      "modifiedAt": "2026-01-18 23:56:34",
       "fullName": "Black Velvet Espresso (Atomic Coffee Roasters)",
-      "originalEntry": {
-        "id": "c_cc8d3c03",
-        "modifiedAt": "2026-01-13 08:29:00",
-        "fullName": "Black Velvet Espresso (Atomic Coffee Roasters)",
-        "ratings": {},
-        "roaster": {
-          "name": "Atomic Coffee Roasters",
-          "id": "r_3742f562",
-          "fullName": "Atomic Coffee Roasters"
-        },
-        "name": "Black Velvet Espresso",
-        "addedAt": "2026-01-13 08:29:00"
+      "notes": "s",
+      "name": "Black Velvet Espresso"
+    },
+    {
+      "modifiedAt": "2026-01-18 17:10:54",
+      "origin": "Blend",
+      "id": "c_168494d8",
+      "roastLevel": "Light/Medium",
+      "addedAt": "2026-01-14 12:21:32",
+      "country": "United States",
+      "roasterTastingNotes": "Tangerine, amaretto, salted caramel. ",
+      "altRoaster": true,
+      "name": "64th Street Espreso",
+      "ratings": {
+        "rating": 8
       },
-      "sortDate": "2026-01-13 08:29:00"
+      "fullName": "64th Street Espreso (McLaughlin Roasting Co. )",
+      "roaster": {
+        "fullName": "McLaughlin Roasting Co. ",
+        "id": "r_6681be96",
+        "country": "United States",
+        "name": "McLaughlin Roasting Co. ",
+        "stateRegion": "CA"
+      },
+      "stateRegion": "CA"
+    },
+    {
+      "id": "c_2f73b96b",
+      "weight": "12",
+      "fullName": "Ethiopia Yirgacheffe (McLaughlin Roasting Co. )",
+      "name": "Ethiopia Yirgacheffe",
+      "roaster": {
+        "id": "r_6681be96",
+        "fullName": "McLaughlin Roasting Co. ",
+        "name": "McLaughlin Roasting Co. "
+      },
+      "addedAt": "2026-01-15 07:23:25",
+      "origin": "Ethiopia ",
+      "roasterTastingNotes": "Passionfruit, apricot jam, milk chocolate",
+      "ratings": {
+        "rating": 6
+      },
+      "weightUnit": "oz",
+      "modifiedAt": "2026-01-18 23:56:48",
+      "roastLevel": "Medium"
+    },
+    {
+      "fullName": "Kenya (McLaughlin Roasting Co. )",
+      "name": "Kenya",
+      "modifiedAt": "2026-01-18 17:10:45",
+      "roasterTastingNotes": "White nectarine, lime zest, lychee",
+      "weight": "12",
+      "ratings": {
+        "rating": 7
+      },
+      "addedAt": "2026-01-15 08:00:44",
+      "notes": "s",
+      "weightUnit": "oz",
+      "origin": "Kenya",
+      "roaster": {
+        "name": "McLaughlin Roasting Co. ",
+        "id": "r_6681be96",
+        "fullName": "McLaughlin Roasting Co. "
+      },
+      "id": "c_22579ce5",
+      "roastLevel": "Light/Medium"
+    },
+    {
+      "priceUnit": "USD ($)",
+      "tastingNotes": "wow!",
+      "addedAt": "2026-01-17 16:43:45",
+      "id": "c_d56bd3a8",
+      "origin": "Colombia",
+      "name": "La Piragua Pink Bourbon",
+      "fuzzy": "La Piragua Pink Bourbon,The Boy & The Bear",
+      "fullName": "La Piragua Pink Bourbon (The Boy & The Bear)",
+      "roasterTastingNotes": "Blackberry, lemonade, cherry",
+      "weightUnit": "oz",
+      "roaster": {
+        "fullName": "The Boy & The Bear",
+        "id": "9f564b89",
+        "name": "The Boy & The Bear"
+      },
+      "price": "32",
+      "caffeine": "Regular",
+      "weight": "10",
+      "modifiedAt": "2026-01-19 00:04:16",
+      "sortDate": "2026-01-17 16:47:05",
+      "ratings": {
+        "flavor": 10,
+        "rating": 10
+      },
+      "roastLevel": "Light",
+      "latestBrewDate": "2026-01-17 00:03:20"
+    },
+    {
+      "roasterTastingNotes": "Pomegranate, mango, honey",
+      "price": "28",
+      "roaster": {
+        "fullName": "The Boy & The Bear",
+        "id": "9f564b89",
+        "name": "The Boy & The Bear"
+      },
+      "addedAt": "2026-01-18 08:05:46",
+      "weight": "12",
+      "fullName": "Yenifer Rojas (The Boy & The Bear)",
+      "id": "c_fa23c12f",
+      "ratings": {
+        "rating": 9
+      },
+      "origin": "Colombia",
+      "name": "Yenifer Rojas",
+      "modifiedAt": "2026-01-18 23:56:06",
+      "roastLevel": "Light/Medium"
     }
   ],
-  "modifiedAt": "2026-01-14 08:44:58"
+  "yieldCalculator": {
+    "dose": 18,
+    "ratio": "2",
+    "yield": 36
+  },
+  "modifiedAt": "2026-01-19 00:04:16"
 }

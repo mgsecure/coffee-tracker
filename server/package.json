@@ -2,12 +2,12 @@
   "name": "@starter/server",
   "version": "0.1.0",
   "type": "module",
-  "main": "src/lockpickersUnitedServer.js",
+  "main": "src/server.js",
   "scripts": {
     "dev": "NODE_ENV=local nodemon --watch src src/index.js",
-    "start": "NODE_ENV=production node src/lockpickersUnitedServer.js",
-    "start:dev": "NODE_ENV=development node src/lockpickersUnitedServer.js",
-    "start:local": "NODE_ENV=local node src/lockpickersUnitedServer.js",
+    "start": "NODE_ENV=production node src/server.js",
+    "start:dev": "NODE_ENV=development node src/server.js",
+    "start:local": "NODE_ENV=local node src/server.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint \"src/**/*.{js,jsx}\" --max-warnings 0"
