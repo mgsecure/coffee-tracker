@@ -17,7 +17,7 @@ export function AppProvider({children}) {
         setBeta(value)
     }, [setBeta])
 
-    const testing = true
+    const testing = false
     const verbose = false
 
     const [first, setFirst] = useState(true)

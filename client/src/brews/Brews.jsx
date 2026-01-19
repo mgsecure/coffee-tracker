@@ -6,12 +6,15 @@ import DataContext from '../context/DataContext.jsx'
 import {motion, AnimatePresence} from 'framer-motion'
 import FilterDisplayAdvanced from '../filters/FilterDisplayAdvanced.jsx'
 import NoMatchingEntriesCard from '../profile/NoMatchingEntriesCard.jsx'
+import useWindowSize from '../util/useWindowSize.jsx'
 
 export default function Brews() {
     const {visibleEntries = [], allEntriesCount} = useContext(DataContext)
 
     const [expanded, setExpanded] = useState(undefined)
     const defExpanded = useDeferredValue(expanded)
+
+    const {isMobile} = useWindowSize()
 
     return (
         <div style={{
@@ -23,10 +26,8 @@ export default function Brews() {
                 <FilterDisplayAdvanced/>
             </div>
 
-            <div style={{width: '100%', marginLeft: 'auto', marginRight: 'auto'}}>
-
-                <Grid container spacing={'6px'} columns={{xs: 1, sm: 1, md: 1}}
-                      style={{marginTop: 0, marginLeft: 0, width: '100%'}}>
+            <div style={{margin: isMobile ? '0px 3px' : '0px 6px'}}>
+                <Grid container spacing={'6px'} columns={1}>
                     <AnimatePresence>
                         <Grid size={{xs: 4, sm: 4, md: 4}} key={'add-bean-card'}>
                             {visibleEntries.length === 0

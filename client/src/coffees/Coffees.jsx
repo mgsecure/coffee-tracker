@@ -7,6 +7,7 @@ import CoffeeCard from './CoffeeCard.jsx'
 import FilterContext from '../context/FilterContext.jsx'
 import FilterDisplayAdvanced from '../filters/FilterDisplayAdvanced.jsx'
 import NoMatchingEntriesCard from '../profile/NoMatchingEntriesCard.jsx'
+import useWindowSize from '../util/useWindowSize.jsx'
 
 export default function Coffees() {
     const {visibleEntries = [], allEntriesCount} = useContext(DataContext)
@@ -14,6 +15,8 @@ export default function Coffees() {
     const {filters} = useContext(FilterContext)
     const [expanded, setExpanded] = useState(filters.id)
     const defExpanded = useDeferredValue(expanded)
+
+    const {isMobile} = useWindowSize()
 
     return (
         <div style={{
@@ -25,9 +28,8 @@ export default function Coffees() {
                 <FilterDisplayAdvanced/>
             </div>
 
-            <div style={{maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto'}}>
-                <Grid container spacing={'6px'} columns={{xs: 1, sm: 1, md: 1}}
-                      style={{marginTop: 0, marginLeft: 0}}>
+            <div style={{margin: isMobile ? '0px 3px' : '0px 6px'}}>
+                <Grid container spacing={'6px'} columns={1}>
                     <AnimatePresence>
                         <Grid size={{xs: 4, sm: 4, md: 4}} key={'add-bean-card'}>
                             {visibleEntries.length === 0

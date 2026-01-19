@@ -5,11 +5,14 @@ import Grid from '@mui/material/Grid'
 import DataContext from '../context/DataContext.jsx'
 import NoMatchingEntriesCard from '../profile/NoMatchingEntriesCard.jsx'
 import {motion, AnimatePresence} from 'framer-motion'
+import useWindowSize from '../util/useWindowSize.jsx'
 
 export default function Equipment() {
     const {visibleEntries = [], allEntriesCount} = useContext(DataContext)
     const [expanded, setExpanded] = useState(undefined)
     const defExpanded = useDeferredValue(expanded)
+
+    const {isMobile} = useWindowSize()
 
     return (
 
@@ -20,10 +23,8 @@ export default function Equipment() {
         }}>
             <div style={{marginBottom: 10}}/>
 
-            <div style={{maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto'}}>
-
-                <Grid container spacing={'6px'} columns={1}
-                      style={{margin: '0px 4px'}}>
+            <div style={{margin: isMobile ? '0px 3px' : '0px 6px'}}>
+                <Grid container spacing={'6px'} columns={1}>
                     <AnimatePresence>
 
                         <Grid size={{xs: 4, sm: 4, md: 4}} key={'add-item-card'}>

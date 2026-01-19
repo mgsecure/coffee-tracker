@@ -181,8 +181,7 @@ export default function CoffeeCard({entry = {}, expanded, onExpand}) {
                         flexDirection: flexDirection,
                         placeItems: 'center',
                         width: '100%',
-                        marginBottom: 8
-                    }}>
+                        marginBottom: 8}}>
                         <div style={{flexGrow: 1}}>
                             <div style={{
                                 marginBottom: 5,

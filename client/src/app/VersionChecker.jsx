@@ -5,7 +5,6 @@ import Backdrop from '@mui/material/Backdrop'
 import Button from '@mui/material/Button'
 import AppContext from './AppContext.jsx'
 import SystemUpdateIcon from '@mui/icons-material/SystemUpdate'
-import DownloadIcon from '@mui/icons-material/Download'
 
 function VersionChecker() {
 
