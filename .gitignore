@@ -15,7 +15,6 @@ dist
 client-dist
 dist-ssr
 build
-.yarn/*
 .husky/_/*
 
 scripts/*.csv
