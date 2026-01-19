@@ -1,10 +1,11 @@
 import React, {useCallback, useContext} from 'react'
-import SystemUpdateIcon from '@mui/icons-material/SystemUpdate'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Backdrop from '@mui/material/Backdrop'
 import Button from '@mui/material/Button'
 import AppContext from './AppContext.jsx'
+import SystemUpdateIcon from '@mui/icons-material/SystemUpdate'
+import DownloadIcon from '@mui/icons-material/Download'
 
 function VersionChecker() {
 
@@ -42,14 +43,15 @@ function VersionChecker() {
     if (updateAvailable) return (
         <React.Fragment>
             <Tooltip title='New Version Available' arrow disableFocusListener>
-                <IconButton onClick={handleClick} style={{color: 'green', marginLeft: 4}}>
+                <IconButton
+                    onClick={handleClick}
+                    style={{color: '#08a108', margin: '6px 0px 0px 4px', height: 36, width: 36}}
+                >
                     <SystemUpdateIcon/>
                 </IconButton>
             </Tooltip>
         </React.Fragment>
     )
-
-
 
 
 }
