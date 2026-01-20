@@ -1,0 +1,15 @@
+{
+  "name": "scripts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+  },
+  "author": "Neal Bayless",
+  "license": "MIT",
+  "description": "",
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}

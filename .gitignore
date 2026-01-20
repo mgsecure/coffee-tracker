@@ -37,3 +37,4 @@ client/public/sitemap.txt
 client/public/sitemap.xml
 client/public/data/*
 client/.env.keys
+client/scripts/keys

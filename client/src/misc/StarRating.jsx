@@ -4,7 +4,9 @@ import {Rating} from 'react-simple-star-rating'
 export default function StarRating({ratings, iconsCount = 5, dimension, onChange, size = 24, emptyColor = '#ccc', readonly= false, fillColor, style, allowFraction=true}) {
 
     const handleRating = useCallback((rate) => {
-        onChange({rating: rate, dimension: dimension})
+        if (rate !== ratings[dimension]) {
+            onChange({rating: rate, dimension: dimension})
+        }
     },[dimension, onChange])
 
     return (
