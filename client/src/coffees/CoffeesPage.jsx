@@ -37,7 +37,6 @@ export default function CoffeesPage() {
             <Nav title='My Coffees' titleMobile='Coffees' extras={extras}/>
 
             <DemoBar/>
-            <div style={{marginBottom: 16}}/>
 
             {profileLoaded && !isLoggedIn && !demoEnabled
                 ? <MustBeLoggedIn actionText={'track your coffees'}/>

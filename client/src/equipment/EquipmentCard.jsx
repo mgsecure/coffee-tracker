@@ -18,6 +18,7 @@ import DeleteEntryButton from '../entries/DeleteEntryButton.jsx'
 import FieldValue from '../misc/FieldValue.jsx'
 import {useNavigate} from 'react-router-dom'
 import useWindowSize from '../util/useWindowSize.jsx'
+import {Button} from '@mui/material'
 
 const ExpandMore = styled((props) => {
     const {expand, ...other} = props
@@ -82,6 +83,8 @@ export default function EquipmentCard({entry = {}, expanded, onExpand}) {
         setDrawerOpen(true)
     }, [])
 
+    const {isMobile} = useWindowSize()
+
     return (
         <Card
             style={{
@@ -97,51 +100,75 @@ export default function EquipmentCard({entry = {}, expanded, onExpand}) {
 
                 <ItemDrawer item={entry.originalEntry} open={drawerOpen} setOpen={setDrawerOpen} type={'Equipment'}/>
 
-                <Tooltip title='Edit' arrow disableInteractive placement={'top'}>
-                    <IconButton onClick={handleDrawerClick} style={{marginRight: 5, marginTop: 8}}>
-                        <EditIcon fontSize='small' style={{color: '#eee'}}/>
-                    </IconButton>
-                </Tooltip>
-                <div style={{width: '100%'}}>
-                    <div style={{
-                        display: 'flex',
-                        flexGrow: 1,
-                        flexDirection: flexDirection,
-                        placeItems: 'center',
-                        width: '100%',
-                        marginBottom: 8
-                    }}>
+                <div style={{
+                    display: 'flex',
+                    placeContent: 'center',
+                    width: '100%',
+                    marginBottom: 0,
+                    alignItems: 'center'
+                }}>
+                    <div style={{flexGrow: 1, fontWeight: 600, paddingLeft: isMobile ? 0 : 20, marginBottom: 0}}>
+                            {isMobile
+                                ? <Tooltip title='Edit' arrow disableInteractive placement={'top'}>
+                                    <IconButton onClick={handleDrawerClick} style={{marginRight: 5, marginTop: 8}}>
+                                        <EditIcon fontSize='small' style={{color: '#eee'}}/>
+                                    </IconButton>
+                                </Tooltip>
+                                : <div style={{width: 115}}>
+                                    <Button onClick={handleDrawerClick} style={{fontWeight: 600}}>
+                                        Edit</Button>
+                                </div>
+                            }
+                    </div>
 
-                        <div style={{flexGrow: 1, marginBottom: 0}}>
-                            <div style={{
-                                fontSize: '0.85rem',
-                                marginBottom: 1,
-                                fontWeight: 500,
-                                opacity: 0.6,
-                                textAlign: 'center'
-                            }}>
-                                {entry.type}
-                            </div>
-                            <div style={{
-                                fontSize: '1.2rem',
-                                fontWeight: 600,
-                                textAlign: 'center',
-                                flexGrow: 1
-                            }}>
-                                <Link style={{color: '#fff'}}
-                                      onClick={() => navigate(`/brews?${entry.type === 'Grinder' ? 'grinderName' : 'machineName'}=${encodeURIComponent(entry.fullName)}`)}>
-                                    {entryName}
-                                </Link>
+                    <div style={{width: '100%'}}>
+                        <div style={{
+                            display: 'flex',
+                            flexGrow: 1,
+                            flexDirection: flexDirection,
+                            placeItems: 'center',
+                            width: '100%',
+                            marginBottom: 0
+                        }}>
+                            <div style={{flexGrow: 1, marginBottom: 0}}>
+                                <div style={{
+                                    fontSize: '0.85rem',
+                                    marginBottom: 1,
+                                    fontWeight: 500,
+                                    opacity: 0.6,
+                                    textAlign: 'center'
+                                }}>
+                                    {entry.type}
+                                </div>
+                                <div style={{
+                                    fontSize: '1.2rem',
+                                    fontWeight: 600,
+                                    textAlign: 'center',
+                                    flexGrow: 1
+                                }}>
+                                    <Link style={{color: '#fff'}}
+                                          onClick={() => navigate(`/brews?${entry.type === 'Grinder' ? 'grinderName' : 'machineName'}=${encodeURIComponent(entry.fullName)}`)}>
+                                        {entryName}
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div style={{flexGrow: 1, alignItems: 'center', textAlign: 'right', paddingRight: isMobile ? 0 : 20}}>
+                        {isMobile
+                            ? <Tooltip title='Details' arrow disableFocusListener disableInteractive placement={'top'}>
+                                <ExpandMore style={{height: 36, width: 36, marginLeft: 5, marginTop: 8}}
+                                            onClick={handleChange}
+                                            expand={expanded}>
+                                    <ExpandMoreIcon/>
+                                </ExpandMore>
+                            </Tooltip>
+                            : <Button onClick={handleChange}
+                                      style={{width: 115, fontWeight: 600, whiteSpace: 'nowrap'}}>
+                                {expanded ? 'Hide' : 'Show'} Details</Button>
+                        }
+                    </div>
                 </div>
-                <Tooltip title='Details' arrow disableFocusListener disableInteractive placement={'top'}>
-                    <ExpandMore style={{height: 36, width: 36, marginLeft: 5, marginTop: 8}} onClick={handleChange}
-                                expand={expanded}>
-                        <ExpandMoreIcon/>
-                    </ExpandMore>
-                </Tooltip>
             </CardContent>
             <CardActions sx={{padding: '0px 5px 4px 5px'}}>
                 <div style={{width: '100%', display: 'flex', placeItems: 'center'}}>

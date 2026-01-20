@@ -62,7 +62,7 @@ export default function CoffeeCard({entry = {}, expanded, onExpand}) {
 
     const changeBrewType = useCallback((type) => {
         setBrewType(type)
-    }, [])
+    },[])
 
     const currentBrew = brewType === 'latest' ? latestBrew : bestBrew
     const showBrewToggle = latestBrew && bestBrew && latestBrew.brewedAt !== bestBrew.brewedAt
@@ -178,17 +178,16 @@ export default function CoffeeCard({entry = {}, expanded, onExpand}) {
                     <div style={{
                         display: 'flex',
                         flexGrow: 1,
-                        flexDirection: 'column',
+                        flexDirection: flexDirection,
                         placeItems: 'center',
                         width: '100%',
-                        marginBottom: 8
-                    }}>
+                        marginBottom: 8}}>
                         <div style={{flexGrow: 1}}>
                             <div style={{
                                 marginBottom: 5,
                                 flexGrow: 1,
                                 placeContent: 'center',
-                                textAlign: 'center'
+                                textAlign: (isMobile ? 'center' : 'left')
                             }}>
                                 <div style={{fontSize: '0.85rem', marginBottom: 1, fontWeight: 500, opacity: 0.6}}>
                                     {entry.roaster?.name}
@@ -204,43 +203,18 @@ export default function CoffeeCard({entry = {}, expanded, onExpand}) {
                                 </div>
                             </div>
                         </div>
-                        {!isMobile &&
-                            <>
-                                <div style={{display: 'flex', placeContent: 'center', width: '100%', marginBottom: 0}}>
-                                    <div style={{flexGrow: 1,fontWeight: 600, paddingLeft: 20}}>
-                                        <div style={{width: 115}}>
-                                        <Button onClick={handleDrawerClick}  style={{fontWeight: 600}}>
-                                            Edit</Button>
-                                        </div>
-                                    </div>
-                                    <RatingTable ratingDimensions={ratingDimensions} onRatingChange={handleRatingChange}
-                                                 ratings={ratings} emptyColor={'#555'} showLabel={false}
-                                                 fontSize={'0.85rem'} size={19} paddingData={0} iconsCount={10}/>
-                                    <div style={{flexGrow: 1, textAlign: 'right', paddingRight:20}}>
-                                        <Button onClick={handleChange} style={{width: 115, fontWeight: 600}}>
-                                            {expanded ? 'Hide' : 'Show'} Details</Button>
-                                    </div>
-                                </div>
-                            </>
-                        }
-                        {isMobile &&
-                            <>
-                                <div style={{display: 'flex', placeContent: 'center', marginBottom: 0}}>
-                                    <Button onClick={handleChange}
-                                            style={{width: 115}}>{expanded ? 'Hide' : 'Show'} Details</Button>
-                                    <Button onClick={handleDrawerClick}>Edit</Button>
-                                </div>
-                                <div style={{marginRight: 0}}>
-                                    <div style={{display: 'flex', marginBottom: 0, width: 230, placeItems: 'center'}}>
-                                        <RatingTable ratingDimensions={ratingDimensions}
-                                                     onRatingChange={handleRatingChange}
-                                                     ratings={ratings} emptyColor={'#555'} showLabel={false}
-                                                     fontSize={'0.85rem'} size={20} paddingData={0} iconsCount={10}/>
-                                    </div>
-                                </div>
-                            </>
-                        }
-
+                        <div style={{display: 'flex', placeContent: 'center', marginBottom: 0}}>
+                            <Button onClick={handleChange}
+                                    style={{width: 115}}>{expanded ? 'Hide' : 'Show'} Details</Button>
+                            <Button onClick={handleDrawerClick}>Edit</Button>
+                        </div>
+                        <div style={{marginRight: 0}}>
+                            <div style={{display: 'flex', marginBottom: 0, width: 230, placeItems: 'center'}}>
+                                <RatingTable ratingDimensions={ratingDimensions} onRatingChange={handleRatingChange}
+                                             ratings={ratings} emptyColor={'#555'} showLabel={false}
+                                             fontSize={'0.85rem'} size={20} paddingData={0} iconsCount={10}/>
+                            </div>
+                        </div>
                         {(sort === 'price' || sort === 'priceAsc') &&
                             <div style={{marginLeft: 10}}>
                                 {modeWeightUnit === 'oz'

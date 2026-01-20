@@ -30,7 +30,7 @@ export default function RatingTable({
             ratingArea: ratingDimensions[key] || key,
             rating: <StarRating ratings={ratings} onChange={onRatingChange} dimension={key} iconsCount={iconsCount}
                                 readonly={readonly} size={size} fontSize={fontSize} allowFraction={allowFraction}
-                                fillColor={fillColor} emptyColor={emptyColor} style={{marginLeft: 5, marginTop: 4}}
+                                fillColor={fillColor} emptyColor={emptyColor} style={{marginLeft: 0, marginTop: 4}}
             />
         }
     })
@@ -42,7 +42,8 @@ export default function RatingTable({
             {useTable
                 ? <DisplayTable tableData={tableData} showHeader={false} alternateRows={false}
                                 colorData={'#ddd'} fontSize={fontSize} fontWeightData={fontWeight}
-                                paddingData={paddingData} backgroundColor={backgroundColor}/>
+                                paddingData={paddingData} backgroundColor={backgroundColor}
+                                bodyStyle={{paddingRight:5}}/>
                 : <div style={{display: 'flex', justifyContent: 'center', flexGrow: 1}}>
                     {rows.map((row, index) => (
                         <div key={index} style={{

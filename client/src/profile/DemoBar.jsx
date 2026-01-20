@@ -12,7 +12,8 @@ export default function DemoBar() {
     if (!authLoaded || isLoggedIn) return null
 
     return (
-        <div style={{display: 'flex', alignItems: 'center', width: '100%', marginTop: 10,
+        <div style={{display: 'flex', alignItems: 'center', width: '100%',
+            marginTop: 10, marginBottom: 10,
             backgroundColor: demo ? '#262636' : '#262636',
             borderRadius: 5, padding: 4}}>
             <div style={{padding: 0, flexGrow: 1, textAlign: 'right'}}>

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && yarn versionFile",
+    "build": "yarn versionFile && vite build",
     "preview": "vite preview --port 3000",
     "test": "vitest",
     "test:run": "vitest run",

@@ -36,7 +36,6 @@ export default function BrewsPage() {
             <Nav title='All Brews' titleMobile='Brews' extras={extras}/>
 
             <DemoBar/>
-            <div style={{marginBottom: 16}}/>
 
             {!isLoggedIn && !demoEnabled
                 ? <MustBeLoggedIn actionText={'track your brews'}/>

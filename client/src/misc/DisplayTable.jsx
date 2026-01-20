@@ -12,9 +12,9 @@ const DisplayTable = ({
                           paddingData = 5,
                           wrap,
                           showHeader = true,
-                          alternateRows = false
+                          alternateRows = false,
+                          bodyStyle = {}
                       }) => {
-    const bodyStyle = {}
 
     const whiteSpace = wrap ? 'inherit' : 'nowrap'
 
@@ -39,7 +39,7 @@ const DisplayTable = ({
 
     return (
         <div style={{backgroundColor: backgroundColor, padding: '0px 8px 8px 8px'}}>
-            <div style={{fontSize: '1.2rem', margin: '10px'}}>{tableData.title}</div>
+            {tableData.title && <div style={{fontSize: '1.2rem', margin: '10px'}}>{tableData.title}</div>}
             <TableContainer id='statsTable'
                             style={{
                                 padding: '0px 0px 0px 0px',

@@ -30,7 +30,6 @@ export default function EquipmentPage() {
             <Nav title='My Gear' titleMobile='My Gear' extras={extras}/>
 
             <DemoBar/>
-            <div style={{marginBottom: 16}}/>
 
             {!isLoggedIn && !demoEnabled
                 ? <MustBeLoggedIn actionText={'track your gear'}/>
