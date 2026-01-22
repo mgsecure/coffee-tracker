@@ -26,7 +26,7 @@ import Link from '@mui/material/Link'
 import AppContext from '../app/AppContext.jsx'
 import EntryImageGallery from '../misc/EntryImageGallery.jsx'
 
-function BeanEntry({entry, expanded, onExpand}) {
+function EspressoBeanEntry({entry, expanded, onExpand}) {
     const {beta} = useContext(AppContext)
     const {expandAll} = useContext(DataContext)
     const {filters} = useContext(FilterContext)
@@ -260,7 +260,7 @@ function BeanEntry({entry, expanded, onExpand}) {
     )
 }
 
-export default React.memo(BeanEntry, (prevProps, nextProps) => {
+export default React.memo(EspressoBeanEntry, (prevProps, nextProps) => {
     return prevProps.entry.id === nextProps.entry.id &&
         prevProps.expanded === nextProps.expanded &&
         prevProps.onExpand === nextProps.onExpand

@@ -13,6 +13,7 @@ import NoMatchingEntriesCard from '../profile/NoMatchingEntriesCard.jsx'
 import RoasterEntry from './RoasterEntry.jsx'
 import Footer from '../nav/Footer.jsx'
 import FilterDisplayAdvanced from '../filters/FilterDisplayAdvanced.jsx'
+import IntroCopy from '../misc/IntroCopy.jsx'
 
 export default function RoastersPage() {
     const {visibleEntries, allEntriesCount, expandAll, loading} = useContext(DataContext)
@@ -45,7 +46,7 @@ export default function RoastersPage() {
         <React.Fragment>
             <Nav title='Roasters' titleMobile='Roasters' extras={extras}/>
 
-            <div style={{marginBottom: 16}}/>
+            <IntroCopy pageName={'popularRoasters'} maxWidth={800}/>
             <div style={{margin: 8, paddingBottom: 32, width: '100%', maxWidth: 800}}>
 
                 {loading && <LoadingDisplay/>}

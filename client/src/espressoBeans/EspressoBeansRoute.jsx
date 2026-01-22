@@ -2,20 +2,20 @@ import React from 'react'
 import {beanFilterFields} from '../data/filterFields'
 import {FilterProvider} from '../context/FilterContext.jsx'
 import usePageTitle from '../util/usePageTitle'
-import DataProvider from './BeansDataProvider.jsx'
+import DataProvider from './EspressoBeansDataProvider.jsx'
 import espressoBeans from '../data/espressoBeansDatabase.json'
-import Beans from './Beans.jsx'
+import EspressoBeans from './EspressoBeans.jsx'
 
-function BeansRoute() {
+function EspressoBeansRoute() {
     usePageTitle('espresso beans database')
 
     return (
         <FilterProvider filterFields={beanFilterFields}>
             <DataProvider allEntries={espressoBeans}>
-                <Beans/>
+                <EspressoBeans/>
             </DataProvider>
         </FilterProvider>
     )
 }
 
-export default BeansRoute
+export default EspressoBeansRoute

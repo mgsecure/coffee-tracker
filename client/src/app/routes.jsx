@@ -43,8 +43,8 @@ export default [{
             path: '/espressoBeans',
             name: 'espressoBeans',
             lazy: async () => {
-                const {default: BeansRoute} = await import('../espressoBeans/BeansRoute.jsx')
-                return {element: <Suspense><BeansRoute/></Suspense>}
+                const {default: EspressoBeansRoute} = await import('../espressoBeans/EspressoBeansRoute.jsx')
+                return {element: <Suspense><EspressoBeansRoute/></Suspense>}
             }
         },
         {

@@ -2,7 +2,7 @@ import React from 'react'
 import {beanFilterFields} from '../data/filterFields'
 import {FilterProvider} from '../context/FilterContext.jsx'
 import usePageTitle from '../util/usePageTitle'
-import DataProvider from '../espressoBeans/BeansDataProvider.jsx'
+import DataProvider from '../espressoBeans/EspressoBeansDataProvider.jsx'
 import espressoBeans from '../data/espressoBeansDatabase.json'
 import EspressoStats from './EspressoStats.jsx'
 

@@ -7,7 +7,7 @@ import filterEntriesAdvanced from '../filters/filterEntriesAdvanced'
 import searchEntriesForText from '../filters/searchEntriesForText'
 import useData from '../util/useData.jsx'
 
-export function BeansDataProvider({children, allEntries}) {
+export function EspressoBeansDataProvider({children, allEntries}) {
     const {filters: allFilters, advancedFilterGroups} = useContext(FilterContext)
     const {search, sort, expandAll} = allFilters
     const {data, loading, error} = useData({url: 'https://beans.mgsecure.com/data/currencyConversion.json'})
@@ -118,4 +118,4 @@ export function BeansDataProvider({children, allEntries}) {
     )
 }
 
-export default BeansDataProvider
+export default EspressoBeansDataProvider

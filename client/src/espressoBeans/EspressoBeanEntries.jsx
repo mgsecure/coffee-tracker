@@ -1,13 +1,13 @@
 import React, {useCallback, useContext, useDeferredValue, useState} from 'react'
 import DataContext from '../context/DataContext'
-import BeanEntry from './BeanEntry.jsx'
+import BeanEntry from './EspressoBeanEntry.jsx'
 import FilterContext from '../context/FilterContext'
 import ExportButton from './ExportButton.jsx'
 import Footer from '../nav/Footer.jsx'
 import LoadingDisplay from '../misc/LoadingDisplay.jsx'
 import FilterDisplayAdvanced from '../filters/FilterDisplayAdvanced.jsx'
 
-function BeanEntries() {
+function EspressoBeanEntries() {
     const {filters, filterCount} = useContext(FilterContext)
     const [expanded, setExpanded] = useState(filters.id)
     const {visibleEntries, expandAll, loading} = useContext(DataContext)
@@ -50,4 +50,4 @@ function BeanEntries() {
     )
 }
 
-export default BeanEntries
+export default EspressoBeanEntries

@@ -38,3 +38,8 @@ client/public/sitemap.xml
 client/public/data/*
 client/.env.keys
 client/scripts/keys
+server/keys
+/server/src/apacheLogAnalysis/logs
+/server/src/apacheLogAnalysis/dailyData
+/server/src/apacheLogAnalysis/errorLogs
+client/stats.html

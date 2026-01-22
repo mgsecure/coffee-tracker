@@ -82,7 +82,10 @@ export default function BrewForm({entry, open, setOpen, action, coffee}) {
     }, [coffeesList, entry?.coffee?.fullname])
 
     const thisCoffee = useMemo(() => {
-        const foundCoffee = coffeesList.find(c => [form.coffeeName, entry?.coffee?.fullName, coffee?.fullname].includes(c.fullName))
+        const foundCoffee =
+            coffeesList.find(c => c.fullName === form.coffeeName)
+            || coffeesList.find(c => c.fullName === c.entry?.coffee?.fullName)
+            || coffeesList.find(c => c.fullName === c.coffee?.fullname)
         return foundCoffee || entry?.coffee || coffee || {name: form.coffeeName, fulName: form.coffeeName}
     }, [coffee, coffeesList, entry, form.coffeeName])
 
