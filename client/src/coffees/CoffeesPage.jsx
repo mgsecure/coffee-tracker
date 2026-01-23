@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
 import Tracker from '../app/Tracker'
 import useWindowSize from '../util/useWindowSize'
 import Nav from '../nav/Nav'
@@ -13,15 +13,23 @@ import AuthContext from '../app/AuthContext.jsx'
 import MustBeLoggedIn from '../profile/MustBeLoggedIn.jsx'
 import DBContext from '../app/DBContext.jsx'
 import {useSearchParams} from 'react-router-dom'
+import FilterContext from '../context/FilterContext.jsx'
 
 export default function CoffeesPage() {
     const {isMobile} = useWindowSize()
     const {visibleEntries = []} = useContext(DataContext)
     const {isLoggedIn} = useContext(AuthContext)
-    const {profileLoaded, demoEnabled} = useContext(DBContext)
+    const {profileLoaded, demoEnabled, demo, setDemo} = useContext(DBContext)
+    const {filters, removeFilters} = useContext(FilterContext)
 
     const [searchParams] = useSearchParams()
     const demoFlag = searchParams.get('demo')
+    useEffect(() => {
+        if (demoFlag && !demo) {
+            setDemo(true)
+            filters.demo && removeFilters(['demo'])
+        }
+    })
 
     const extras = (
         <React.Fragment>
@@ -33,7 +41,7 @@ export default function CoffeesPage() {
     )
 
     const footerBefore = (
-        <div style={{margin: '30px 0px'}}/>
+        <></>
     )
 
     return (

@@ -15,7 +15,7 @@ function Footer({extras, before}) {
 
             {before}
 
-            <div style={{margin: '20px 0px'}}/>
+            <div style={{margin: '60px 0px'}}/>
 
             <Link onClick={() => openInNewTab('https://www.reddit.com/r/espresso')}>
                 r/Espresso

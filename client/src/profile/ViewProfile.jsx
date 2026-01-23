@@ -102,7 +102,7 @@ export default function ViewProfile() {
         </React.Fragment>
     )
     const footerBefore = (
-        <div style={{margin: '30px 0px'}}/>
+        <></>
     )
 
     return (

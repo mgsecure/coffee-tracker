@@ -28,7 +28,7 @@ export default function BrewsPage() {
         </React.Fragment>
     )
     const footerBefore = (
-        <div style={{margin: '30px 0px'}}/>
+        <></>
     )
 
     return (

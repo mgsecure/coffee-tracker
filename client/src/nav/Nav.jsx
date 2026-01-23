@@ -62,9 +62,9 @@ function Nav({extras, extrasTwo, title, titleMobile}) {
                                         {menuItem && !isRootPath
                                             ?
                                             <Link onClick={handleClickTitle} style={{color: theme.palette.text.primary, whiteSpace: 'nowrap'}} sx={linkSx}>
-                                                {isMobile ? titleMobile : title}
+                                                {isMobile ? (titleMobile || title) : title}
                                             </Link>
-                                            : <div style={{whiteSpace: 'nowrap'}}>{isMobile ? titleMobile : title}</div>
+                                            : <div style={{whiteSpace: 'nowrap'}}>{isMobile ? (titleMobile || title) : title}</div>
                                         }
                                     </React.Fragment>
                                 }

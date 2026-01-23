@@ -10,32 +10,34 @@ import RedditIcon from '@mui/icons-material/Reddit'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import TableChartIcon from '@mui/icons-material/TableChart'
 import FreeBreakfastIcon from '@mui/icons-material/FreeBreakfast'
+import CameraAltIcon from '@mui/icons-material/CameraAlt'
+import AssessmentIcon from '@mui/icons-material/Assessment'
 
 export default [
     {
         title: 'Home',
         icon: <HomeIcon fontSize='small'/>,
-        path: '/',
+        path: '/'
     },
     {
         title: 'My Gear',
         icon: <ConstructionIcon fontSize='small'/>,
-        path: '/equipment',
+        path: '/equipment'
     },
     {
         title: 'My Coffees',
         icon: <FreeBreakfastIcon fontSize='small'/>,
-        path: '/coffees',
+        path: '/coffees'
     },
     {
         title: 'All Brews',
         icon: <CoffeeIcon fontSize='small'/>,
-        path: '/brews',
+        path: '/brews'
     },
     {
         title: 'Popular Roasters',
         icon: <FeedIcon fontSize='small'/>,
-        path: '/roasters',
+        path: '/roasters'
     },
     {
         title: 'Espresso Bean Database',
@@ -50,34 +52,54 @@ export default [
     {
         title: 'Stats & Charts',
         icon: <InsertChartOutlinedIcon fontSize='small'/>,
-        path: '/espressoStats',
+        path: '/espressoStats'
+    },
+    {
+        title: 'Screenshots',
+        icon: <CameraAltIcon fontSize='small'/>,
+        path: '/screenshots'
     },
     {
         title: 'Add A Roaster',
         icon: <AddCircleOutlineIcon fontSize='small'/>,
         path: '/info',
-        disabled: true,
+        disabled: true
     },
     {
         title: 'Glossary',
         icon: <MenuBookIcon fontSize='small'/>,
         path: '/glossary',
-        disabled: true,
+        disabled: true
     },
     {
         title: 'About Coffee Tracker',
         icon: <InfoOutlinedIcon fontSize='small'/>,
         path: '/about',
-        disabled: true,
+        disabled: true
+    },
+    {
+        title: 'Reports',
+        icon: <AssessmentIcon fontSize='small'/>,
+        path: '/reports',
+        admin: true,
+        userClaims: ['admin'],
+        children: [
+            {
+                admin: true,
+                userClaims: ['admin'],
+                title: 'Site Report',
+                path: '/reports'
+            },
+        ]
     },
     {
         title: 'Visit r/Espresso',
         icon: <RedditIcon fontSize='small'/>,
-        path: 'https://www.reddit.com/r/espresso/',
+        path: 'https://www.reddit.com/r/espresso/'
     },
     {
         title: 'Visit r/Pourover',
         icon: <RedditIcon fontSize='small'/>,
-        path: 'https://www.reddit.com/r/pourover/',
-    },
+        path: 'https://www.reddit.com/r/pourover/'
+    }
 ]

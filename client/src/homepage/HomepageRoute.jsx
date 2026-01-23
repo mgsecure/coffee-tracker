@@ -73,7 +73,7 @@ export default function HomepageRoute() {
                     </Grid>
                 </Grid>
 
-                <Grid container spacing={1} style={{margin: '0px 0px 30px'}} columns={{xs: 4, sm: 8, md: 12}}>
+                <Grid container spacing={1} style={{margin: '0px 0px 0px'}} columns={{xs: 4, sm: 8, md: 12}}>
                     <Grid size={12}>
                         <Card style={{...style, padding: 15, backgroundColor: theme.palette.card?.main, cursor: 'default'}}>
                             <div style={{fontSize: '1.2rem', fontWeight: 700}}>Resources</div>

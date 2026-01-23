@@ -176,6 +176,14 @@ export default [{
             }
         },
         {
+            path: '/screenshots',
+            name: 'screenshots',
+            lazy: async () => {
+                const {default: ScreenshotsRoute} = await import('../screenshots/ScreenshotsRoute')
+                return {element: <Suspense><ScreenshotsRoute/></Suspense>}
+            }
+        },
+        {
             path: '/modbox',
             name: 'modbox',
             lazy: async () => {

@@ -6,7 +6,6 @@ import DataContext from '../context/DataContext.jsx'
 import {setDeep, setDeepAdd, setDeepPush} from '../util/setDeep'
 import ClickablePie from './ClickablePie.jsx'
 import Footer from '../nav/Footer.jsx'
-import DataTest from './DataTest.jsx'
 import StatsExportButton from './StatsExportButton.jsx'
 
 /**
@@ -206,7 +205,7 @@ export default function EspressoStats() {
     )
 
     const footerBefore = (
-        <div style={{margin: '30px 0px'}}/>
+        <></>
     )
 
     const headerStyle = {
