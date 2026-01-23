@@ -27,14 +27,16 @@ export default function EspressoBeans() {
         <React.Fragment>
             <Nav title='r/espresso beans' titleMobile='r/espresso' extras={extras}/>
 
-            <IntroCopy pageName={'espressoBeans'} maxWidth={800}/>
+            <div style={{margin: 8, padding: 4, paddingBottom: 32, width: '100%', maxWidth: 800}}>
 
-            {!loading && visibleEntries.length === 0 &&
-                <NoMatchingEntriesCard type={'roaster'} entriesCount={visibleEntries.length}
-                                       allEntriesCount={allEntriesCount} addNew={false}/>
-            }
-            <EspressoBeanEntries/>
+                <IntroCopy pageName={'espressoBeans'} maxWidth={800}/>
 
+                {!loading && visibleEntries.length === 0 &&
+                    <NoMatchingEntriesCard type={'roaster'} entriesCount={visibleEntries.length}
+                                           allEntriesCount={allEntriesCount} addNew={false}/>
+                }
+                <EspressoBeanEntries/>
+            </div>
             <Tracker feature='espressoBeans'/>
         </React.Fragment>
     )

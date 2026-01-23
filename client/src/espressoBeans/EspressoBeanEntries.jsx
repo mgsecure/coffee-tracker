@@ -25,7 +25,7 @@ function EspressoBeanEntries() {
     )
 
     return (
-        <div style={{margin: 8, paddingBottom: 32, width: '100%', maxWidth: 800}}>
+        <div style={{width: '100%'}}>
 
             {filterCount > 0 &&
                 <div style={{marginBottom: 10}}>

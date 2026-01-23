@@ -5,6 +5,7 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import IconButton from '@mui/material/IconButton'
 import useWindowSize from '../util/useWindowSize.jsx'
+import {useTheme} from '@mui/material/styles'
 
 const DataTableSort = ({
                            tableData,
@@ -13,7 +14,7 @@ const DataTableSort = ({
                            linkFunction
                        }) => {
 
-
+    const theme = useTheme()
     const {rows, columns, defaultSort = 'name', sortable, wrap = false} = tableData
     const [sort, setSort] = useState(defaultSort)
     const [ascending, setAscending] = useState(!tableData.columns.find(c => c.id === defaultSort)?.descending)
@@ -21,7 +22,6 @@ const DataTableSort = ({
     const overflowStyle = wrap
         ? {whiteSpace: 'inherit'}
         : {whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}
-
 
     const sortRows = useCallback(({rows, sort, defaultSort, ascending}) => {
         const list = (rows || []).slice()
@@ -112,19 +112,21 @@ const DataTableSort = ({
 
     return (
         <div style={{width: tableWidth}}>
-            <div style={{fontSize: '1.3rem', margin: '10px'}}>{tableData.title}</div>
+            {tableData.title &&
+                <div style={{fontSize: '1.3rem', margin: '10px'}}>{tableData.title}</div>
+            }
             <TableContainer id='statsTable'
                             style={{
-                                padding: '0px 0px 0px 4px',
-                                width: tableWidth,
+                                padding: '0px 0px',
+                                width: '100%',
                                 marginLeft: 'auto',
                                 marginRight: 'auto',
                                 height: tableHeight
                             }}
                             component={Paper} elevation={2}>
-                <Table size='small' stickyHeader={!!tableHeight} style={{width: tableWidth}}>
+                <Table size='small' stickyHeader={!!tableHeight} style={{width: '100%'}}>
                     <TableHead>
-                        <TableRow style={{backgroundColor: '#111'}}>
+                        <TableRow>
                             {displayData.columns.map((column, index) =>
                                 <TableCell key={index + 1}
                                            sx={{
@@ -133,7 +135,7 @@ const DataTableSort = ({
                                                fontSize: fontSize,
                                                lineHeight: '1.1rem',
                                                padding: '6px 2px',
-                                               color: '#fff'
+                                               backgroundColor: '#111'
                                            }}
                                            component='th' scope='row'>
 
@@ -147,8 +149,7 @@ const DataTableSort = ({
                                                 <nobr>{column.name}</nobr>
                                             </Link>
                                             {sort === column.id
-                                                ?
-                                                <IconButton onClick={() => handleSort(column.id)} style={{padding: 0}}>
+                                                ? <IconButton onClick={() => handleSort(column.id)} style={{padding: 0}}>
                                                     {sortIcon}</IconButton>
                                                 : <div style={{width: 24}}/>
                                             }

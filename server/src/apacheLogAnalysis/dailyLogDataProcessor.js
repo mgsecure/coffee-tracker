@@ -4,6 +4,7 @@
 import fs from 'fs/promises'
 import path from 'path'
 import {exec} from 'child_process'
+import {setDeepAdd, setDeep} from '../util/setDeep.js'
 
 // DAYJS SETUP
 import dayjs from 'dayjs'
@@ -19,7 +20,7 @@ dayjs.extend(weekOfYear)
 
 // --- CONFIGURATION ---
 const daysToReport = 777
-const startDate = dayjs('2023-02-20')
+const startDate = dayjs('2026-01-01')
 const today = dayjs()
 const endDate = today.subtract(1, 'day')
 
@@ -28,7 +29,7 @@ import {localUser, prodUser} from '../../keys/users.js'
 const prodEnvironment = localUser !== process.env.USER
 
 // Set paths based on environment
-const componentsDir = './'
+const workDir = './'
 const logsPath = './logs'
 const dataDir = './dailyData'
 
@@ -47,15 +48,9 @@ wip.totals = {}
 wip.totals.numDays = 0
 wip.totals.visits = 0
 wip.totals.visitors = 0
-wip.totals.totalLockViews = 0
-wip.totals.totalPotViews = 0
 
 wip.days = {}         // keyed by date string "YYYY-MM-DD"
 wip.weeks = {}        // keyed by first day of week (YYYY-MM-DD)
-wip.lockViewsById = {}
-wip.raflPotViewsById = {}
-wip.referrerPotViews = {}
-wip.raflPotViewsByCountry = {}
 wip.visitsByCountry = {}
 wip.firstVisit = {}   // country => first date seen
 wip.lockViewsByCountry = {}
@@ -89,6 +84,7 @@ const allDataFiles = await fs.readdir(dataDir)
 const dataFiles = allDataFiles.filter(file => !['.', '..', '.DS_Store', 'New Folder With Items'].includes(file))
     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
 
+
 for (const file of dataFiles) {
     const dateString = getDateStringFromFilename(file)
     if (!dateString) continue
@@ -111,216 +107,100 @@ for (const file of dataFiles) {
     // Determine week key using week number and first day of week
     const firstDay = dayjs(requestDate).startOf('week').format('YYYY-MM-DD')
 
-    // Initialize aggregates for this day and week if needed
-    if (!wip.days[dateString]) {
-        wip.days[dateString] = {}
-    }
-    if (!wip.weeks[firstDay]) {
-        wip.weeks[firstDay] = {numDays: 0, visits: 0, visitors: 0, totalLockViews: 0}
-    }
-    wip.totals.numDays++
-    wip.weeks[firstDay].numDays++
+    setDeepAdd(wip, ['totals', 'numDays'], 1)
+    setDeepAdd(wip, ['weeks', firstDay, 'numDays'], 1)
 
-    // PRIMARY METRICS aggregation
-    wip.days[dateString].visits = dayData.visits
-    wip.weeks[firstDay].visits = (wip.weeks[firstDay].visits || 0) + dayData.visits
-    wip.totals.visits += dayData.visits
+    setDeep(wip, ['last28days', dateString, 'visits'], dayData.visits)
+    setDeepAdd(wip, ['weeks', firstDay, 'visits'], dayData.visits)
+    setDeepAdd(wip, ['weeks', 'totals', 'visits'], dayData.visits)
 
-    wip.days[dateString].visitors = dayData.visitors
-    wip.weeks[firstDay].visitors = (wip.weeks[firstDay].visitors || 0) + dayData.visitors
-    wip.totals.visitors += dayData.visitors
+    setDeep(wip, ['last28days', dateString, 'visitors'], dayData.visitors)
+    setDeepAdd(wip, ['weeks', firstDay, 'visitors'], dayData.visitors)
+    setDeepAdd(wip, ['weeks', 'totals', 'visitors'], dayData.visitors)
 
-    // Process lockViewsById
-    if (dayData.lockViewsById) {
-
-        for (const key in dayData.lockViewsById) {
-            const count = dayData.lockViewsById[key]
-            wip.lockViewsById[key] = (wip.lockViewsById[key] || 0) + count
-            lockViews[key] = (lockViews[key] || 0) + count
-
-            const lockBelt = 'Unranked'
-
-            wip.lockViewsByBelt = wip.lockViewsByBelt || {}
-            wip.lockViewsByBelt[lockBelt] = (wip.lockViewsByBelt[lockBelt] || 0) + count
-
-            wip.days[dateString].totalLockViews = (wip.days[dateString].totalLockViews || 0) + count
-            wip.weeks[firstDay].totalLockViews = (wip.weeks[firstDay].totalLockViews || 0) + count
-            wip.totals.totalLockViews += count
-        }
-    }
-
-    // Process raflPotViewsById
-    if (dayData.raflPotViewsById) {
-        for (const key in dayData.raflPotViewsById) {
-            const count = dayData.raflPotViewsById[key]
-            wip.raflPotViewsById[key] = (wip.raflPotViewsById[key] || 0) + count
-            wip.totals.totalPotViews += count
-        }
-    }
-
-    // Process referrerPotViews
-    if (dayData.referrerPotViews) {
-        for (const key in dayData.referrerPotViews) {
-            const count = dayData.referrerPotViews[key]
-            wip.referrerPotViews[key] = (wip.referrerPotViews[key] || 0) + count
-        }
-    }
-
-    // Process raflPotViewsByCountry
-    if (dayData.raflPotViewsByCountry) {
-        for (const key in dayData.raflPotViewsByCountry) {
-            const count = dayData.raflPotViewsByCountry[key]
-            wip.raflPotViewsByCountry[key] = (wip.raflPotViewsByCountry[key] || 0) + count
-        }
-    }
-
-    // Process pageViews
     if (dayData.pageViews) {
-        wip.days[dateString].pageViews = wip.days[dateString].pageViews || {}
         for (const key in dayData.pageViews) {
-            wip.days[dateString].pageViews[key] = (wip.days[dateString].pageViews[key] || 0) + dayData.pageViews[key]
+            setDeepAdd(wip, ['last28days', dateString, 'pageViews', key], dayData.pageViews[key])
         }
     }
-
-    // Process errorPages
     if (dayData.errorPages) {
-        wip.errorPages = wip.errorPages || {}
         for (const key in dayData.errorPages) {
-            wip.errorPages[key] = (wip.errorPages[key] || 0) + dayData.errorPages[key]
+            setDeepAdd(wip, ['errorPages', key], dayData.errorPages[key])
         }
     }
-
-    // Process continents
-    if (dayData.continents) {
-        wip.continents = wip.continents || {}
-        for (const key in dayData.continents) {
-            wip.continents[key] = (wip.continents[key] || 0) + dayData.continents[key]
+    if (dayData.pageViewsByContinent) {
+        for (const key in dayData.pageViewsByContinent) {
+            setDeepAdd(wip, ['pageViewsByContinent', key], dayData.pageViewsByContinent[key])
         }
     }
-
-    // Process visitsByCountry and firstVisit
-    if (dayData.visitsByCountry) {
-        wip.visitsByCountry = wip.visitsByCountry || {}
-        for (const key in dayData.visitsByCountry) {
-            wip.visitsByCountry[key] = (wip.visitsByCountry[key] || 0) + dayData.visitsByCountry[key]
-            // Set first visit if not set or if this date is earlier
-            if (!wip.firstVisit[key] || requestDate.isBefore(dayjs(wip.firstVisit[key], 'YYYY-MM-DD'))) {
-                wip.firstVisit[key] = dateString
+    if (dayData.pageViewsByCountry) {
+        for (const key in dayData.pageViewsByCountry) {
+            setDeepAdd(wip, ['pageViewsByCountry', key], dayData.pageViewsByCountry[key])
+            if (!wip.firstVisit?.[key] || requestDate.isBefore(dayjs(wip.firstVisit?.[key], 'YYYY-MM-DD'))) {
+                setDeep(wip, ['firstVisit', key], dateString)
             }
         }
     }
-
-    // Process lockViewsByCountry
-    if (dayData.lockViewsByCountry) {
-        wip.lockViewsByCountry = wip.lockViewsByCountry || {}
-        for (const key in dayData.lockViewsByCountry) {
-            wip.lockViewsByCountry[key] = (wip.lockViewsByCountry[key] || 0) + dayData.lockViewsByCountry[key]
+    if (dayData.visitorsByCountry) {
+        for (const key in dayData.visitorsByCountry) {
+            setDeepAdd(wip, ['visitorsByCountry', key], dayData.visitorsByCountry[key])
         }
     }
-
-    // Process states
-    if (dayData.states) {
-        wip.states = wip.states || {}
-        for (const key in dayData.states) {
-            wip.states[key] = (wip.states[key] || 0) + dayData.states[key]
+    if (dayData.pageViewsByState) {
+        for (const key in dayData.pageViewsByState) {
+            setDeepAdd(wip, ['pageViewsByState', key], dayData.pageViewsByState[key])
         }
     }
-
-    // Process completedSearches
-    if (dayData.completedSearches) {
-        wip.completedSearches = wip.completedSearches || {}
-        for (const key in dayData.completedSearches) {
-            wip.completedSearches[key] = (wip.completedSearches[key] || 0) + dayData.completedSearches[key]
+    if (dayData.pageViewsBySearchTerm) {
+        for (const page in dayData.pageViewsBySearchTerm) {
+            for (const term in dayData.pageViewsBySearchTerm[page]) {
+                setDeepAdd(wip, ['pageViewsBySearchTerm', page, term], dayData.pageViewsBySearchTerm[page][term])
+                setDeepAdd(wip, ['pageViewsBySearchTerm', 'total', term], dayData.pageViewsBySearchTerm[page][term])
+            }
         }
     }
-
-    // Process lockViewsBySearch
-    if (dayData.lockViewsBySearch) {
-        wip.lockViewsBySearch = wip.lockViewsBySearch || {}
-        for (const key in dayData.lockViewsBySearch) {
-            wip.lockViewsBySearch[key] = (wip.lockViewsBySearch[key] || 0) + dayData.lockViewsBySearch[key]
-        }
-    }
-
-    // Process lockViewsByWidth
-    if (dayData.lockViewsByWidth) {
+    if (dayData.pageViewsByWidth) {
         wip.lockViewsByWidth = wip.lockViewsByWidth || {}
-        for (const key in dayData.lockViewsByWidth) {
-            wip.lockViewsByWidth[key] = (wip.lockViewsByWidth[key] || 0) + dayData.lockViewsByWidth[key]
+        for (const key in dayData.pageViewsByWidth) {
+            setDeepAdd(wip, ['pageViewsByWidth', key], dayData.pageViewsByWidth[key])
         }
     }
-
-    // Process referrerWelcomeViews
-    if (dayData.referrerWelcomeViews) {
-        wip.referrerWelcomeViews = wip.referrerWelcomeViews || {}
-        for (const key in dayData.referrerWelcomeViews) {
-            wip.referrerWelcomeViews[key] = (wip.referrerWelcomeViews[key] || 0) + dayData.referrerWelcomeViews[key]
-        }
-    }
-
-    // Process referrerLockViews
-    if (dayData.referrerLockViews) {
-        wip.referrerLockViews = wip.referrerLockViews || {}
-        for (const key in dayData.referrerLockViews) {
-            wip.referrerLockViews[key] = (wip.referrerLockViews[key] || 0) + dayData.referrerLockViews[key]
-        }
-    }
-
-    // Process referrerViews
     if (dayData.referrerViews) {
-        wip.referrerViews = wip.referrerViews || {}
         for (const key in dayData.referrerViews) {
-            wip.referrerViews[key] = (wip.referrerViews[key] || 0) + dayData.referrerViews[key]
+            setDeepAdd(wip, ['referrerViews', key], dayData.referrerViews[key])
         }
     }
-
-    // Process seoViewsById
-    if (dayData.seoViewsById) {
-        wip.seoLockById = wip.seoLockById || {}
-        for (const key in dayData.seoViewsById) {
-            wip.seoLockById[key] = (wip.seoLockById[key] || 0) + dayData.seoViewsById[key]
-        }
-    }
-
-    // Process browsers
     if (dayData.browsers) {
         for (const key in dayData.browsers) {
-            wip.browsers[key] = (wip.browsers[key] || 0) + dayData.browsers[key]
+            setDeepAdd(wip, ['browsers', key], dayData.browsers[key])
         }
     }
-
-    // Process platforms
     if (dayData.platforms) {
         for (const key in dayData.platforms) {
-            wip.platforms[key] = (wip.platforms[key] || 0) + dayData.platforms[key]
+            setDeepAdd(wip, ['platforms', key], dayData.platforms[key])
         }
     }
-
-    // Process crawlerAgentRequests
     if (dayData.crawlerAgentRequests) {
         for (const key in dayData.crawlerAgentRequests) {
-            wip.crawlerAgentRequests[key] = (wip.crawlerAgentRequests[key] || 0) + dayData.crawlerAgentRequests[key]
+            setDeepAdd(wip, ['crawlerAgentRequests', key], dayData.crawlerAgentRequests[key])
         }
     }
-
-    // Process requestsByLocalHour and requestsByServerHour
     if (dayData.requestsByLocalHour) {
         for (const key in dayData.requestsByLocalHour) {
-            wip.requestsByLocalHour[key] = (wip.requestsByLocalHour[key] || 0) + dayData.requestsByLocalHour[key]
+            setDeepAdd(wip, ['requestsByLocalHour', key], dayData.requestsByLocalHour[key])
         }
     }
     if (dayData.requestsByServerHour) {
         for (const key in dayData.requestsByServerHour) {
-            wip.requestsByServerHour[key] = (wip.requestsByServerHour[key] || 0) + dayData.requestsByServerHour[key]
+            setDeepAdd(wip, ['requestsByServerHour', key], dayData.requestsByServerHour[key])
         }
     }
+    setDeepAdd(wip, ['totals', 'logEntries'], dayData.logEntries)
 
-    // Aggregate total log entries
-    wip.totals.logEntries = (wip.totals.logEntries || 0) + (dayData.logEntries || 0)
 }
 
 // For debugging, print lockViews aggregate as JSON
-//console.log(JSON.stringify(lockViews, null, 2));
+console.log(JSON.stringify(wip, null, 2))
 
 
 // --- SITE STATS OBJECT (final output) ---
@@ -328,131 +208,6 @@ let siteStatsFull = {test: true}
 
 // --- FUNCTIONS FOR BUILDING REPORTS ---
 
-// 1. firstVisitByCountryHighlight
-function firstVisitByCountryHighlight() {
-    let jsonData = {}
-    let columnsArray = []
-    let dataArray = []
-
-    jsonData.title = ''
-    const columns = [
-        ['country', 'Country', 'left'],
-        ['firstVisit', 'First Visit', 'center'],
-        ['visits', 'Visits', 'center']
-    ]
-    for (const col of columns) {
-        columnsArray.push({id: col[0], name: col[1], align: col[2]})
-    }
-    jsonData.columns = columnsArray
-
-    let countryCount = 0
-    // Sort countries by firstVisit date (ascending) then alphabetically
-    const sortedCountries = Object.keys(wip.firstVisit).sort((a, b) => {
-        const da = dayjs(wip.firstVisit[a], 'YYYY-MM-DD')
-        const db = dayjs(wip.firstVisit[b], 'YYYY-MM-DD')
-        if (da.isSame(db)) {
-            return a.localeCompare(b)
-        }
-        return da - db
-    })
-    for (const country of sortedCountries) {
-        // If the first visit is within the last 7 days
-        if (dayjs(wip.firstVisit[country], 'YYYY-MM-DD').isAfter(today.subtract(7, 'day'))) {
-            dataArray.push({
-                country: country,
-                firstVisit: wip.firstVisit[country],
-                visits: wip.visitsByCountry[country] || 0
-            })
-            countryCount++
-        }
-    }
-    jsonData.countryCount = countryCount
-    jsonData.data = dataArray
-    siteStatsFull.firstVistsLastSevenDays = jsonData
-}
-
-// 2. raflByDate – Aggregates various RAFL metrics by date (last 28 days)
-function raflByDate() {
-    const daysToReportFiltered = 28
-    let jsonData = {}
-    let columnsArray = []
-    let dataArray = []
-    jsonData.title = ''
-    const columns = [
-        ['date', 'Date', 'left'],
-        ['dateString', 'Date', 'left'],
-        ['potViews', 'Pot Views', 'center'],
-        ['potListViews', 'Pot List Views', 'center'],
-        ['raflStats', 'Stats Views', 'center'],
-        ['raflCharities', 'Charities Views', 'center'],
-        ['raflEnterAbout', 'Enter/About Views', 'center'],
-        ['raflForm', 'Entry Form Views', 'center']
-    ]
-    for (const col of columns) {
-        columnsArray.push({id: col[0], name: col[1], align: col[2]})
-    }
-    jsonData.columns = columnsArray
-
-    for (const date in wip.days) {
-        const thisDate = dayjs(date, 'YYYY-MM-DD')
-        if (thisDate.isBefore(endDate.subtract(daysToReportFiltered - 1, 'day'))) continue
-        //const weekend = (thisDate.day() === 0 || thisDate.day() === 6) ? 1 : 0
-        const dataRow = {
-            date: date,
-            dateString: thisDate.format('MM/DD'),
-            potViews: wip.days[date].totalRaflPotViews || 0,
-            potListViews: (wip.days[date].pageViews && wip.days[date].pageViews['rafl']) || 0,
-            raflStats: (wip.days[date].pageViews && wip.days[date].pageViews['raflStats']) || 0,
-            raflCharities: (wip.days[date].pageViews && wip.days[date].pageViews['raflCharities']) || 0,
-            raflEnterAbout: (wip.days[date].pageViews && wip.days[date].pageViews['raflEnterAbout']) || 0,
-            raflForm: (wip.days[date].pageViews && wip.days[date].pageViews['raflForm']) || 0
-        }
-        dataArray.push(dataRow)
-    }
-    jsonData.data = dataArray
-    siteStatsFull.rafl28days = jsonData
-}
-
-// 3. potViewsById – Aggregates RAFL pot views per ID and calculates percentages
-function potViewsById() {
-    let jsonPotViewsById = {}
-    let columnsArray = []
-    let dataArray = []
-    jsonPotViewsById.description = 'RAFL Pot Views by ID'
-    const columns = [
-        ['id', 'Pot ID', 'left'],
-        ['views', 'Pot Views', 'center'],
-        ['percentViews', 'Percent Views', 'center']
-    ]
-    for (const col of columns) {
-        columnsArray.push({id: col[0], name: col[1], align: col[2]})
-    }
-    jsonPotViewsById.columns = columnsArray
-
-    for (const key in wip.raflPotViewsById) {
-        if (key === '') continue
-        const percentViews = ((wip.raflPotViewsById[key] / (wip.totals.totalPotViews + 0.0001)) * 100).toFixed(1)
-        dataArray.push({
-            id: key,
-            views: wip.raflPotViewsById[key],
-            percentViews: percentViews / 100 // stored as a fraction
-        })
-    }
-    jsonPotViewsById.data = dataArray
-    siteStatsFull.potViewsById = jsonPotViewsById
-}
-
-// 4. potViewsByCountry
-function potViewsByCountry() {
-    let jsonPotViewsByCountry = {}
-    let dataArray = []
-    for (const key in wip.raflPotViewsByCountry) {
-        if (key === '') continue
-        dataArray.push({country: key, views: wip.raflPotViewsByCountry[key]})
-    }
-    jsonPotViewsByCountry.data = dataArray
-    siteStatsFull.potViewsByCountry = jsonPotViewsByCountry
-}
 
 // 5. trafficByDate – Daily traffic metrics (last 28 days)
 function trafficByDate() {
@@ -473,8 +228,9 @@ function trafficByDate() {
         columnsArray.push({id: col[0], name: col[1], align: col[2]})
     }
     jsonData.columns = columnsArray
-    let totalVisitorsDate = 0, totalVisitsDate = 0, totalViewsDate = 0
 
+
+    let totalVisitorsDate = 0, totalVisitsDate = 0, totalViewsDate = 0
     for (const date in wip.days) {
         totalVisitorsDate += wip.days[date].visitors || 0
         totalVisitsDate += wip.days[date].visits || 0
@@ -776,15 +532,13 @@ function outputSiteFullJson() {
         updatedDateTime: dt.format(),
         timezone: dt.format('z')
     }
-    fs.writeFile(siteStatsFullJsonFile, JSON.stringify(siteStatsFull, null, 2), 'utf8')
+    //fs.writeFile(siteStatsFullJsonFile, JSON.stringify(siteStatsFull, null, 2), 'utf8')
+    fs.writeFile(siteStatsFullJsonFile, JSON.stringify(wip, null, 2), 'utf8')
+    fs.writeFile('./statsSiteFull.json', JSON.stringify(wip, null, 2), 'utf8')
 
 }
 
 // --- EXECUTE REPORT BUILDING FUNCTIONS ---
-firstVisitByCountryHighlight()
-//raflByDate()
-//potViewsById()
-//potViewsByCountry()
 trafficByDate()
 trafficByWeek()
 popularCountries()

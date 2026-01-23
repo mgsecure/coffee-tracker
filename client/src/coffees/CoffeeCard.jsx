@@ -209,8 +209,8 @@ export default function CoffeeCard({entry = {}, expanded, onExpand}) {
                                 <div style={{display: 'flex', placeContent: 'center', width: '100%', marginBottom: 0}}>
                                     <div style={{flexGrow: 1,fontWeight: 600, paddingLeft: 20}}>
                                         <div style={{width: 115}}>
-                                        <Button onClick={handleDrawerClick}  style={{fontWeight: 600}}>
-                                            Edit</Button>
+                                            <Button onClick={handleDrawerClick}  style={{fontWeight: 600}}>
+                                                Edit</Button>
                                         </div>
                                     </div>
                                     <RatingTable ratingDimensions={ratingDimensions} onRatingChange={handleRatingChange}
@@ -226,9 +226,9 @@ export default function CoffeeCard({entry = {}, expanded, onExpand}) {
                         {isMobile &&
                             <>
                                 <div style={{display: 'flex', placeContent: 'center', marginBottom: 0}}>
+                                    <Button onClick={handleDrawerClick}>Edit</Button>
                                     <Button onClick={handleChange}
                                             style={{width: 115}}>{expanded ? 'Hide' : 'Show'} Details</Button>
-                                    <Button onClick={handleDrawerClick}>Edit</Button>
                                 </div>
                                 <div style={{marginRight: 0}}>
                                     <div style={{display: 'flex', marginBottom: 0, width: 230, placeItems: 'center'}}>

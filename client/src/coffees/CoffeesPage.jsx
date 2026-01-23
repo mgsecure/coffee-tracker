@@ -12,12 +12,16 @@ import DemoBar from '../profile/DemoBar.jsx'
 import AuthContext from '../app/AuthContext.jsx'
 import MustBeLoggedIn from '../profile/MustBeLoggedIn.jsx'
 import DBContext from '../app/DBContext.jsx'
+import {useSearchParams} from 'react-router-dom'
 
 export default function CoffeesPage() {
     const {isMobile} = useWindowSize()
     const {visibleEntries = []} = useContext(DataContext)
     const {isLoggedIn} = useContext(AuthContext)
     const {profileLoaded, demoEnabled} = useContext(DBContext)
+
+    const [searchParams] = useSearchParams()
+    const demoFlag = searchParams.get('demo')
 
     const extras = (
         <React.Fragment>

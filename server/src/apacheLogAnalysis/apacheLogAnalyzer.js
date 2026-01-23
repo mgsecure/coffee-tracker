@@ -6,10 +6,12 @@ import fs from 'fs/promises'
 import path from 'path'
 import url from 'url'
 import {useragent} from 'express-useragent'
-import { exec } from 'child_process'
+import {exec} from 'child_process'
 import geoip from 'geoip-lite'
+import {countries} from './tzCountryList.js'
+import {localUser} from '../../keys/users.js'
+import {setDeep, setDeepAdd, setDeepUnique} from '../util/setDeep.js'
 
-import {localUser, prodUser} from '../../keys/users.js'
 const prodEnvironment = localUser !== process.env.USER
 
 // DAYJS SETUP WITH PLUGINS
@@ -17,6 +19,7 @@ import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat.js'
 import utc from 'dayjs/plugin/utc.js'
 import timezone from 'dayjs/plugin/timezone.js'
+
 dayjs.extend(customParseFormat)
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -26,8 +29,7 @@ const filterInternal = false
 const daysToReport = 9999
 
 // Date configuration (using YYYYMMDD format)
-const startDateStr = '20230220'  // YYYYMMDD
-const startDate = dayjs(startDateStr, 'YYYYMMDD')
+const startDate = dayjs('2026-01-01')
 const today = dayjs()
 const endDate = today.subtract(1, 'day')
 // You can override endDate if needed
@@ -36,27 +38,22 @@ const componentsDir = './'
 const logsPath = './logs'
 const dataDir = './dailyData'
 
-import countryTZ from './country-timezones.json' with { type: 'json' }
-const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const ignoreFiles = ['.', '..', '.DS_Store', 'New Folder With Items']
 
 // GLOBAL VARIABLES
 let logLines = 0
-let stats = {}  // Will be keyed by requestDate (YYYY-MM-DD)
-let temp = {}   // Temporary storage for min/max times and IP addresses
-let duplicateLockViews = 0 // eslint-disable-line
-let duplicateLockViewsByDate = {}
-
-let previousLockViewed = {} // To track duplicate lock views per IP
+let stats = {}
+let temp = {}
 
 // READ LOG FILE NAMES
 let allLogFiles = await fs.readdir(logsPath)
 let logFiles = allLogFiles.filter(file => !ignoreFiles.includes(file)).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-console.log('logFiles:', logFiles)
 
 let crawlerAgents = []
 let crawlerAgentNames = {}
-// Load crawler agents from both JSON files
+
 getCrawlerUserAgents(path.join(componentsDir, 'crawler-user-agents.json')).then()
 getCrawlerUserAgents(path.join(componentsDir, 'crawler-user-agents-LPU.json')).then()
 
@@ -70,14 +67,13 @@ allDataFiles.forEach(file => {
         dataFiles.push(parts[0])
     }
 })
-console.log('dataFiles:', dataFiles)
 
 for (const logFileName of logFiles) {
     await processLogFile(logFileName)
 }
 
 writeDailyFiles().then()
-console.log(`Data Process Runtime: ${String(dayjs().diff(today, 'minute')).padStart(2, '0')}:${String(dayjs().diff(today, 'second')).padStart(2, '0')}.${String(dayjs().diff(today, 'millisecond')).substring(0,2)}`)
+console.log(`Data Process Runtime: ${String(dayjs().diff(today, 'minute')).padStart(2, '0')}:${String(dayjs().diff(today, 'second')).padStart(2, '0')}.${String(dayjs().diff(today, 'millisecond')).substring(0, 2)}`)
 console.log(`Processed ${logLines} log entries`)
 
 async function processLogFile(logFileName) {
@@ -92,7 +88,6 @@ async function processLogFile(logFileName) {
         logLines++
         line = line.replace(/\s+/g, ' ')
 
-        // Parse the line using regex (similar to the Perl capture)
         // Regex: clientAddress rfc1413 username [localTime] "httpRequest" statusCode bytesSent "referer" "clientSoftware"
         const logRegex = /^(\S+) (\S+) (\S+) \[(.+?)\] "(.+?)" (\S+) (\S+) "(.*?)" "(.*?)"/
         const match = logRegex.exec(line)
@@ -143,17 +138,15 @@ async function processLogFile(logFileName) {
         if (today.diff(requestDate, 'day') > daysToReport) return
         if (dataFiles.includes(requestDateText)) return
 
-        // Initialize stats for this date if not already done
-        if (!stats[requestDateText]) {
-            stats[requestDateText] = { logEntries: 0, date: requestDateText }
-            temp[requestDateText] = { ipAddresses: {} }
-        }
-        stats[requestDateText].logEntries++
+        setDeepAdd(stats, [requestDateText, 'logEntries'], 1)
+
+
         // Update min and max times
-        if (!temp[requestDateText].minTime || requestDateTimeFull.isBefore(temp[requestDateText].minTime))
-            temp[requestDateText].minTime = requestDateTimeFull
+        if (!temp[requestDateText]?.minTime || requestDateTimeFull.isBefore(temp[requestDateText].minTime))
+            setDeep(temp, [requestDateText, 'minTime'], requestDateTimeFull)
+
         if (!temp[requestDateText].maxTime || requestDateTimeFull.isAfter(temp[requestDateText].maxTime))
-            temp[requestDateText].maxTime = requestDateTimeFull
+            setDeep(temp, [requestDateText, 'maxTime'], requestDateTimeFull)
 
         // Process crawler agents based on clientSoftware
         if (clientSoftware.match(/google/i) || clientSoftware.match(/ahrefs/i) || clientSoftware.match(/facebookexternalhit/i)) {
@@ -169,29 +162,29 @@ async function processLogFile(logFileName) {
             return
         }
 
-        // GEOLOOKUP using geoip-lite
-        const geo = geoip.lookup(clientAddress)
-
         // Increment IP counter
-        temp[requestDateText].ipAddresses[clientAddress] = (temp[requestDateText].ipAddresses[clientAddress] || 0) + 1
+        setDeepUnique(temp, [requestDateText, 'ipAddresses'], clientAddress)
 
-        let requestCountry = geo ? geo.country : 'Unknown'
-        let requestState = geo && geo.region ? geo.region : undefined
-        // Adjust country names as in Perl code
-        if (requestCountry === 'HK') requestCountry = 'Hong Kong'
-        if (requestCountry === 'VN') requestCountry = 'Vietnam'
-        if (requestCountry === 'KR') requestCountry = 'Republic of Korea'
+        const geo = geoip.lookup(clientAddress)
+        const requestCountry = geo ? geo.country : 'Unknown'
+        const requestState = geo && geo.region ? geo.region : undefined
+        setDeepUnique(temp, [requestDateText, 'ipsByCountry', requestCountry], clientAddress)
 
-        stats[requestDateText].continents = stats[requestDateText].continents || {}
-        let requestContinent = (countryTZ[requestCountry] && countryTZ[requestCountry][1]) || 'Unknown'
-        stats[requestDateText].continents[requestContinent] = (stats[requestDateText].continents[requestContinent] || 0) + 1
 
-        stats[requestDateText].countries = stats[requestDateText].countries || {}
-        stats[requestDateText].countries[requestCountry] = (stats[requestDateText].countries[requestCountry] || 0) + 1
+        // https://gist.github.com/pamelafox/986163
+        const tzCountry = countries.find(c => c.timezones.includes(geo?.timezone)) || {}
+        const requestContinent = tzCountry.continent
 
-        if (requestState && requestCountry === 'US') {
-            stats[requestDateText].states = stats[requestDateText].states || {}
-            stats[requestDateText].states[requestState] = (stats[requestDateText].states[requestState] || 0) + 1
+        const serverTZ = 'America/Los_Angeles'
+        const serverOffset = dayjs().tz(serverTZ).utcOffset() // in minutes
+        if (geo?.timezone) {
+            let dt = requestDateTimeFull.tz(geo?.timezone)
+            let localOffset = dayjs().tz(geo?.timezone).utcOffset()
+            let hourOffset = (localOffset - serverOffset) / 60
+            let adjustedDT = dt.add(hourOffset, 'hour')
+            let localHour = adjustedDT.format('HH')
+            setDeepAdd(stats, [requestDateText, 'requestsByLocalHour', localHour], 1)
+            setDeepAdd(stats, [requestDateText, 'requestsByServerHour', requestDateTimeFull.format('HH')], 1)
         }
 
         // PARSE BEACON REQUESTS
@@ -202,70 +195,36 @@ async function processLogFile(logFileName) {
         const screenWidthString = query.w?.trim()
         const refString = query.ref?.trim()
         const searchTerm = query.search?.trim().toLowerCase()
-        let cleanReferrerString = refString ? refString.replace(/(https:\/\/lpubelts\.com\/).*/, '$1').trim() : undefined
+        let cleanReferrerString = refString ? refString.replace(/(https:\/\/coffee-tracker\.com\/).*/, '$1').trim() : undefined
         if (cleanReferrerString) {
-            stats[requestDateText].referrerViews = stats[requestDateText].referrerViews || {}
-            stats[requestDateText].referrerViews[cleanReferrerString] = (stats[requestDateText].referrerViews[cleanReferrerString] || 0) + 1
+            setDeepAdd(stats, [requestDateText, 'referrerViews', cleanReferrerString], 1)
         }
+        if (fileRequested.match(/\/i\/bean\.gif/i)) {
+            setDeepAdd(stats, [requestDateText, 'beacons'], 1)
+            setDeepAdd(stats, [requestDateText, 'pageViews', trkString], 1)
+            setDeepAdd(stats, [requestDateText, 'pageViews', 'total'], 1)
 
-        // Handle various endpoints based on fileRequested
-        if (fileRequested.match(/\/i\/lpu\.gif/i)) {
-            stats[requestDateText].beacons = (stats[requestDateText].beacons || 0) + 1
-            if (trkString === 'dial') {
-                const idMatch = fileRequested.match(/id=([\w\d]+)/)
-                const uniqueID = idMatch ? idMatch[1] : ''
-                stats[requestDateText].lockViewsById = stats[requestDateText].lockViewsById || {}
-                stats[requestDateText].lockViewsById[uniqueID] = (stats[requestDateText].lockViewsById[uniqueID] || 0) + 1
-                stats[requestDateText].lockViewsByCountry = stats[requestDateText].lockViewsByCountry || {}
-                stats[requestDateText].lockViewsByCountry[requestCountry] = (stats[requestDateText].lockViewsByCountry[requestCountry] || 0) + 1
-                stats[requestDateText].lockViewsByWidth = stats[requestDateText].lockViewsByWidth || {}
-                stats[requestDateText].lockViewsByWidth[screenWidthString] = (stats[requestDateText].lockViewsByWidth[screenWidthString] || 0) + 1
-            } else {
-                stats[requestDateText].pageViews = stats[requestDateText].pageViews || {}
-                stats[requestDateText].pageViews[trkString] = (stats[requestDateText].pageViews[trkString] || 0) + 1
-                stats[requestDateText].pageViews.total = (stats[requestDateText].pageViews.total || 0) + 1
+            setDeepAdd(stats, [requestDateText, 'pageViewsByCountry', requestCountry], 1)
+            setDeepAdd(stats, [requestDateText, 'pageViewsByContinent', requestContinent], 1)
+            if (requestState && requestCountry === 'US') {
+                setDeepAdd(stats, [requestDateText, 'pageViewsByState', requestState], 1)
             }
+
+            if (screenWidthString) {
+                setDeepAdd(stats, [requestDateText, 'pageViewsByWidth', screenWidthString], 1)
+            }
+
+            const cleanPage = pageString?.replace(/https:\/\/coffee-tracker\.com\/(\w+).*/, '$1') || 'unknown'
             if (pageString) {
-                let cleanPage = pageString.replace(/https:\/\/lpubelts\.com\/\?.*#\/(\w+).*/, '$1')
                 if (trkString === 'error') {
-                    stats[requestDateText].errorPages = stats[requestDateText].errorPages || {}
-                    stats[requestDateText].errorPages[cleanPage] = (stats[requestDateText].errorPages[cleanPage] || 0) + 1
+                    setDeepAdd(stats, [requestDateText, 'errorPages', cleanPage], 1)
                 }
             }
-        } else if (fileRequested.match(/\/i\/rafl\.gif\?id=\d{4}-\d{3}/i)) {
-            stats[requestDateText].beacons = (stats[requestDateText].beacons || 0) + 1
-            const idMatch = fileRequested.match(/id=(\d{4}-\d{3})/)
-            const uniqueID = idMatch ? idMatch[1] : ''
-            stats[requestDateText].raflPotViewsById = stats[requestDateText].raflPotViewsById || {}
-            stats[requestDateText].raflPotViewsById[uniqueID] = (stats[requestDateText].raflPotViewsById[uniqueID] || 0) + 1
-            stats[requestDateText].raflPotViewsByCountry = stats[requestDateText].raflPotViewsByCountry || {}
-            stats[requestDateText].raflPotViewsByCountry[requestCountry] = (stats[requestDateText].raflPotViewsByCountry[requestCountry] || 0) + 1
-            if (cleanReferrerString) {
-                stats[requestDateText].referrerPotViews = stats[requestDateText].referrerPotViews || {}
-                stats[requestDateText].referrerPotViews[cleanReferrerString] = (stats[requestDateText].referrerPotViews[cleanReferrerString] || 0) + 1
+            if (searchTerm) {
+                setDeepAdd(stats, [requestDateText, 'pageViewsBySearchTerm', cleanPage, searchTerm], 1)
             }
-            stats[requestDateText].totalRaflPotViews = (stats[requestDateText].totalRaflPotViews || 0) + 1
-        } else if (fileRequested.match(/\/i\/lock\.png\?id=/i)) {
-            const idMatch = fileRequested.match(/id=([\w\d]+)/)
-            const uniqueID = idMatch ? idMatch[1] : ''
-            stats[requestDateText].seoViewsById = stats[requestDateText].seoViewsById || {}
-            stats[requestDateText].seoViewsById[uniqueID] = (stats[requestDateText].seoViewsById[uniqueID] || 0) + 1
+
         } else if (fileRequested.match(/\/i\/clear\.gif/i)) {
-            stats[requestDateText].beacons = (stats[requestDateText].beacons || 0) + 1
-            const idMatch = fileRequested.match(/id=([\w\d]+)/)
-            const uniqueID = idMatch ? idMatch[1] : ''
-            stats[requestDateText].lockViewsById = stats[requestDateText].lockViewsById || {}
-            stats[requestDateText].lockViewsById[uniqueID] = (stats[requestDateText].lockViewsById[uniqueID] || 0) + 1
-            stats[requestDateText].lockViewsByCountry = stats[requestDateText].lockViewsByCountry || {}
-            stats[requestDateText].lockViewsByCountry[requestCountry] = (stats[requestDateText].lockViewsByCountry[requestCountry] || 0) + 1
-            if (screenWidthString) {
-                stats[requestDateText].lockViewsByWidth = stats[requestDateText].lockViewsByWidth || {}
-                stats[requestDateText].lockViewsByWidth[screenWidthString] = (stats[requestDateText].lockViewsByWidth[screenWidthString] || 0) + 1
-            }
-            if (searchTerm && requestDate.isAfter(dayjs('2025-10-30', 'YYYY-MM-DD'))) {
-                stats[requestDateText].lockViewsBySearch = stats[requestDateText].lockViewsBySearch || {}
-                stats[requestDateText].lockViewsBySearch[searchTerm] = (stats[requestDateText].lockViewsBySearch[searchTerm] || 0) + 1
-            }
             stats[requestDateText].lockViewsByIP = stats[requestDateText].lockViewsByIP || {}
             stats[requestDateText].lockViewsByIP[clientAddress] = (stats[requestDateText].lockViewsByIP[clientAddress] || 0) + 1
             if (cleanReferrerString) {
@@ -292,39 +251,25 @@ async function processLogFile(logFileName) {
         let uaResult = useragent.parse(clientSoftware)
         let uaPlatform = uaResult.os || 'Other'
         let uaBrowser = uaResult.browser || 'Other'
-        stats[requestDateText].platforms = stats[requestDateText].platforms || {}
-        stats[requestDateText].platforms[uaPlatform] = (stats[requestDateText].platforms[uaPlatform] || 0) + 1
-        stats[requestDateText].browsers = stats[requestDateText].browsers || {}
-        stats[requestDateText].browsers[uaBrowser] = (stats[requestDateText].browsers[uaBrowser] || 0) + 1
-
-        // LOCAL REQUEST TIME ADJUSTMENT
-        // Assume server time zone is America/New_York
-        const serverTZ = 'America/New_York'
-        const serverOffset = dayjs().tz(serverTZ).utcOffset() // in minutes
-
-        if (countryTZ[requestCountry]) {
-            let tzName = countryTZ[requestCountry][0] || serverTZ
-            let dt = requestDateTimeFull.tz(tzName)
-            let localOffset = dayjs().tz(tzName).utcOffset()
-            let hourOffset = (localOffset - serverOffset) / 60
-            // Add the hour offset to get the adjusted time
-            let adjustedDT = dt.add(hourOffset, 'hour')
-            let localHour = adjustedDT.format('HH')
-
-            stats[requestDateText].requestsByLocalHour = stats[requestDateText].requestsByLocalHour || {}
-            stats[requestDateText].requestsByLocalHour[localHour] = (stats[requestDateText].requestsByLocalHour[localHour] || 0) + 1
-            stats[requestDateText].requestsByServerHour = stats[requestDateText].requestsByServerHour || {}
-            stats[requestDateText].requestsByServerHour[requestDateTimeFull.format('HH')] = (stats[requestDateText].requestsByServerHour[requestDateTimeFull.format('HH')] || 0) + 1
-        }
+        setDeepAdd(stats, [requestDateText, 'platforms', uaPlatform], 1)
+        setDeepAdd(stats, [requestDateText, 'browsers', uaBrowser], 1)
     })
 }
 
 
 async function writeDailyFiles() {
+
     Object.keys(temp).forEach(requestDateText => {
         stats[requestDateText].minTime = temp[requestDateText].minTime.format()
         stats[requestDateText].maxTime = temp[requestDateText].maxTime.format()
         stats[requestDateText].visitors = Object.keys(temp[requestDateText].ipAddresses).length
+        //         setDeepUnique(temp, [requestDateText, 'ipsByCountry', requestCountry], clientAddress)
+        stats[requestDateText].visitorsByCountry =
+            Object.keys(temp[requestDateText].ipsByCountry)
+            .reduce((acc, requestCountry) => {
+                setDeep(acc, [requestCountry], temp[requestDateText].ipsByCountry[requestCountry].length)
+                return acc
+            }, {})
     })
 
 // WRITE JSON OUTPUT FILES per date
@@ -338,11 +283,9 @@ async function writeDailyFiles() {
 }
 
 
-
-
 // Optionally, use a system command to announce completion (macOS only)
 if (!prodEnvironment) {
-    exec("say 'analysis complete'")
+    exec('say \'analysis complete\'')
 }
 
 

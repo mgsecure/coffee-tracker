@@ -3,7 +3,6 @@ import {coffeeFilterFields} from '../data/filterFields'
 import {FilterProvider} from '../context/FilterContext.jsx'
 import usePageTitle from '../util/usePageTitle'
 import DataProvider from './CoffeesDataProvider.jsx'
-import espressoBeans from '../data/espressoBeansDatabase.json'
 import CoffeesPage from './CoffeesPage.jsx'
 import DBContext from '../app/DBContext.jsx'
 
@@ -13,7 +12,7 @@ export default function CoffeesRoute() {
 
     return (
         <FilterProvider filterFields={coffeeFilterFields}>
-            <DataProvider allEntries={espressoBeans} profile={userProfile}>
+            <DataProvider allEntries={userProfile.coffees || []} profile={userProfile}>
                 <CoffeesPage/>
             </DataProvider>
         </FilterProvider>

@@ -46,8 +46,8 @@ export default function RoastersPage() {
         <React.Fragment>
             <Nav title='Roasters' titleMobile='Roasters' extras={extras}/>
 
-            <IntroCopy pageName={'popularRoasters'} maxWidth={800}/>
-            <div style={{margin: 8, paddingBottom: 32, width: '100%', maxWidth: 800}}>
+            <div style={{margin: 8, padding: 4, paddingBottom: 32, width: '100%', maxWidth: 800}}>
+                <IntroCopy pageName={'popularRoasters'} maxWidth={800}/>
 
                 {loading && <LoadingDisplay/>}
 

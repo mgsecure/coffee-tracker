@@ -3,11 +3,11 @@ import SignInButton from '../auth/SignInButton.jsx'
 import {useTheme} from '@mui/material/styles'
 import AuthContext from '../app/AuthContext.jsx'
 
-export default function MustBeLoggedIn({actionText = 'track your coffees'}) {
+export default function MustBeLoggedIn({actionText = 'track your coffees', style}) {
     const theme= useTheme()
-    const {isLoggedIn} = useContext(AuthContext)
+    const {authLoaded, isLoggedIn} = useContext(AuthContext)
 
-    if (isLoggedIn) return null
+    if (!authLoaded || isLoggedIn) return null
 
     return (
         <div
@@ -21,7 +21,8 @@ export default function MustBeLoggedIn({actionText = 'track your coffees'}) {
                 textAlign: 'center',
                 padding: 40,
                 borderRadius: 5,
-                minWidth: 350
+                minWidth: 350,
+                ...style
             }}>
             <div>
             You must be logged in to<br/>
