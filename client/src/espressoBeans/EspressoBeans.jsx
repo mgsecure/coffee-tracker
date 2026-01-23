@@ -7,7 +7,7 @@ import SearchBox from '../nav/SearchBox'
 import ViewFilterButtons from '../filters/ViewFilterButtons.jsx'
 import DataContext from '../context/DataContext.jsx'
 import {beanSortFields} from '../data/sortFields'
-import NoMatchingEntriesCard from '../profile/NoMatchingEntriesCard.jsx'
+import NoMatchingEntriesCard from '../shared/NoMatchingEntriesCard.jsx'
 import IntroCopy from '../misc/IntroCopy.jsx'
 
 export default function EspressoBeans() {

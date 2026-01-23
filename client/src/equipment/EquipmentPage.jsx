@@ -6,8 +6,8 @@ import Footer from '../nav/Footer.jsx'
 import Equipment from './Equipment.jsx'
 import DBContext from '../app/DBContext.jsx'
 import AuthContext from '../app/AuthContext.jsx'
-import DemoBar from '../profile/DemoBar.jsx'
-import MustBeLoggedIn from '../profile/MustBeLoggedIn.jsx'
+import DemoBar from '../shared/DemoBar.jsx'
+import MustBeLoggedIn from '../shared/MustBeLoggedIn.jsx'
 import DataContext from '../context/DataContext.jsx'
 
 export default function EquipmentPage() {

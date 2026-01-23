@@ -1,12 +1,12 @@
 import React, {useContext, useDeferredValue, useState} from 'react'
-import AddNewItemCard from '../profile/AddNewItemCard.jsx'
+import AddNewItemCard from '../shared/AddNewItemCard.jsx'
 import Grid from '@mui/material/Grid'
 import DataContext from '../context/DataContext.jsx'
 import {motion, AnimatePresence} from 'framer-motion'
 import CoffeeCard from './CoffeeCard.jsx'
 import FilterContext from '../context/FilterContext.jsx'
 import FilterDisplayAdvanced from '../filters/FilterDisplayAdvanced.jsx'
-import NoMatchingEntriesCard from '../profile/NoMatchingEntriesCard.jsx'
+import NoMatchingEntriesCard from '../shared/NoMatchingEntriesCard.jsx'
 import useWindowSize from '../util/useWindowSize.jsx'
 
 export default function Coffees() {

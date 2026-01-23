@@ -44,7 +44,7 @@ export default function RatingTable({
                                 colorData={'#ddd'} fontSize={fontSize} fontWeightData={fontWeight}
                                 paddingData={paddingData} backgroundColor={backgroundColor}
                                 bodyStyle={{paddingRight:5}}/>
-                : <div style={{display: 'flex', justifyContent: 'center', flexGrow: 1}}>
+                : <div style={{display: 'flex', justifyContent: 'center', flexGrow: 1}} id='notTable'>
                     {rows.map((row, index) => (
                         <div key={index} style={{
                             display: 'flex',

@@ -16,44 +16,11 @@ let doseUnits = {g: 0}
 let temperatureUnits = {'C': 0}
 
 export function CoffeesDataProvider({children, profile}) {
+    const globalContext = useContext(DataContext)
     const {filters: allFilters, advancedFilterGroups} = useContext(FilterContext)
     const {search, sort, expandAll} = allFilters
     const {data: currencyConversion} = useData({url: 'https://beans.mgsecure.com/data/currencyConversion.json'})
-
-    const allBrews = useMemo(() => {
-        return profile.brews || []
-    }, [profile.brews])
-
-    const mappedBrews = useMemo(() => {
-        return allBrews
-            .map(entry => {
-                const coffee = profile.coffees?.find(g => g.id === entry.coffee?.id) || entry.coffee || {}
-                const tempUnit = entry.temperatureUnit?.substring(1, 2)
-                if (tempUnit) temperatureUnits[tempUnit] = (temperatureUnits[tempUnit] || 0) + 1
-                if (entry.doseUnit) doseUnits[entry.doseUnit] = (doseUnits[entry.doseUnit] || 0) + 1
-
-                return {
-                    ...entry,
-                    originalEntry: {...entry},
-                    fullName: coffee.roaster ? `${coffee.name} (${coffee.roaster.name})` : coffee.name,
-                    modifiedAt: entry.modifiedAt || entry.addedAt,
-                    restedDays: Math.max(dayjs(entry.addedAt).diff(dayjs(entry.roastDate), 'day'), 0),
-                    isFlagged: entry.flagged ? 'Yes' : 'No',
-                    fuzzy: removeAccents([
-                        entry.fullName
-                    ].join(','))
-                }
-            })
-    }, [allBrews, profile.coffees])
-    const modeDoseUnit = Object.entries(doseUnits).reduce((a, b) =>
-        b[1] > a[1] || (b[1] === a[1] && b[0] < a[0]) ? b : a
-    )[0]
-
-    const modeTempUnit = Object.entries(temperatureUnits).reduce((a, b) =>
-        b[1] > a[1] || (b[1] === a[1] && b[0] < a[0]) ? b : a
-    )[0]
-    const modeTemperatureUnit = `º${modeTempUnit}`
-
+    const {mappedBrews, modeDoseUnit, modeTemperatureUnit} = useContext(DataContext)
 
 
     const brewsList = useMemo(() => {
@@ -190,6 +157,7 @@ export function CoffeesDataProvider({children, profile}) {
     }, [profile.coffees])
 
     const value = useMemo(() => ({
+        ...globalContext,
         allEntries,
         allEntriesCount: allEntries.length,
         mappedEntries,
@@ -205,7 +173,7 @@ export function CoffeesDataProvider({children, profile}) {
         modePriceUnit,
         modeDoseUnit,
         modeTemperatureUnit
-    }), [allEntries, mappedEntries, searchedEntries, visibleEntries, expandAll, grinderList, machineList, brewsList, coffeesList, roastersList, modeWeightUnit, modePriceUnit, modeDoseUnit, modeTemperatureUnit])
+    }), [globalContext, allEntries, mappedEntries, searchedEntries, visibleEntries, expandAll, grinderList, machineList, brewsList, coffeesList, roastersList, modeWeightUnit, modePriceUnit, modeDoseUnit, modeTemperatureUnit])
 
     return (
         <DataContext.Provider value={value}>

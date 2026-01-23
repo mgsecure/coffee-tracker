@@ -38,7 +38,7 @@ const DisplayTable = ({
 
 
     return (
-        <div style={{backgroundColor: backgroundColor, padding: '0px 8px 8px 8px'}}>
+        <div style={{backgroundColor: backgroundColor, padding: 0}}>
             {tableData.title && <div style={{fontSize: '1.2rem', margin: '10px'}}>{tableData.title}</div>}
             <TableContainer id='statsTable'
                             style={{

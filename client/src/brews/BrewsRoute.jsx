@@ -2,10 +2,10 @@ import React, {useContext} from 'react'
 import {brewFilterFields} from '../data/filterFields'
 import {FilterProvider} from '../context/FilterContext.jsx'
 import usePageTitle from '../util/usePageTitle'
-import DataProvider from './BrewsDataProvider.jsx'
-import espressoBeans from '../data/espressoBeansDatabase.json'
 import BrewsPage from './BrewsPage.jsx'
 import DBContext from '../app/DBContext.jsx'
+import GlobalDataProvider from '../shared/GlobalDataProvider.jsx'
+import DataProvider from './BrewsDataProvider.jsx'
 
 function BrewsRoute() {
     usePageTitle('Brews')
@@ -13,9 +13,11 @@ function BrewsRoute() {
 
     return (
         <FilterProvider filterFields={brewFilterFields}>
-            <DataProvider allEntries={espressoBeans} profile={userProfile}>
-                <BrewsPage/>
-            </DataProvider>
+            <GlobalDataProvider>
+                <DataProvider profile={userProfile}>
+                    <BrewsPage/>
+                </DataProvider>
+            </GlobalDataProvider>
         </FilterProvider>
     )
 }

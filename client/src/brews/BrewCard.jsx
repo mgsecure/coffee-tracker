@@ -16,7 +16,7 @@ import useWindowSize from '../util/useWindowSize.jsx'
 import Stack from '@mui/material/Stack'
 import FieldValue from '../misc/FieldValue.jsx'
 import Link from '@mui/material/Link'
-import ItemDrawer from '../profile/ItemDrawer.jsx'
+import ItemDrawer from '../shared/ItemDrawer.jsx'
 import LogEntryButton from '../entries/LogEntryButton.jsx'
 import dayjs from 'dayjs'
 import Tooltip from '@mui/material/Tooltip'
@@ -304,6 +304,21 @@ export default function BrewCard({
                                                     style={{marginRight: fieldSeparation}} textStyle={timeStyle}/>
                                         <FieldValue name='Recipe/Notes' value={entry.recipePrep}
                                                     style={{marginRight: fieldSeparation}} textStyle={recipeStyle}/>
+                                        {entry.multipleEquipment.grinders &&
+                                            <FieldValue name='Grinder'
+                                                        value={entry?.grinder?.fullName &&
+                                                            <Link style={{color: '#fff'}}
+                                                                  onClick={() => handleAddFilter('grinderName', entry?.grinder?.fullName, true)}>
+                                                                {entry?.grinder?.fullName}</Link>}
+                                                        style={{marginRight: 24}}/>
+                                        }
+                                        <FieldValue name='Equipment'
+                                                    value={entry?.machine?.fullName &&
+                                                        <Link style={{color: '#fff'}}
+                                                              onClick={() => handleAddFilter('machineName', entry?.machine?.fullName, true)}>
+                                                            {entry?.machine?.fullName}</Link>}
+                                                    style={{marginRight: 24}}/>
+
                                         {brewCount > 1 &&
                                             <FieldValue name='More Info'
                                                         value={<Link
@@ -428,18 +443,14 @@ export default function BrewCard({
                         <FieldValue name='Rested' value={entry.roastDate && entry.restedDays?.toFixed(0)}
                                     suffix={` day${entry.restedDays !== 1 ? 's' : ''}`}
                                     style={{marginRight: 24}}/>
-                        <FieldValue name='Grinder'
-                                    value={entry?.grinder?.fullName &&
-                                        <Link style={{color: '#fff'}}
-                                              onClick={() => handleAddFilter('grinderName', entry?.grinder?.fullName, true)}>
-                                            {entry?.grinder?.fullName}</Link>}
-                                    style={{marginRight: 24}}/>
-                        <FieldValue name='Equipment'
-                                    value={entry?.machine?.fullName &&
-                                        <Link style={{color: '#fff'}}
-                                              onClick={() => handleAddFilter('machineName', entry?.machine?.fullName, true)}>
-                                            {entry?.machine?.fullName}</Link>}
-                                    style={{marginRight: 24}}/>
+                        {!entry.multipleEquipment.grinders &&
+                            <FieldValue name='Grinder'
+                                        value={entry?.grinder?.fullName &&
+                                            <Link style={{color: '#fff'}}
+                                                  onClick={() => handleAddFilter('grinderName', entry?.grinder?.fullName, true)}>
+                                                {entry?.grinder?.fullName}</Link>}
+                                        style={{marginRight: 24}}/>
+                        }
                     </Stack>
 
                     <Stack direction='row' spacing={0} style={{flexWrap: 'wrap', marginBottom: 8}}>

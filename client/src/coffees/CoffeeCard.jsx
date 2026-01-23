@@ -13,7 +13,7 @@ import useWindowSize from '../util/useWindowSize.jsx'
 import Stack from '@mui/material/Stack'
 import FieldValue from '../misc/FieldValue.jsx'
 import Link from '@mui/material/Link'
-import ItemDrawer from '../profile/ItemDrawer.jsx'
+import ItemDrawer from '../shared/ItemDrawer.jsx'
 import LogEntryButton from '../entries/LogEntryButton.jsx'
 import RatingTable from '../misc/RatingTable.jsx'
 import Tooltip from '@mui/material/Tooltip'
@@ -21,7 +21,7 @@ import isValidUrl from '../util/isValidUrl'
 import {openInNewTab} from '../util/openInNewTab'
 import LocationDisplay from '../misc/LocationDisplay.jsx'
 import BrewCard from '../brews/BrewCard.jsx'
-import AddNewItemCard from '../profile/AddNewItemCard.jsx'
+import AddNewItemCard from '../shared/AddNewItemCard.jsx'
 import DeleteEntryButton from '../entries/DeleteEntryButton.jsx'
 import DataContext from '../context/DataContext.jsx'
 import FilterContext from '../context/FilterContext.jsx'
@@ -207,16 +207,16 @@ export default function CoffeeCard({entry = {}, expanded, onExpand}) {
                         {!isMobile &&
                             <>
                                 <div style={{display: 'flex', placeContent: 'center', width: '100%', marginBottom: 0}}>
-                                    <div style={{flexGrow: 1,fontWeight: 600, paddingLeft: 20}}>
+                                    <div style={{flexGrow: 1, fontWeight: 600, paddingLeft: 20}}>
                                         <div style={{width: 115}}>
-                                            <Button onClick={handleDrawerClick}  style={{fontWeight: 600}}>
+                                            <Button onClick={handleDrawerClick} style={{fontWeight: 600}}>
                                                 Edit</Button>
                                         </div>
                                     </div>
                                     <RatingTable ratingDimensions={ratingDimensions} onRatingChange={handleRatingChange}
                                                  ratings={ratings} emptyColor={'#555'} showLabel={false}
                                                  fontSize={'0.85rem'} size={19} paddingData={0} iconsCount={10}/>
-                                    <div style={{flexGrow: 1, textAlign: 'right', paddingRight:20}}>
+                                    <div style={{flexGrow: 1, textAlign: 'right', paddingRight: 20}}>
                                         <Button onClick={handleChange} style={{width: 115, fontWeight: 600}}>
                                             {expanded ? 'Hide' : 'Show'} Details</Button>
                                     </div>
@@ -278,23 +278,14 @@ export default function CoffeeCard({entry = {}, expanded, onExpand}) {
             <Collapse in={expanded} timeout='auto' unmountOnExit>
                 <CardContent style={{textAlign: 'left', padding: '0px 10px', color: '#fff'}}>
 
-                    <Stack direction='row' spacing={0} style={{flexWrap: 'wrap', marginBottom: 8}}>
-                        <div style={{display: ' flex'}}>
-                            <FieldValue name='Roast Date' value={entry.roastDate} style={{marginRight: 16}}/>
-                            <FieldValue name='Rested' value={entry.restedDays} suffix={' days'}
+                    {(entry.tastingNotes || entry.roasterTastingNotes) &&
+                        <Stack direction='row' spacing={0} style={{flexWrap: 'wrap', marginBottom: 8}} id='notes'>
+                            <FieldValue name='Tasting Notes' value={entry.tastingNotes} style={{marginRight: 24}}/>
+                            <FieldValue name='Roaster Tasting Notes' value={entry.roasterTastingNotes}
                                         style={{marginRight: 24}}/>
-                        </div>
-                        <FieldValue name='Grinder' value={entry.grinderName} style={{marginRight: 24}}/>
-                        <FieldValue name='Equipment' value={entry.machineName} style={{marginRight: 24}}/>
-                    </Stack>
-
-                    <Stack direction='row' spacing={0} style={{flexWrap: 'wrap', marginBottom: 8}}>
-                        <FieldValue name='Tasting Notes' value={entry.tastingNotes} style={{marginRight: 24}}/>
-                        <FieldValue name='Roaster Tasting Notes' value={entry.roasterTastingNotes}
-                                    style={{marginRight: 24}}/>
-                    </Stack>
-
-                    <Stack direction='row' spacing={0} style={{flexWrap: 'wrap', marginBottom: 8}}>
+                        </Stack>
+                    }
+                    <Stack direction='row' spacing={0} style={{flexWrap: 'wrap', marginBottom: 8}} id='details'>
                         <FieldValue name='Origin' value={entry.origin} style={{marginRight: 24}}/>
                         <FieldValue name='Roast Level' value={entry.roastLevel} style={{marginRight: 24}}/>
                         <FieldValue name='Caffeine' value={entry.caffeine} style={{marginRight: 24}}/>
@@ -305,30 +296,39 @@ export default function CoffeeCard({entry = {}, expanded, onExpand}) {
                         <FieldValue name='Rested Days' value={entry.restedDays} style={{marginRight: 24}}/>
                     </Stack>
 
-                    <Stack direction='row' spacing={0} style={{flexWrap: 'wrap', marginBottom: 8}}>
-                        <FieldValue name='Weight' value={entry.weight} suffix={entry.weightUnit}
-                                    style={{marginRight: 24}}/>
-                        <FieldValue name='Price' value={entry.price ? parseFloat(entry.price).toFixed(2) : null}
-                                    prefix={`${currencySymbol} `} suffix={` ${currencyDescription}`}
-                                    style={{marginRight: 24}}/>
-                        {entry.weightUnit === 'oz'
-                            ? <FieldValue name='Price per pound'
-                                          value={entry.pricePound ? parseFloat(entry.pricePound).toFixed(2) : null}
-                                          prefix={`${currencySymbol} `} suffix={` ${currencyDescription}`}
-                                          style={{marginRight: 24}}/>
-                            : <FieldValue name='Price per 100g'
-                                          value={entry.price100g ? parseFloat(entry.price100g).toFixed(2) : null}
-                                          prefix={`${currencySymbol} `} suffix={` ${currencyDescription}`}
-                                          style={{marginRight: 24}}/>
-                        }
-                    </Stack>
+                    {(entry.weight || entry.price) &&
+                        <Stack direction='row' spacing={0} style={{flexWrap: 'wrap', marginBottom: 8}} id='weightPrice'>
+                            <FieldValue name='Weight' value={entry.weight} suffix={entry.weightUnit}
+                                        style={{marginRight: 24}}/>
+                            <FieldValue name='Price' value={entry.price ? parseFloat(entry.price).toFixed(2) : null}
+                                        prefix={`${currencySymbol} `} suffix={` ${currencyDescription}`}
+                                        style={{marginRight: 24}}/>
+                            {entry.weightUnit === 'oz'
+                                ? <FieldValue name='Price per pound'
+                                              value={entry.pricePound ? parseFloat(entry.pricePound).toFixed(2) : null}
+                                              prefix={`${currencySymbol} `} suffix={` ${currencyDescription}`}
+                                              style={{marginRight: 24}}/>
+                                : <FieldValue name='Price per 100g'
+                                              value={entry.price100g ? parseFloat(entry.price100g).toFixed(2) : null}
+                                              prefix={`${currencySymbol} `} suffix={` ${currencyDescription}`}
+                                              style={{marginRight: 24}}/>
+                            }
+                        </Stack>
+                    }
 
-                    <Stack direction='row' spacing={0} style={{flexWrap: 'wrap', marginBottom: 8}}>
-                        <FieldValue name='Link' value={beanLink} style={{marginRight: 24}}/>
-                    </Stack>
+                    {beanLink &&
+                        <Stack direction='row' spacing={0} style={{flexWrap: 'wrap', marginBottom: 8}} id='beanLink'>
+                            <FieldValue name='Link' value={beanLink} style={{marginRight: 24}}/>
+                        </Stack>
+                    }
 
-                    <div style={{display: flexStyle, marginBottom: 8}}>
-                        <div style={{maxWidth: ratingWidth, marginBottom: 5, marginRight: 10}}>
+                    <div id='table' style={{display: flexStyle, marginBottom: 8}}>
+                        <div style={{
+                            maxWidth: ratingWidth,
+                            marginBottom: 5,
+                            marginLeft: isMobile ? 0 : 8,
+                            marginRight: isMobile ? 0 : 10
+                        }}>
                             <RatingTable ratingDimensions={ratingDimensionsFull} onRatingChange={handleRatingChange}
                                          ratings={ratings} emptyColor={'#555'} showLabel={true} useTable={true}
                                          fontSize={'0.85rem'} size={ratingSize} paddingData={0} iconsCount={10}

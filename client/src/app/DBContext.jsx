@@ -35,7 +35,7 @@ export function DBProvider({children}) {
     const adminRole = isLoggedIn && user && userClaims.includes('admin')
     const qaUserRole = isLoggedIn && user && (['qaUser', 'admin'].some(claim => userClaims.includes(claim)) || adminRole)
 
-    const [demo, setDemo] = useLocalStorage('demo', true)
+    const [demo, setDemo] = useLocalStorage('demo', false)
     const handleSetDemo = useCallback(value => {
         setDemo(value)
     }, [setDemo])
