@@ -51,11 +51,7 @@ export default function RoastersPage() {
 
                 {loading && <LoadingDisplay/>}
 
-                {filterCount > 0 &&
-                    <div style={{marginBottom: 10}}>
-                        <FilterDisplayAdvanced/>
-                    </div>
-                }
+                <FilterDisplayAdvanced/>
 
                 {!loading && visibleEntries.length === 0 &&
                     <NoMatchingEntriesCard type={'roaster'} entriesCount={visibleEntries.length}

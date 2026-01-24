@@ -49,6 +49,7 @@ function MainMenu() {
                 open={open}
                 onOpen={openDrawer}
                 onClose={closeDrawer}
+                disableRestoreFocus={true}
             >
                 <Stack direction='column' style={{minWidth: 250}}>
                     <MenuItem onClick={closeDrawer} style={{

@@ -230,249 +230,248 @@ export default function BrewForm({entry, open, setOpen, action, coffee}) {
         }
     }, [form, thisCoffee, thisMachine, thisGrinder, entry, action, updateCollection, setOpen])
 
-    const paddingLeft = !isMobile ? 15 : 15
+    const paddingLeft = !isMobile ? 15 : 10
     const requiredStyle = {fontSize: '1.0rem', lineHeight: '1.3rem', fontWeight: 400}
 
     return (
-        <div>
+        <div style={{marginRight: 5, display: flexStyle, marginBottom: 20}} id={'drawer'}>
 
-            <div style={{marginRight: 5, display: flexStyle, marginBottom: 20}} id={'drawer'}>
+            <form action={null} encType='multipart/form-data' method='post'
+                  onSubmit={handleSubmit}>
+                <div style={{marginTop: 10}}>
 
-                <form action={null} encType='multipart/form-data' method='post'
-                      onSubmit={handleSubmit}>
-                    <div style={{paddingLeft: paddingLeft, color: theme.palette.text.primary, marginTop: 10}}>
+                    <div style={{paddingLeft: paddingLeft, display: 'flex', placeContent: 'center'}}>
+                        <div style={{flexGrow: 1}}>
+                            <div style={{marginTop: 15, marginRight: 15, marginBottom: 15}}>
+                                <div style={{
+                                    fontSize: '1.1rem',
+                                    lineHeight: '1.3rem',
+                                    fontWeight: 700,
+                                    marginBottom: 3
+                                }}>
+                                    Choose Coffee <span style={requiredStyle}>(Required)</span>
+                                </div>
+                                <SelectBox changeHandler={handleFormChange}
+                                           form={form}
+                                           name='coffeeName'
+                                           optionsList={[...coffeeNames, '[ add coffee ]']}
+                                           multiple={false}
+                                           defaultValue={thisCoffee?.fullName || coffee?.fullName || ''}
+                                           size='small'
+                                           width={isMobile ? 300 : '100%'}/>
+                            </div>
 
-                        <div style={{display: 'flex', placeContent: 'center'}}>
+                            <div style={{display: 'flex'}}>
+                                <div style={{display: flexStyle}}>
+                                    <div style={{display: 'flex', marginBottom: 10}}>
+                                        <div style={{marginRight: 0}}>
+                                            <div style={{fontSize: '1.0rem', marginBottom: 2}}>Dose</div>
+                                            <div style={{display: 'flex'}}>
+                                                <TextField type='number' name='dose'
+                                                           slotProps={{
+                                                               htmlInput: {
+                                                                   min: 1, step: 1
+                                                               }
+                                                           }}
+                                                           style={{width: 70, marginRight: 5}}
+                                                           size='small'
+                                                           onChange={handleFormChange} value={form.dose || ''}
+                                                           color='info'/>
+                                            </div>
+                                        </div>
 
-                            <div style={{flexGrow: 1}}>
-                                <div style={{marginTop: 15, marginRight: 15, marginBottom: 15}}>
+                                        <div style={{marginRight: 20}}>
+                                            <div style={{fontSize: '1.0rem', marginBottom: 2}}>Yield {ratio}</div>
+                                            <div style={{display: 'flex'}}>
+                                                <TextField type='number' name='yield'
+                                                           slotProps={{
+                                                               htmlInput: {
+                                                                   min: 1, step: 1
+                                                               }
+                                                           }}
+                                                           style={{width: 70, marginRight: 5}}
+                                                           size='small'
+                                                           onChange={handleFormChange} value={form.yield || ''}
+                                                           color='info'/>
+                                                <FormToggleButtonGroup fieldName={'doseUnit'} options={['g', 'oz']}
+                                                                       form={form}
+                                                                       handleFormChange={handleFormChange}/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style={{display: 'flex', marginBottom: 10}}>
+                                        <div style={{marginRight: 20}}>
+                                            <div style={{fontSize: '1.0rem', marginBottom: 2}}>Temperature</div>
+                                            <div style={{display: 'flex'}}>
+                                                <TextField type='number' name='temperature'
+                                                           slotProps={{
+                                                               htmlInput: {
+                                                                   min: 1, step: 1
+                                                               }
+                                                           }}
+                                                           style={{width: 70, marginRight: 5}}
+                                                           size='small'
+                                                           onChange={handleFormChange}
+                                                           value={form.temperature || ''}
+                                                           color='info'/>
+                                                <FormToggleButtonGroup fieldName={'temperatureUnit'}
+                                                                       options={['°C', '°F']}
+                                                                       form={form}
+                                                                       handleFormChange={handleFormChange}/>
+                                            </div>
+                                        </div>
+
+                                        <div style={{marginRight: 20}}>
+                                            <div style={{fontSize: '1.0rem', marginBottom: 2}}>Grind</div>
+                                            <TextField type='text' name='grinderSetting' style={{width: 80}}
+                                                       size='small'
+                                                       onChange={handleFormChange}
+                                                       value={form.grinderSetting || ''}
+                                                       color='info'/>
+                                        </div>
+                                    </div>
+
+                                    <div style={{marginRight: 20, marginBottom: 10}}>
+                                        <div style={{fontSize: '1.0rem', marginBottom: 2}}>Time</div>
+                                        <TimePicker value={form.brewTime} handleChangeTime={handleChangeTime}/>
+                                    </div>
+                                </div>
+
+                                {isMobile &&
                                     <div style={{
-                                        fontSize: '1.1rem',
-                                        lineHeight: '1.3rem',
-                                        fontWeight: 700,
-                                        marginBottom: 3
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        placeContent: 'center',
+                                        margin: '10px 5px 10px 5px',
+                                        borderLeft: '1px solid',
+                                        borderColor: lighten(theme.palette.card.add, 0.1)
                                     }}>
-                                        Choose Coffee <span style={requiredStyle}>(Required)</span>
+                                        <EntryFlags entry={form} handleFlaggedChange={handleFlaggedChange}
+                                                    updating={false}/>
+                                        <LogEntryButton entry={form} entryType={'Brew'} size={'small'}
+                                                        style={{marginLeft: 10}}/>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+
+                        {!isMobile &&
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                placeContent: 'center',
+                                margin: '20px 30px 0px 30px',
+                                paddingLeft: 5,
+                                borderLeft: '1px solid',
+                                borderColor: lighten(theme.palette.card.add, 0.1)
+                            }}>
+                                <EntryFlags entry={form} handleFlaggedChange={handleFlaggedChange}
+                                            updating={false}/>
+                                <LogEntryButton entry={form} entryType={'Brew'} size={'small'}
+                                                style={{marginLeft: 10}}/>
+                            </div>
+                        }
+
+                    </div>
+
+                    <div style={{
+                        paddingLeft: paddingLeft,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        placeContent: 'center',
+                        width: '100%'
+                    }}>
+                        <div style={{flexGrow: 1}}>
+
+                            <div style={{flexGrow: 1, margin: '10px 10px 10px 0px'}}>
+                                <div style={{fontSize: '1.0rem', marginBottom: 2}}>Recipe/Notes</div>
+                                <TextField type='text' name='recipePrep' multiline fullWidth rows={2}
+                                           style={{minWidth: 300}}
+                                           size='small'
+                                           onChange={handleFormChange} value={form.recipePrep || ''}
+                                           color='info'/>
+                            </div>
+
+                            <div style={{marginRight: 10, marginBottom: 10}}>
+                                <div style={{fontSize: '1.0rem', marginBottom: 2}}>Additional Notes</div>
+                                <TextField type='text' name='tastingNotes' fullWidth style={{minWidth: 300}}
+                                           size='small'
+                                           onChange={handleFormChange} value={form.tastingNotes || ''}
+                                           color='info'/>
+                            </div>
+
+                            <div style={{display: flexStyle, alignItems: 'center'}}>
+                                <div style={{marginRight: 10, marginBottom: '10px'}}>
+                                    <div style={{fontSize: '1.0rem', marginBottom: 2}}>Roast Date</div>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            value={form.roastDate || null}
+                                            label=' '
+                                            onChange={(newValue) => handleFormChange({
+                                                target: {
+                                                    name: 'roastDate',
+                                                    value: newValue
+                                                }
+                                            })}
+                                            sx={{
+                                                width: 150,
+                                                '.MuiPickersSectionList-root': {
+                                                    padding: '8px 0px'
+                                                }
+                                            }}
+                                            disableFuture
+                                        />
+                                    </LocalizationProvider>
+                                </div>
+                                <div style={{marginRight: 10, marginBottom: '10px'}}>
+                                    <div style={{fontSize: '1.0rem', marginBottom: 2}}>
+                                        Grinder
                                     </div>
                                     <SelectBox changeHandler={handleFormChange}
                                                form={form}
-                                               name='coffeeName'
-                                               optionsList={[...coffeeNames, '[ add coffee ]']}
-                                               multiple={false}
-                                               defaultValue={thisCoffee?.fullName || coffee?.fullName || ''}
-                                               size='small'
-                                               width={isMobile ? 300 : '100%'}/>
+                                               name='grinderName'
+                                               optionsList={[...grinderNames, '[ add grinder ]']}
+                                               multiple={false} defaultValue={thisGrinder?.fullName || ''}
+                                               size='small' width={300}/>
                                 </div>
-
-                                <div style={{display: 'flex'}}>
-                                    <div style={{display: flexStyle}}>
-                                        <div style={{display: 'flex', marginBottom: 10}}>
-                                            <div style={{marginRight: 0, marginTop: 0}}>
-                                                <div style={{fontSize: '1.0rem', marginBottom: 2}}>Dose</div>
-                                                <div style={{display: 'flex'}}>
-                                                    <TextField type='number' name='dose'
-                                                               slotProps={{
-                                                                   htmlInput: {
-                                                                       min: 1, step: 1
-                                                                   }
-                                                               }}
-                                                               style={{width: 70, marginRight: 5}}
-                                                               size='small'
-                                                               onChange={handleFormChange} value={form.dose || ''}
-                                                               color='info'/>
-                                                </div>
-                                            </div>
-
-                                            <div style={{marginRight: 20, marginTop: 0}}>
-                                                <div style={{fontSize: '1.0rem', marginBottom: 2}}>Yield {ratio}</div>
-                                                <div style={{display: 'flex'}}>
-                                                    <TextField type='number' name='yield'
-                                                               slotProps={{
-                                                                   htmlInput: {
-                                                                       min: 1, step: 1
-                                                                   }
-                                                               }}
-                                                               style={{width: 70, marginRight: 5}}
-                                                               size='small'
-                                                               onChange={handleFormChange} value={form.yield || ''}
-                                                               color='info'/>
-                                                    <FormToggleButtonGroup fieldName={'doseUnit'} options={['g', 'oz']}
-                                                                           form={form}
-                                                                           handleFormChange={handleFormChange}/>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div style={{display: 'flex', marginBottom: 10}}>
-                                            <div style={{marginRight: 20, marginTop: 0}}>
-                                                <div style={{fontSize: '1.0rem', marginBottom: 2}}>Temperature</div>
-                                                <div style={{display: 'flex'}}>
-                                                    <TextField type='number' name='temperature'
-                                                               slotProps={{
-                                                                   htmlInput: {
-                                                                       min: 1, step: 1
-                                                                   }
-                                                               }}
-                                                               style={{width: 70, marginRight: 5}}
-                                                               size='small'
-                                                               onChange={handleFormChange}
-                                                               value={form.temperature || ''}
-                                                               color='info'/>
-                                                    <FormToggleButtonGroup fieldName={'temperatureUnit'}
-                                                                           options={['°C', '°F']}
-                                                                           form={form}
-                                                                           handleFormChange={handleFormChange}/>
-                                                </div>
-                                            </div>
-
-                                            <div style={{marginRight: 20, marginTop: 0}}>
-                                                <div style={{fontSize: '1.0rem', marginBottom: 2}}>Grind</div>
-                                                <div style={{display: 'flex'}}>
-                                                    <TextField type='text' name='grinderSetting' style={{width: 80}}
-                                                               size='small'
-                                                               onChange={handleFormChange}
-                                                               value={form.grinderSetting || ''}
-                                                               color='info'/>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div style={{marginRight: 20, marginBottom: 10}}>
-                                            <div style={{fontSize: '1.0rem', marginBottom: 2}}>Time</div>
-                                            <TimePicker value={form.brewTime} handleChangeTime={handleChangeTime}/>
-                                        </div>
+                                <div style={{marginRight: 10, marginBottom: '10px'}}>
+                                    <div style={{fontSize: '1.0rem', marginBottom: 2}}>
+                                        Machine/Brewer
                                     </div>
-
-                                    {isMobile &&
-                                        <div style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            placeContent: 'center',
-                                            margin: '10px 5px 10px 5px',
-                                            borderLeft: '1px solid',
-                                            borderColor: lighten(theme.palette.card.add, 0.1)
-                                        }}>
-                                            <EntryFlags entry={form} handleFlaggedChange={handleFlaggedChange}
-                                                        updating={false}/>
-                                            <LogEntryButton entry={form} entryType={'Brew'} size={'small'}
-                                                            style={{marginLeft: 10}}/>
-                                        </div>
-                                    }
-
-                                </div>
-                            </div>
-
-
-                            {!isMobile &&
-                                <div style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    placeContent: 'center',
-                                    margin: '20px 30px 0px 30px',
-                                    paddingLeft: 5,
-                                    borderLeft: '1px solid',
-                                    borderColor: lighten(theme.palette.card.add, 0.1)
-                                }}>
-                                    <EntryFlags entry={form} handleFlaggedChange={handleFlaggedChange}
-                                                updating={false}/>
-                                    <LogEntryButton entry={form} entryType={'Brew'} size={'small'}
-                                                    style={{marginLeft: 10}}/>
-                                </div>
-                            }
-
-
-                        </div>
-
-                        <div style={{marginRight: 20, marginBottom: 10}}>
-                            <div style={{display: 'flex'}}>
-                                <div style={{flexGrow: 1, marginRight: 10}}>
-                                    <div style={{fontSize: '1.0rem', marginBottom: 2}}>Recipe/Notes</div>
-                                    <TextField type='text' name='recipePrep' fullWidth style={{minWidth: 300}}
-                                               size='small'
-                                               onChange={handleFormChange} value={form.recipePrep || ''}
-                                               color='info'/>
+                                    <SelectBox changeHandler={handleFormChange}
+                                               form={form}
+                                               name='machineName'
+                                               optionsList={[...machineNames, '[ add machine ]']}
+                                               multiple={false} defaultValue={thisMachine?.fullName || ''}
+                                               size='small' width={300}/>
                                 </div>
                             </div>
                         </div>
-
-                        <div style={{marginRight: 10, marginBottom: 10}}>
-                            <div style={{fontSize: '1.0rem', marginBottom: 2}}>Additional Notes</div>
-                            <TextField type='text' name='tastingNotes' fullWidth style={{minWidth: 300}}
-                                       size='small'
-                                       onChange={handleFormChange} value={form.tastingNotes || ''}
-                                       color='info'/>
-                        </div>
-
-                        <div style={{display: flexStyle, alignItems: 'center'}}>
-                            <div style={{marginRight: 10, marginBottom: '10px'}}>
-                                <div style={{fontSize: '1.0rem', marginBottom: 2}}>Roast Date</div>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                        value={form.roastDate || null}
-                                        label=' '
-                                        onChange={(newValue) => handleFormChange({
-                                            target: {
-                                                name: 'roastDate',
-                                                value: newValue
-                                            }
-                                        })}
-                                        sx={{
-                                            width: 150,
-                                            '.MuiPickersSectionList-root': {
-                                                padding: '8px 0px'
-                                            }
-                                        }}
-                                        disableFuture
-                                    />
-                                </LocalizationProvider>
-                            </div>
-                            <div style={{marginRight: 10, marginBottom: '10px'}}>
-                                <div style={{fontSize: '1.0rem', marginBottom: 2}}>
-                                    Grinder
-                                </div>
-                                <SelectBox changeHandler={handleFormChange}
-                                           form={form}
-                                           name='grinderName'
-                                           optionsList={[...grinderNames, '[ add grinder ]']}
-                                           multiple={false} defaultValue={thisGrinder?.fullName || ''}
-                                           size='small' width={300}/>
-                            </div>
-                            <div style={{marginRight: 10, marginBottom: '10px'}}>
-                                <div style={{fontSize: '1.0rem', marginBottom: 2}}>
-                                    Machine/Brewer
-                                </div>
-                                <SelectBox changeHandler={handleFormChange}
-                                           form={form}
-                                           name='machineName'
-                                           optionsList={[...machineNames, '[ add machine ]']}
-                                           multiple={false} defaultValue={thisMachine?.fullName || ''}
-                                           size='small' width={300}/>
-                            </div>
-                        </div>
-
-                        <div style={{
-                            margin: '30px 0px 60px',
-                            width: '100%',
-                            display: 'flex',
-                            justifyContent: 'center'
-                        }}>
-                            <Button onClick={handleReload} variant='outlined' color='info'
-                                    style={{marginRight: 16}}
-                                    disabled={uploading}>
-                                CANCEL
-                            </Button>
-                            <Button type='submit' variant='contained' color='info'
-                                    disabled={!saveEnabled || uploading} style={{boxShadow: 'none'}}>
-                                {uploading
-                                    ? <LoadingDisplayWhiteSmall size={'small'}/>
-                                    : 'SAVE'
-                                }
-                            </Button>
-                        </div>
-
                     </div>
-                </form>
-            </div>
+
+                    <div style={{
+                        margin: '30px 0px 60px',
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center'
+                    }}>
+                        <Button onClick={handleReload} variant='outlined' color='info'
+                                style={{marginRight: 16}}
+                                disabled={uploading}>
+                            CANCEL
+                        </Button>
+                        <Button type='submit' variant='contained' color='info'
+                                disabled={!saveEnabled || uploading} style={{boxShadow: 'none'}}>
+                            {uploading
+                                ? <LoadingDisplayWhiteSmall size={'small'}/>
+                                : 'SAVE'
+                            }
+                        </Button>
+                    </div>
+                </div>
+            </form>
         </div>
     )
 }

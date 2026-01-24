@@ -184,6 +184,14 @@ export default [{
             }
         },
         {
+            path: '/survey',
+            name: 'survey',
+            lazy: async () => {
+                const {default: SurveyRoute} = await import('../survey/SurveyRoute')
+                return {element: <Suspense><SurveyRoute/></Suspense>}
+            }
+        },
+        {
             path: '/modbox',
             name: 'modbox',
             lazy: async () => {

@@ -24,11 +24,11 @@ export default function Coffees() {
             padding: 0,
             marginLeft: 'auto', marginRight: 'auto', marginTop: 0
         }}>
-            <div style={{marginBottom: 10}}>
-                <FilterDisplayAdvanced/>
-            </div>
 
-            <div style={{margin: isMobile ? '0px 3px' : '0px 6px'}}>
+            <div style={{margin: isMobile ? '10px 3px' : '10px 6px'}}>
+
+                <FilterDisplayAdvanced/>
+
                 <Grid container spacing={'6px'} columns={1}>
                     <AnimatePresence>
                         <Grid size={{xs: 4, sm: 4, md: 4}} key={'add-bean-card'}>

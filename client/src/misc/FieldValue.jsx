@@ -1,9 +1,10 @@
 import React from 'react'
 
 function FieldValue({name, value, last, style, headerStyle = {}, textStyle = {}, suffix, prefix, fallback, center=false}) {
+    const alignStyle = center ? {textAlign: 'center'} : {marginLeft: 5}
     const marginStyle = last
-        ? {marginLeft: 5, ...style}
-        : {marginLeft: 5, marginBottom: 8, ...style}
+        ? {...alignStyle, ...style}
+        : {marginBottom: 8, ...alignStyle, ...style}
     const fullHeaderStyle = {
         color: '#888',
         fontSize: '0.85rem',
@@ -11,8 +12,7 @@ function FieldValue({name, value, last, style, headerStyle = {}, textStyle = {},
         ...headerStyle
     }
     const fullTextStyle = {
-        marginLeft: 5,
-        textAlign: center ? 'center' : 'left',
+        ...alignStyle,
         ...textStyle
     }
 

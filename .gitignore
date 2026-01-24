@@ -43,3 +43,4 @@ server/keys
 /server/src/apacheLogAnalysis/dailyData
 /server/src/apacheLogAnalysis/errorLogs
 client/stats.html
+/client/distBackup

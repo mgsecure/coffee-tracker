@@ -242,16 +242,16 @@ export default function CoffeeCard({entry = {}, expanded, onExpand}) {
                         }
 
                         {(sort === 'price' || sort === 'priceAsc') &&
-                            <div style={{marginLeft: 10}}>
+                            <div>
                                 {modeWeightUnit === 'oz'
                                     ? <FieldValue name='Price/pound'
                                                   value={entry.pricePound ? parseFloat(entry.pricePound).toFixed(2) : null}
                                                   prefix={`${currencySymbol} `}
-                                                  style={{marginRight: 24}}/>
+                                                  style={{}} center={true}/>
                                     : <FieldValue name='Price/100g'
                                                   value={entry.price100g ? parseFloat(entry.price100g).toFixed(2) : null}
                                                   prefix={`${currencySymbol} `}
-                                                  style={{marginRight: 24}}/>
+                                                  style={{}} center={true}/>
                                 }
                             </div>
                         }

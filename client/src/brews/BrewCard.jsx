@@ -40,9 +40,10 @@ export default function BrewCard({
                                      showBrewToggle
                                  }) {
     const {adminEnabled} = useContext(AppContext)
-    const {coffeesList, visibleEntries = []} = useContext(DataContext)
+    const {coffeesList, mappedBrews} = useContext(DataContext)
     const {updateCollection} = useContext(DBContext)
-    const {addFilter, sort} = useContext(FilterContext)
+    const {addFilter, filters, sort} = useContext(FilterContext)
+    const {coffeeName} = filters
     const ref = useRef(null)
     const navigate = useNavigate()
     const theme = useTheme()
@@ -156,12 +157,17 @@ export default function BrewCard({
         navigate(`/brews?coffeeName=${encodeURIComponent(thisCoffee.name)}`)
     }, [navigate, thisCoffee.name])
 
-    const coffeeBrews = visibleEntries.filter(e => e.coffee?.name === entry.coffee?.name)
-    const previousBrew = !sort && coffeeBrews?.find(b => b.idx > entry.idx)
+    const coffeeBrews = [...mappedBrews]
+        .filter(e => e.coffee?.name === entry.coffee?.name)
+        .sort((a, b) => {
+            return dayjs(b.brewedAt).valueOf() - dayjs(a.brewedAt).valueOf()
+        })
+    const previousBrew = (!sort && coffeeName === entry.coffee?.name) &&
+        coffeeBrews?.find(brew => dayjs(brew.brewedAt).valueOf() < dayjs(entry.brewedAt).valueOf())
 
     const highlightStyle = {
         backgroundColor: theme.palette.card?.add,
-        fontWeight: 700,
+        fontWeight: 500,
         padding: '0px 5px',
         borderRadius: 4
     }

@@ -10,7 +10,7 @@ import useData from '../util/useData.jsx'
 export function EspressoBeansDataProvider({children, allEntries}) {
     const {filters: allFilters, advancedFilterGroups} = useContext(FilterContext)
     const {search, sort, expandAll} = allFilters
-    const {data, loading, error} = useData({url: 'https://beans.mgsecure.com/data/currencyConversion.json'})
+    const {data, loading, error} = useData({url: '/currencyConversion.json'})
 
     const mappedEntries = useMemo(() => {
         if (!data || loading || error) return []

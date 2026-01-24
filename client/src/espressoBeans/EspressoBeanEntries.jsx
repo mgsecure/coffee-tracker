@@ -19,7 +19,7 @@ function EspressoBeanEntries() {
     }, [])
 
     const footerBefore = (
-        <div style={{margin:'30px 0px'}}>
+        <div style={{margin: '30px 0px'}}>
             <ExportButton text={true} entries={visibleEntries}/>
         </div>
     )
@@ -27,13 +27,9 @@ function EspressoBeanEntries() {
     return (
         <div style={{width: '100%'}}>
 
-            {filterCount > 0 &&
-                <div style={{marginBottom: 10}}>
-                    <FilterDisplayAdvanced/>
-                </div>
-            }
+            <FilterDisplayAdvanced/>
 
-            { loading && <LoadingDisplay/>}
+            {loading && <LoadingDisplay/>}
 
             {visibleEntries.map(entry =>
                 <BeanEntry

@@ -19,7 +19,7 @@ export function CoffeesDataProvider({children, profile}) {
     const globalContext = useContext(DataContext)
     const {filters: allFilters, advancedFilterGroups} = useContext(FilterContext)
     const {search, sort, expandAll} = allFilters
-    const {data: currencyConversion} = useData({url: 'https://beans.mgsecure.com/data/currencyConversion.json'})
+    const {data: currencyConversion} = useData({url: '/currencyConversion.json'})
     const {mappedBrews, modeDoseUnit, modeTemperatureUnit} = useContext(DataContext)
 
 

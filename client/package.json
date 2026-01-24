@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "yarn versionFile && vite build",
+    "build": "yarn distBackup && yarn versionFile && vite build",
     "preview": "vite preview --port 3000",
     "test": "vitest",
     "test:run": "vitest run",
     "lint": "eslint \"src/**/*.{js,jsx}\" --max-warnings 0",
+    "distBackup": "node ./scripts/distBackup.js",
     "versionFile": "node ./scripts/version.js",
     "min-version": "node ./scripts/minVersion.js"
   },
