@@ -27,20 +27,20 @@ const endDate = today.subtract(1, 'day')
 import {localUser, prodUser} from '../../keys/users.js'
 
 const prodEnvironment = localUser !== process.env.USER
+import { fileURLToPath }  from 'url'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
-// Set paths based on environment
-const workDir = './'
-const logsPath = './logs'
-const dataDir = './dailyData'
-
-const serverPath = prodEnvironment
-    ? `/home/${prodUser}/coffee-tracker.com/public/data`
-    : `/Users/${localUser}/Documents/GitHub/coffee-tracker/client/public/data`
-
-const siteStatsFullJsonFile = path.join(serverPath, 'statsSiteFull.json')
+const dataDir = path.resolve(__dirname, 'dailyData')
 
 import countryTZ from './country-timezones.json' with {type: 'json'}
 
+const serverPath = prodEnvironment
+    ? `/home/${prodUser}/coffee-tracker.com/data`
+    : `/Users/${localUser}/Documents/GitHub/coffee-tracker/client/public/data`
+
+let siteStatsFull = {test: true}
+const siteStatsFullJsonFile = path.join(serverPath, 'statsSiteFull.json')
 
 // --- DATA AGGREGATION OBJECTS ---
 let wip = {} // work-in-progress aggregates
@@ -68,143 +68,155 @@ wip.crawlerAgentRequests = {}
 wip.requestsByLocalHour = {}
 wip.requestsByServerHour = {}
 
-// Also keep a separate aggregate for lockViews (used later for printing)
-let lockViews = {}
+export default async function processDailyData() {
 
-// --- HELPER FUNCTIONS ---
+// --- MAIN PROCESSING: Read daily data files and aggregate ---
+    const allDataFiles = await fs.readdir(dataDir)
+    const dataFiles = allDataFiles.filter(file => !['.', '..', '.DS_Store', 'New Folder With Items'].includes(file))
+        .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
 
-// Parse the date from a filename. Assumes filenames start with "YYYY-MM-DD"
+    for (const file of dataFiles) {
+        const dateString = getDateStringFromFilename(file)
+        if (!dateString) continue
+
+        const requestDate = dayjs(dateString, 'YYYY-MM-DD')
+        // Skip if out of range
+        if (requestDate.isAfter(endDate) || requestDate.isBefore(startDate)) continue
+        if (today.diff(requestDate, 'day') > daysToReport) continue
+
+        const filePath = path.join(dataDir, file)
+        let dayData = {}
+        try {
+            const content = await fs.readFile(filePath, 'utf8')
+            dayData = JSON.parse(content)
+        } catch (err) {
+            console.error('Error reading or parsing', filePath, err)
+            continue
+        }
+
+        // Determine week key using week number and first day of week
+        const firstDay = dayjs(requestDate).startOf('week').format('YYYY-MM-DD')
+
+        setDeepAdd(wip, ['totals', 'numDays'], 1)
+        setDeepAdd(wip, ['weeks', firstDay, 'numDays'], 1)
+
+        setDeep(wip, ['last28days', dateString, 'visits'], dayData.visits)
+        setDeepAdd(wip, ['weeks', firstDay, 'visits'], dayData.visits)
+        setDeepAdd(wip, ['weeks', 'totals', 'visits'], dayData.visits)
+
+        setDeep(wip, ['last28days', dateString, 'visitors'], dayData.visitors)
+        setDeepAdd(wip, ['weeks', firstDay, 'visitors'], dayData.visitors)
+        setDeepAdd(wip, ['weeks', 'totals', 'visitors'], dayData.visitors)
+
+        if (dayData.pageViews) {
+            for (const key in dayData.pageViews) {
+                if (key !== 'undefined') setDeepAdd(wip, ['last28days', dateString, 'pageViews', key], dayData.pageViews[key])
+            }
+        }
+        if (dayData.errorPages) {
+            for (const key in dayData.errorPages) {
+                setDeepAdd(wip, ['errorPages', key], dayData.errorPages[key])
+            }
+        }
+        if (dayData.pageViewsByContinent) {
+            for (const key in dayData.pageViewsByContinent) {
+                setDeepAdd(wip, ['pageViewsByContinent', key], dayData.pageViewsByContinent[key])
+            }
+        }
+        if (dayData.pageViewsByCountry) {
+            for (const key in dayData.pageViewsByCountry) {
+                setDeepAdd(wip, ['pageViewsByCountry', key], dayData.pageViewsByCountry[key])
+                if (!wip.firstVisit?.[key] || requestDate.isBefore(dayjs(wip.firstVisit?.[key], 'YYYY-MM-DD'))) {
+                    setDeep(wip, ['firstVisit', key], dateString)
+                }
+            }
+        }
+        if (dayData.visitorsByCountry) {
+            for (const key in dayData.visitorsByCountry) {
+                setDeepAdd(wip, ['visitorsByCountry', key], dayData.visitorsByCountry[key])
+            }
+        }
+        if (dayData.pageViewsByState) {
+            for (const key in dayData.pageViewsByState) {
+                setDeepAdd(wip, ['pageViewsByState', key], dayData.pageViewsByState[key])
+            }
+        }
+        if (dayData.pageViewsBySearchTerm) {
+            for (const page in dayData.pageViewsBySearchTerm) {
+                for (const term in dayData.pageViewsBySearchTerm[page]) {
+                    setDeepAdd(wip, ['pageViewsBySearchTerm', page, term], dayData.pageViewsBySearchTerm[page][term])
+                    setDeepAdd(wip, ['pageViewsBySearchTerm', 'total', term], dayData.pageViewsBySearchTerm[page][term])
+                }
+            }
+        }
+        if (dayData.pageViewsByWidth) {
+            wip.lockViewsByWidth = wip.lockViewsByWidth || {}
+            for (const key in dayData.pageViewsByWidth) {
+                setDeepAdd(wip, ['pageViewsByWidth', key], dayData.pageViewsByWidth[key])
+            }
+        }
+        if (dayData.referrerViews) {
+            for (const key in dayData.referrerViews) {
+                setDeepAdd(wip, ['referrerViews', key], dayData.referrerViews[key])
+            }
+        }
+        if (dayData.browsers) {
+            for (const key in dayData.browsers) {
+                setDeepAdd(wip, ['browsers', key], dayData.browsers[key])
+            }
+        }
+        if (dayData.platforms) {
+            for (const key in dayData.platforms) {
+                setDeepAdd(wip, ['platforms', key], dayData.platforms[key])
+            }
+        }
+        if (dayData.crawlerAgentRequests) {
+            for (const key in dayData.crawlerAgentRequests) {
+                setDeepAdd(wip, ['crawlerAgentRequests', key], dayData.crawlerAgentRequests[key])
+            }
+        }
+        if (dayData.requestsByLocalHour) {
+            for (const key in dayData.requestsByLocalHour) {
+                setDeepAdd(wip, ['requestsByLocalHour', key], dayData.requestsByLocalHour[key])
+            }
+        }
+        if (dayData.requestsByServerHour) {
+            for (const key in dayData.requestsByServerHour) {
+                setDeepAdd(wip, ['requestsByServerHour', key], dayData.requestsByServerHour[key])
+            }
+        }
+        setDeepAdd(wip, ['totals', 'logEntries'], dayData.logEntries)
+
+    }
+
+
+    //console.log(JSON.stringify(wip, null, 2))
+
+
+// --- EXECUTE REPORT BUILDING FUNCTIONS ---
+    trafficByDate()
+    trafficByWeek()
+    popularCountries()
+    lockViewsByBelt()
+    pageTracking()
+    platformBrowser()
+    hourlyRequests()
+    searchTerms()
+    screenWidths()
+    outputSiteFullJson()
+    
+    if (!prodEnvironment) {
+        console.log(`Data Process Runtime: ${String(dayjs().diff(today, 'minute')).padStart(2, '0')}:${String(dayjs().diff(today, 'second')).padStart(2, '0')}.${String(dayjs().diff(today, 'millisecond')).substring(0, 2)}`)
+        exec('say \'done\'')
+    }
+
+}
+
+
 function getDateStringFromFilename(filename) {
     const match = filename.match(/(\d{4}-\d{2}-\d{2})/)
     return match ? match[1] : null
 }
-
-// --- MAIN PROCESSING: Read daily data files and aggregate ---
-const allDataFiles = await fs.readdir(dataDir)
-const dataFiles = allDataFiles.filter(file => !['.', '..', '.DS_Store', 'New Folder With Items'].includes(file))
-    .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-
-
-for (const file of dataFiles) {
-    const dateString = getDateStringFromFilename(file)
-    if (!dateString) continue
-
-    const requestDate = dayjs(dateString, 'YYYY-MM-DD')
-    // Skip if out of range
-    if (requestDate.isAfter(endDate) || requestDate.isBefore(startDate)) continue
-    if (today.diff(requestDate, 'day') > daysToReport) continue
-
-    const filePath = path.join(dataDir, file)
-    let dayData = {}
-    try {
-        const content = await fs.readFile(filePath, 'utf8')
-        dayData = JSON.parse(content)
-    } catch (err) {
-        console.error('Error reading or parsing', filePath, err)
-        continue
-    }
-
-    // Determine week key using week number and first day of week
-    const firstDay = dayjs(requestDate).startOf('week').format('YYYY-MM-DD')
-
-    setDeepAdd(wip, ['totals', 'numDays'], 1)
-    setDeepAdd(wip, ['weeks', firstDay, 'numDays'], 1)
-
-    setDeep(wip, ['last28days', dateString, 'visits'], dayData.visits)
-    setDeepAdd(wip, ['weeks', firstDay, 'visits'], dayData.visits)
-    setDeepAdd(wip, ['weeks', 'totals', 'visits'], dayData.visits)
-
-    setDeep(wip, ['last28days', dateString, 'visitors'], dayData.visitors)
-    setDeepAdd(wip, ['weeks', firstDay, 'visitors'], dayData.visitors)
-    setDeepAdd(wip, ['weeks', 'totals', 'visitors'], dayData.visitors)
-
-    if (dayData.pageViews) {
-        for (const key in dayData.pageViews) {
-            if (key !== 'undefined') setDeepAdd(wip, ['last28days', dateString, 'pageViews', key], dayData.pageViews[key])
-        }
-    }
-    if (dayData.errorPages) {
-        for (const key in dayData.errorPages) {
-            setDeepAdd(wip, ['errorPages', key], dayData.errorPages[key])
-        }
-    }
-    if (dayData.pageViewsByContinent) {
-        for (const key in dayData.pageViewsByContinent) {
-            setDeepAdd(wip, ['pageViewsByContinent', key], dayData.pageViewsByContinent[key])
-        }
-    }
-    if (dayData.pageViewsByCountry) {
-        for (const key in dayData.pageViewsByCountry) {
-            setDeepAdd(wip, ['pageViewsByCountry', key], dayData.pageViewsByCountry[key])
-            if (!wip.firstVisit?.[key] || requestDate.isBefore(dayjs(wip.firstVisit?.[key], 'YYYY-MM-DD'))) {
-                setDeep(wip, ['firstVisit', key], dateString)
-            }
-        }
-    }
-    if (dayData.visitorsByCountry) {
-        for (const key in dayData.visitorsByCountry) {
-            setDeepAdd(wip, ['visitorsByCountry', key], dayData.visitorsByCountry[key])
-        }
-    }
-    if (dayData.pageViewsByState) {
-        for (const key in dayData.pageViewsByState) {
-            setDeepAdd(wip, ['pageViewsByState', key], dayData.pageViewsByState[key])
-        }
-    }
-    if (dayData.pageViewsBySearchTerm) {
-        for (const page in dayData.pageViewsBySearchTerm) {
-            for (const term in dayData.pageViewsBySearchTerm[page]) {
-                setDeepAdd(wip, ['pageViewsBySearchTerm', page, term], dayData.pageViewsBySearchTerm[page][term])
-                setDeepAdd(wip, ['pageViewsBySearchTerm', 'total', term], dayData.pageViewsBySearchTerm[page][term])
-            }
-        }
-    }
-    if (dayData.pageViewsByWidth) {
-        wip.lockViewsByWidth = wip.lockViewsByWidth || {}
-        for (const key in dayData.pageViewsByWidth) {
-            setDeepAdd(wip, ['pageViewsByWidth', key], dayData.pageViewsByWidth[key])
-        }
-    }
-    if (dayData.referrerViews) {
-        for (const key in dayData.referrerViews) {
-            setDeepAdd(wip, ['referrerViews', key], dayData.referrerViews[key])
-        }
-    }
-    if (dayData.browsers) {
-        for (const key in dayData.browsers) {
-            setDeepAdd(wip, ['browsers', key], dayData.browsers[key])
-        }
-    }
-    if (dayData.platforms) {
-        for (const key in dayData.platforms) {
-            setDeepAdd(wip, ['platforms', key], dayData.platforms[key])
-        }
-    }
-    if (dayData.crawlerAgentRequests) {
-        for (const key in dayData.crawlerAgentRequests) {
-            setDeepAdd(wip, ['crawlerAgentRequests', key], dayData.crawlerAgentRequests[key])
-        }
-    }
-    if (dayData.requestsByLocalHour) {
-        for (const key in dayData.requestsByLocalHour) {
-            setDeepAdd(wip, ['requestsByLocalHour', key], dayData.requestsByLocalHour[key])
-        }
-    }
-    if (dayData.requestsByServerHour) {
-        for (const key in dayData.requestsByServerHour) {
-            setDeepAdd(wip, ['requestsByServerHour', key], dayData.requestsByServerHour[key])
-        }
-    }
-    setDeepAdd(wip, ['totals', 'logEntries'], dayData.logEntries)
-
-}
-
-// For debugging, print lockViews aggregate as JSON
-console.log(JSON.stringify(wip, null, 2))
-
-
-// --- SITE STATS OBJECT (final output) ---
-let siteStatsFull = {test: true}
 
 // --- FUNCTIONS FOR BUILDING REPORTS ---
 
@@ -538,21 +550,3 @@ function outputSiteFullJson() {
 
 }
 
-// --- EXECUTE REPORT BUILDING FUNCTIONS ---
-trafficByDate()
-trafficByWeek()
-popularCountries()
-lockViewsByBelt()
-pageTracking()
-platformBrowser()
-hourlyRequests()
-searchTerms()
-screenWidths()
-outputSiteFullJson()
-
-// --- RUNTIME INFO ---
-console.log(`Data Process Runtime: ${String(dayjs().diff(today, 'minute')).padStart(2, '0')}:${String(dayjs().diff(today, 'second')).padStart(2, '0')}.${String(dayjs().diff(today, 'millisecond')).substring(0, 2)}`)
-
-if (!prodEnvironment) {
-    exec('say \'done\'')
-}

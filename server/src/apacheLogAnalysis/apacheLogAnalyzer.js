@@ -4,7 +4,6 @@
 // REQUIRED MODULES
 import fs from 'fs/promises'
 import path from 'path'
-import url from 'url'
 import {useragent} from 'express-useragent'
 import {exec} from 'child_process'
 import geoip from 'geoip-lite'
@@ -13,6 +12,14 @@ import {localUser} from '../../keys/users.js'
 import {setDeep, setDeepAdd, setDeepUnique} from '../util/setDeep.js'
 
 const prodEnvironment = localUser !== process.env.USER
+
+import url, {fileURLToPath} from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const componentsDir = path.resolve(__dirname)
+const logsPath = path.resolve(__dirname, 'logs')
+const dataDir = path.resolve(__dirname, 'dailyData')
 
 // DAYJS SETUP WITH PLUGINS
 import dayjs from 'dayjs'
@@ -34,11 +41,6 @@ const today = dayjs()
 const endDate = today.subtract(1, 'day')
 // You can override endDate if needed
 
-const componentsDir = './'
-const logsPath = './logs'
-const dataDir = './dailyData'
-
-
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const ignoreFiles = ['.', '..', '.DS_Store', 'New Folder With Items']
 
@@ -46,44 +48,50 @@ const ignoreFiles = ['.', '..', '.DS_Store', 'New Folder With Items']
 let logLines = 0
 let stats = {}
 let temp = {}
-
-// READ LOG FILE NAMES
-let allLogFiles = await fs.readdir(logsPath)
-let logFiles = allLogFiles
-    .filter(file => file.match(/^access/i))
-    .filter(file => !ignoreFiles.includes(file)).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-
 let crawlerAgents = []
 let crawlerAgentNames = {}
-
-getCrawlerUserAgents(path.join(componentsDir, 'crawler-user-agents.json')).then()
-getCrawlerUserAgents(path.join(componentsDir, 'crawler-user-agents-LPU.json')).then()
-
-// READ DATA FILE NAMES from dataDir (we only need the date portion from filenames)
-let allDataFiles = await fs.readdir(dataDir)
 let dataFiles = []
-allDataFiles.forEach(file => {
-    if (ignoreFiles.includes(file)) return
-    let parts = file.split('_')
-    if (parts.length > 0) {
-        dataFiles.push(parts[0])
+
+
+export default async function analyzeLogs() {
+
+    let allLogFiles = await fs.readdir(logsPath)
+    let logFiles = allLogFiles
+        .filter(file => file.match(/^access/i))
+        .filter(file => !ignoreFiles.includes(file)).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+
+    getCrawlerUserAgents(path.join(componentsDir, 'crawler-user-agents.json')).then()
+    getCrawlerUserAgents(path.join(componentsDir, 'crawler-user-agents-local.json')).then()
+
+    // READ DATA FILE NAMES from dataDir (we only need the date portion from filenames)
+    let allDataFiles = await fs.readdir(dataDir)
+    allDataFiles.forEach(file => {
+        if (ignoreFiles.includes(file)) return
+        let parts = file.split('_')
+        if (parts.length > 0) {
+            dataFiles.push(parts[0])
+        }
+    })
+
+    for (const logFileName of logFiles) {
+        await processLogFile(logFileName)
     }
-})
 
-for (const logFileName of logFiles) {
-    await processLogFile(logFileName)
+    writeDailyFiles().then()
+
+    if (!prodEnvironment) {
+        console.log(`Data Process Runtime: ${String(dayjs().diff(today, 'minute')).padStart(2, '0')}:${String(dayjs().diff(today, 'second')).padStart(2, '0')}.${String(dayjs().diff(today, 'millisecond')).substring(0, 2)}`)
+        console.log(`Processed ${logLines} log entries`)
+        exec('say \'analysis complete\'')
+    }
+
+
 }
-
-writeDailyFiles().then()
-console.log(`Data Process Runtime: ${String(dayjs().diff(today, 'minute')).padStart(2, '0')}:${String(dayjs().diff(today, 'second')).padStart(2, '0')}.${String(dayjs().diff(today, 'millisecond')).substring(0, 2)}`)
-console.log(`Processed ${logLines} log entries`)
 
 async function processLogFile(logFileName) {
     const fullLogPath = path.join(logsPath, logFileName)
     const logContent = await fs.readFile(fullLogPath, 'utf8')
     const lines = logContent.split('\n')
-
-    console.log('processing log file:', fullLogPath, 'with', lines.length, 'lines')
 
     lines.forEach(line => {
         if (!line.trim()) return
@@ -268,10 +276,10 @@ async function writeDailyFiles() {
         //         setDeepUnique(temp, [requestDateText, 'ipsByCountry', requestCountry], clientAddress)
         stats[requestDateText].visitorsByCountry =
             Object.keys(temp[requestDateText].ipsByCountry)
-            .reduce((acc, requestCountry) => {
-                setDeep(acc, [requestCountry], temp[requestDateText].ipsByCountry[requestCountry].length)
-                return acc
-            }, {})
+                .reduce((acc, requestCountry) => {
+                    setDeep(acc, [requestCountry], temp[requestDateText].ipsByCountry[requestCountry].length)
+                    return acc
+                }, {})
     })
 
 // WRITE JSON OUTPUT FILES per date
@@ -283,13 +291,6 @@ async function writeDailyFiles() {
         fs.writeFile(outputPath, JSON.stringify(stats[requestDateText], null, 2), 'utf8').then()
     })
 }
-
-
-// Optionally, use a system command to announce completion (macOS only)
-if (!prodEnvironment) {
-    exec('say \'analysis complete\'')
-}
-
 
 async function getCrawlerUserAgents(jsonPath) {
     try {

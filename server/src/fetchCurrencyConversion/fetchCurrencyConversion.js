@@ -1,5 +1,5 @@
-import {localUser, prodUser} from './keys/users.js'
-import {CURRENCY_API_KEY} from './keys/importKeys.js'
+import {localUser, prodUser} from '../../keys/users.js'
+import {CURRENCY_API_KEY} from '../../keys/importKeys.js'
 
 import fs from 'fs/promises'
 import path from 'path'
@@ -16,7 +16,7 @@ export default async function fetchCurrencyConversion() {
 
     const serverDir = prodEnvironment
         ? `/home/${prodUser}/coffee-tracker.com`
-        : path.resolve(__dirname, '../public')
+        : `/Users/${localUser}/Documents/GitHub/coffee-tracker/client/public`
 
     try {
         if (!prodEnvironment) console.log(`Fetching currency conversion from ${url}...`)

@@ -44,3 +44,4 @@ server/keys
 /server/src/apacheLogAnalysis/errorLogs
 client/stats.html
 /client/distBackup
+/server/src/apacheLogAnalysis/logsTemp
