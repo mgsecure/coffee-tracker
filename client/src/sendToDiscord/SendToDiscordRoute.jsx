@@ -45,13 +45,13 @@ export default function SendToDiscordRoute() {
             value = sanitizeValues(value, {profanityOK: true, urlsOK: true})
         }
         setForm(prev => ({...prev, [name]: value}))
-    }, [])
+    }, [form.otherPlatform, form.platform])
 
     const handleClearField = useCallback((fieldName) => {
         const updatedForm = {...form}
         delete updatedForm[fieldName]
         setForm(updatedForm)
-    }, [])
+    }, [form])
 
     const handleFormSubmit = useCallback(async (e) => {
         e?.preventDefault?.()

@@ -50,7 +50,7 @@ function AutoCompleteBox({
 
     useEffect(() => {
         if (inputValue && inputValue.length > 0) setInputValue('')
-    }, [inputValueOverride, setInputValue])
+    }, [inputValue, inputValueOverride, setInputValue])
 
     return (
         <React.Fragment>

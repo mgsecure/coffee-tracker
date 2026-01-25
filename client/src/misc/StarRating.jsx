@@ -7,7 +7,7 @@ export default function StarRating({ratings, iconsCount = 5, dimension, onChange
         if (rate !== ratings[dimension]) {
             onChange({rating: rate, dimension: dimension})
         }
-    },[dimension, onChange])
+    },[dimension, onChange, ratings])
 
     return (
         <div style={{display: 'flex', placeItems: 'center', marginTop:4, ...style}}>

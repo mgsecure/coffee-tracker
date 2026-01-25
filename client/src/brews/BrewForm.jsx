@@ -133,14 +133,12 @@ export default function BrewForm({entry, open, setOpen, action, coffee}) {
     }, [navigate])
 
     const handleFlaggedChange = useCallback(async (event, direction) => {
-        const formCopy = {...form, flagged: form.flagged === direction ? undefined : direction}
-        setForm(formCopy)
+        setForm((prevForm) => ({...prevForm, flagged: prevForm.flagged === direction ? undefined : direction}))
         setFormChanged(true)
-    }, [form])
+    }, [])
 
     const handleFormChange = useCallback((event) => {
         const {name, value} = event.target
-        const newForm = {...form}
         if (name === 'coffeeName' && value === '[ add coffee ]') {
             setOpen(false)
             handleAddNew('coffees', undefined)
@@ -153,14 +151,20 @@ export default function BrewForm({entry, open, setOpen, action, coffee}) {
             setOpen(false)
             handleAddNew('equipment', undefined)
             return
-        } else if (name === 'temperature' && !form.temperatureUnit) {
-            newForm.temperatureUnit = modeTemperatureUnit
-        } else if (name === 'dose' && !form.doseUnit) {
-            newForm.doseUnit = modeDoseUnit
         }
-        setForm({...form, [name]: value})
+        
+        setForm((prevForm) => {
+            const newForm = {...prevForm}
+            if (name === 'temperature' && !prevForm.temperatureUnit) {
+                newForm.temperatureUnit = modeTemperatureUnit
+            } else if (name === 'dose' && !prevForm.doseUnit) {
+                newForm.doseUnit = modeDoseUnit
+            }
+            newForm[name] = value
+            return newForm
+        })
         setFormChanged(true)
-    }, [form, handleAddNew, modeDoseUnit, modeTemperatureUnit, setOpen])
+    }, [handleAddNew, modeDoseUnit, modeTemperatureUnit, setOpen])
 
     const handleChangeTime = useCallback((value) => {
         handleFormChange({target: {name: 'brewTime', value}})

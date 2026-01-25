@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useMemo, useState} from 'react'
+import React, {useCallback, useContext, useState} from 'react'
 import Box from '@mui/material/Box'
 import Drawer from '@mui/material/Drawer'
 import Tooltip from '@mui/material/Tooltip'
@@ -19,7 +19,7 @@ function FilterTextButton({onFiltersChanged}) {
 
     const {isLoggedIn} = useContext(AuthContext)
     const {beta} = useContext(AppContext)
-    const {filters, filterCount, addFilters, addFilter, filterFields, removeFilters} = useContext(FilterContext)
+    const {filterCount, addFilters, filterFields} = useContext(FilterContext)
 
     const [open, setOpen] = useState(false)
     const handleHotkey = useCallback(() => setOpen(!open), [open])
@@ -36,9 +36,6 @@ function FilterTextButton({onFiltersChanged}) {
 
     const openDrawer = useCallback(() => setOpen(true), [])
     const closeDrawer = useCallback(() => setOpen(false), [])
-
-    const {color, lineColor = '#999'} = belts[initialBelt] ? belts[initialBelt] : {color: '#inherit'}
-    const beltOpacity = scope === 'belt' ? 1 : 0.7
 
     const {width} = useWindowSize()
     const smallWidth = width <= 500
@@ -76,7 +73,7 @@ function FilterTextButton({onFiltersChanged}) {
                                 })
                                 .map((field, index) =>
                                     <FilterByField
-                                        tab={tab}
+                                        tab={undefined}
                                         key={index}
                                         {...field}
                                         onFilter={handleAddFilter}

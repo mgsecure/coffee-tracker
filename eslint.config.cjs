@@ -26,6 +26,7 @@ const compat = new FlatCompat({
 })
 
 module.exports = defineConfig([{
+    files: ['**/*.js', '**/*.jsx'],
     languageOptions: {
         globals: {
             ...globals.browser,
@@ -36,7 +37,9 @@ module.exports = defineConfig([{
         sourceType: 'module',
 
         parserOptions: {
-            ecmaFeatures: ['jsx'],
+            ecmaFeatures: {
+                jsx: true,
+            },
         },
     },
 

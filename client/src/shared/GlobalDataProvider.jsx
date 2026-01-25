@@ -51,7 +51,7 @@ export function GlobalDataProvider({children}) {
                     ].join(','))
                 }
             })
-    }, [profile])
+    }, [equipment, profile.brews, profile.coffees, profile.equipment])
 
     const modeDoseUnit = Object.entries(doseUnits).reduce((a, b) =>
         b[1] > a[1] || (b[1] === a[1] && b[0] < a[0]) ? b : a

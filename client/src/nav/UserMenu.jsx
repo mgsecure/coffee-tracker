@@ -49,7 +49,7 @@ function UserMenu() {
         setAdminEnabled(false)
         handleClose()
         logout()
-    }, [handleClose, logout])
+    }, [handleClose, logout, setAdminEnabled])
 
     return (
         <React.Fragment>

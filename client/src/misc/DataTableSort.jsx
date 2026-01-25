@@ -18,6 +18,7 @@ const DataTableSort = ({
     const {rows, columns, defaultSort = 'name', sortable, wrap = false} = tableData
     const [sort, setSort] = useState(defaultSort)
     const [ascending, setAscending] = useState(!tableData.columns.find(c => c.id === defaultSort)?.descending)
+    console.log('rows', rows)
 
     const overflowStyle = wrap
         ? {whiteSpace: 'inherit'}
@@ -49,7 +50,7 @@ const DataTableSort = ({
             if (primary !== 0) return ascending ? primary : -primary
             // fallback compare is ALWAYS the value from the column data (stable)
             const hasFallback = list.find(x => x?.[defaultSort] !== undefined && x?.[defaultSort] !== null)
-            const fallbackType = typeof hasFallback?.[defaultSort] || 'string'
+            const fallbackType = hasFallback?.[defaultSort] ? typeof hasFallback?.[defaultSort] : 'string'
             const fallback = cmp(a, b, defaultSort, fallbackType === 'number')
             return columns?.find(c => c.id === defaultSort)?.descending ? -fallback : fallback
         })

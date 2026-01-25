@@ -120,7 +120,7 @@ for (const file of dataFiles) {
 
     if (dayData.pageViews) {
         for (const key in dayData.pageViews) {
-            setDeepAdd(wip, ['last28days', dateString, 'pageViews', key], dayData.pageViews[key])
+            if (key !== 'undefined') setDeepAdd(wip, ['last28days', dateString, 'pageViews', key], dayData.pageViews[key])
         }
     }
     if (dayData.errorPages) {

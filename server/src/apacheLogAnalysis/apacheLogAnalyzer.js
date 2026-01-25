@@ -49,7 +49,9 @@ let temp = {}
 
 // READ LOG FILE NAMES
 let allLogFiles = await fs.readdir(logsPath)
-let logFiles = allLogFiles.filter(file => !ignoreFiles.includes(file)).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+let logFiles = allLogFiles
+    .filter(file => file.match(/^access/i))
+    .filter(file => !ignoreFiles.includes(file)).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
 
 let crawlerAgents = []
 let crawlerAgentNames = {}

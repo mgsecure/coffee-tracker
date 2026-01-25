@@ -8,6 +8,7 @@ import LoadingDisplay from '../../misc/LoadingDisplay.jsx'
 import dayjs from 'dayjs'
 import FirstVisitsLastSevenTable from './FirstVisitsLastSevenTable.jsx'
 import SiteTrafficSummary from './SiteTrafficSummary.jsx'
+import PageTrackingTable from './PageTrackingTable.jsx'
 
 export default function SiteReportPage() {
     const {siteStats = {}, loading, error, countryCodeCountries} = useContext(DataContext)
@@ -65,6 +66,10 @@ export default function SiteReportPage() {
 
             <div style={firstHeaderStyle}>Traffic Summary</div>
             <SiteTrafficSummary/>
+
+            <div style={firstHeaderStyle}>Page Tracking</div>
+            <PageTrackingTable/>
+
         </React.Fragment>
     )
 }

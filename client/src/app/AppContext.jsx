@@ -28,7 +28,7 @@ export function AppProvider({children}) {
     const [error, setError] = useState(false)
     const updateAvailable = initial && version && initial !== version
 
-    const checkVersion = async first => {
+    const checkVersion = useCallback(async first => {
         try {
             const response = await fetch('/version.json', {cache: 'no-cache'})
             const {version: newVersion, minVersion} = (await response.json())
@@ -48,13 +48,13 @@ export function AppProvider({children}) {
             console.warn('Unable to check version.', e)
             setError(true)
         }
-    }
+    },[initalMinVersion, testing, version])
 
     const multiplier = testing ? 1 : 60 // set to 1 for testing, 60 for production
 
     useEffect(() => {
         checkVersion(first).then()
-    },[])
+    },[checkVersion, first])
 
     useInterval(checkVersion, 10 * multiplier * 1000) // 10 * 60 * 1000 = 10 minutes
 

@@ -33,7 +33,7 @@ export function ReportsDataProvider({children, profile}) {
     const brewsList = useMemo(() => {
         return ([...profile.brews || []])
             .sort((a, b) => a.fullName.localeCompare(b.fullName))
-    }, [profile.coffees])
+    }, [profile.brews])
 
     const roastersList = useMemo(() => {
         const userList = ([...profile.coffees || []])

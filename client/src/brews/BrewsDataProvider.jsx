@@ -77,15 +77,7 @@ export function BrewsDataProvider({children, profile}) {
         searchedEntries,
         visibleEntries,
         expandAll,
-    }), [
-        globalContext,
-        allEntries,
-        mappedEntries,
-        searchedEntries,
-        visibleEntries,
-        expandAll,
-        coffeesList,
-    ])
+    }), [globalContext, allEntries, mappedEntries, searchedEntries, visibleEntries, expandAll])
 
     return (
         <DataContext.Provider value={value}>

@@ -39,7 +39,7 @@ export default function EnvAppBar() {
         handleClose()
         setShowFull(false)
         navigate(url)
-    }, [navigate, setShowFull])
+    }, [handleClose, navigate])
 
     const menuItems = routes[0].children.map(route => (
         <MenuItem key={route.path} onClick={handleClick(route.path)}>{route.name || route.path}</MenuItem>

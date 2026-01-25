@@ -152,7 +152,6 @@ export default function CoffeeCard({entry = {}, expanded, onExpand}) {
     const beanLink = beanUrl ? <Link sx={linkSx} onClick={() => openInNewTab(entry.url)}>{entry.url}</Link> : entry.url
 
     const {isMobile, flexStyle} = useWindowSize()
-    const flexDirection = isMobile ? 'column' : 'row'
 
     const ratingWidth = isMobile ? 300 : 400
     const ratingSize = isMobile ? 19 : 21
