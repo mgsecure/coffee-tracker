@@ -9,6 +9,6 @@ export function getPageTitle(value) {
         ? 'LOCAL'
         : /^dev.*/.test(window.location.host)
             ? 'DEV'
-            : 'Coffee Tracker'
-    return value ? `${environment} - ${value}` : 'Coffee Tracker'
+            : 'Lock Zaddy'
+    return value ? `${environment} - ${value}` : 'Lock Zaddy'
 }
