@@ -192,6 +192,14 @@ export default [{
             }
         },
         {
+            path: '/time',
+            name: 'time',
+            lazy: async () => {
+                const {default: TimeRoute} = await import('../alice/TimeRoute.jsx')
+                return {element: <Suspense><TimeRoute/></Suspense>}
+            }
+        },
+        {
             path: '/modbox',
             name: 'modbox',
             lazy: async () => {

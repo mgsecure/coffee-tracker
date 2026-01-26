@@ -13,7 +13,7 @@ import Slide from '@mui/material/Slide'
 import {useNavigate} from 'react-router-dom'
 
 export default function EnvAppBar() {
-    const {admin, setAdmin, beta, setBeta} = useContext(AppContext)
+    const {adminEnabled} = useContext(AppContext)
     const navigate = useNavigate()
 
     const [showFull, setShowFull] = useState(false)
@@ -47,7 +47,7 @@ export default function EnvAppBar() {
 
     return (
         <React.Fragment>
-            {(isDev || admin) &&
+            {(isDev || adminEnabled) &&
                 <React.Fragment>
 
                     {!showFull

@@ -45,3 +45,4 @@ server/keys
 client/stats.html
 /client/distBackup
 /server/src/apacheLogAnalysis/logsTemp
+/client/src/alice

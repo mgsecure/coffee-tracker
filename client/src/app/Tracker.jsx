@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, useMemo} from 'react'
 import querystring from 'query-string'
 import AppContext from './AppContext'
 
@@ -9,12 +9,14 @@ function Tracker({feature, ...extraParams}) {
     //if (import.meta.env.DEV || adminEnabled) return null
     if (import.meta.env.DEV) return null
 
-    const randomStuff = (Math.random()).toString(36).substring(2, 10)
-    const file = files[feature] || 'bean.gif'
-    const ref = document.referrer || 'none'
-    const page = window.location.href.replace(/.*\/#\/(\w+)\?*.*/,'$1')
-    const query = querystring.stringify({trk: feature, r: randomStuff, w: screen.width, ref, page, ...extraParams})
-    const url = `https://coffee-tracker.com/i/${file}?${query}`
+    const url = useMemo(() => {
+        const randomStuff = (Math.random()).toString(36).substring(2, 10)
+        const file = files[feature] || 'bean.gif'
+        const ref = document.referrer || 'none'
+        const page = window.location.href.replace(/.*\/#\/(\w+)\?*.*/, '$1')
+        const query = querystring.stringify({trk: feature, r: randomStuff, w: screen.width, ref, page, ...extraParams})
+        return `https://coffee-tracker.com/i/${file}?${query}`
+    }, [extraParams, feature])
 
     // <Tracker feature='search' search={search}/>
     // <Tracker feature='lock' id={entry.id} search={search}/>

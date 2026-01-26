@@ -22,19 +22,19 @@ const PageTrackingTable = () => {
                 .forEach(page => {
                 setDeepAdd(totals, [page], last28days[date].pageViews[page])
             })
-            acc.push({dateString: date, ...last28days[date].pageViews})
+            acc.push({dateString: date, visitors: (last28days[date].visitors || 0), ...last28days[date].pageViews})
             return acc
         }, [])
         .map(day => (day))
 
     const pageColumns = Object.keys(totals)
+        .filter(x => x !== 'total')
         .sort((a, b) => totals[b] - totals[a])
         .map(page => ({id: page, name: page, align: 'center'}))
     const columns = [
-        {id: 'dateString', name: 'Date', align: 'left'}, ...pageColumns
+        {id: 'dateString', name: 'Date', align: 'left'}, {id: 'visitors', name: 'Visitors', align: 'center'}, {id: 'total', name: 'Views', align: 'center'}, ...pageColumns
     ]
     const tableData = {columns: columns, rows: sortedDays}
-    console.log('sortedDays', sortedDays)
 
     const linkFunction = useCallback((_id, string) => {
         return string

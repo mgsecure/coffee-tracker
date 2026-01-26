@@ -5,7 +5,6 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import IconButton from '@mui/material/IconButton'
 import useWindowSize from '../util/useWindowSize.jsx'
-import {useTheme} from '@mui/material/styles'
 
 const DataTableSort = ({
                            tableData,
@@ -14,11 +13,9 @@ const DataTableSort = ({
                            linkFunction
                        }) => {
 
-    const theme = useTheme()
     const {rows, columns, defaultSort = 'name', sortable, wrap = false} = tableData
     const [sort, setSort] = useState(defaultSort)
     const [ascending, setAscending] = useState(!tableData.columns.find(c => c.id === defaultSort)?.descending)
-    console.log('rows', rows)
 
     const overflowStyle = wrap
         ? {whiteSpace: 'inherit'}

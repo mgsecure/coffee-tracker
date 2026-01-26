@@ -13,7 +13,7 @@ import {setDeep, setDeepAdd, setDeepUnique} from '../util/setDeep.js'
 
 const prodEnvironment = localUser !== process.env.USER
 
-import url, {fileURLToPath} from 'url'
+import {fileURLToPath} from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -38,8 +38,8 @@ const daysToReport = 9999
 // Date configuration (using YYYYMMDD format)
 const startDate = dayjs('2026-01-01')
 const today = dayjs()
-const endDate = today.subtract(1, 'day')
-// You can override endDate if needed
+let endDate = today.subtract(1, 'day')
+endDate = today
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const ignoreFiles = ['.', '..', '.DS_Store', 'New Folder With Items']
@@ -98,6 +98,7 @@ async function processLogFile(logFileName) {
         logLines++
         line = line.replace(/\s+/g, ' ')
 
+        // 45.48.2.162 - - [25/Jan/2026:17:04:29 -0800] "GET /i/bean.gif?page=https%3A%2F%2Fcoffee-tracker.com%2Freports&r=c3gfutbe&ref=https%3A%2F%2Fcoffee-tracker.com%2F&trk=reports&w=1512 HTTP/2.0" 200 92 "https://coffee-tracker.com/reports" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
         // Regex: clientAddress rfc1413 username [localTime] "httpRequest" statusCode bytesSent "referer" "clientSoftware"
         const logRegex = /^(\S+) (\S+) (\S+) \[(.+?)\] "(.+?)" (\S+) (\S+) "(.*?)" "(.*?)"/
         const match = logRegex.exec(line)
@@ -146,7 +147,8 @@ async function processLogFile(logFileName) {
 
         if (requestDate.isBefore(startDate) || requestDate.isAfter(endDate)) return
         if (today.diff(requestDate, 'day') > daysToReport) return
-        if (dataFiles.includes(requestDateText)) return
+        if (dataFiles.includes(requestDateText) && requestDateText !== dayjs().format('YYYY-MM-DD')) return
+
 
         setDeepAdd(stats, [requestDateText, 'logEntries'], 1)
 
@@ -198,14 +200,18 @@ async function processLogFile(logFileName) {
         }
 
         // PARSE BEACON REQUESTS
-        const parsedUrl = url.parse(fileRequested, true)
-        const query = parsedUrl.query
-        const trkString = query.trk?.trim()
-        const pageString = query.page?.trim()
-        const screenWidthString = query.w?.trim()
-        const refString = query.ref?.trim()
-        const searchTerm = query.search?.trim().toLowerCase()
+
+        let baseUrl = 'https://coffee-tracker.com'
+        const url = new URL(fileRequested, baseUrl)
+
+        const trkString = url.searchParams.get('trk')?.trim()
+        const pageString = url.searchParams.get('page')?.trim()
+        const screenWidthString = url.searchParams.get('w')?.trim()
+        const refString = url.searchParams.get('ref')?.trim()
+        const searchTerm = url.searchParams.get('search')?.trim().toLowerCase()
         let cleanReferrerString = refString ? refString.replace(/(https:\/\/coffee-tracker\.com\/).*/, '$1').trim() : undefined
+        const cleanPage = pageString?.replace(/https:\/\/coffee-tracker\.com\/(\w+).*/, '$1') || 'unknown'
+
         if (cleanReferrerString) {
             setDeepAdd(stats, [requestDateText, 'referrerViews', cleanReferrerString], 1)
         }
@@ -224,7 +230,6 @@ async function processLogFile(logFileName) {
                 setDeepAdd(stats, [requestDateText, 'pageViewsByWidth', screenWidthString], 1)
             }
 
-            const cleanPage = pageString?.replace(/https:\/\/coffee-tracker\.com\/(\w+).*/, '$1') || 'unknown'
             if (pageString) {
                 if (trkString === 'error') {
                     setDeepAdd(stats, [requestDateText, 'errorPages', cleanPage], 1)

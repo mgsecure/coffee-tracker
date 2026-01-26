@@ -17,8 +17,8 @@ function renderWithProviders(ui) {
 }
 
 describe('HomepageRoute', () => {
-  it('renders the Lockpickers United title', () => {
+  it('renders the Coffee Tracker title', () => {
     renderWithProviders(<HomepageRoute />)
-    expect(screen.getByText('Lockpickers United')).toBeInTheDocument()
+    expect(screen.getByText('Coffee Tracker')).toBeInTheDocument()
   })
 })

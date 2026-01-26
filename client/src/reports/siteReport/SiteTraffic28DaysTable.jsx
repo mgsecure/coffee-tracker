@@ -33,7 +33,7 @@ const SiteTraffic28DaysTable = ({height}) => {
     tableData.columns = columns.map(col => ({id: col[0], name: col[1], align: col[2]}))
     tableData.rows = trafficLast28days
 
-    const linkFunction = useCallback((id, string) => {
+    const linkFunction = useCallback((_id, string) => {
         return string
     }, [])
 

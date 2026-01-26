@@ -1,7 +1,6 @@
 import React from 'react'
 import useWindowSize from '../../util/useWindowSize'
 import SiteTraffic28DaysLine from './SiteTraffic28DaysLine.jsx'
-import SiteTraffic28DaysTable from './SiteTraffic28DaysTable.jsx'
 
 function SiteTrafficSummary() {
 
@@ -17,14 +16,13 @@ function SiteTrafficSummary() {
         ...divFlexStyle
     }
 
-    const height = isMobile ? 300 : 400
+    const height = isMobile ? 300 : 450
 
     return (
         <React.Fragment>
             <div style={{textAlign: 'center'}}>
                 <div style={combinedDivStyle}>
                     <SiteTraffic28DaysLine height={height}/>
-                    <SiteTraffic28DaysTable height={height}/>
                 </div>
             </div>
         </React.Fragment>

@@ -4,6 +4,7 @@
 import fs from 'fs/promises'
 import path from 'path'
 import {exec} from 'child_process'
+import { fileURLToPath }  from 'url'
 import {setDeepAdd, setDeep} from '../util/setDeep.js'
 
 // DAYJS SETUP
@@ -22,12 +23,12 @@ dayjs.extend(weekOfYear)
 const daysToReport = 777
 const startDate = dayjs('2026-01-01')
 const today = dayjs()
-const endDate = today.subtract(1, 'day')
+let endDate = today.subtract(1, 'day')
+endDate = today
 
 import {localUser, prodUser} from '../../keys/users.js'
 
 const prodEnvironment = localUser !== process.env.USER
-import { fileURLToPath }  from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -67,6 +68,11 @@ wip.platforms = {}
 wip.crawlerAgentRequests = {}
 wip.requestsByLocalHour = {}
 wip.requestsByServerHour = {}
+
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+    processDailyData().then()
+}
 
 export default async function processDailyData() {
 
@@ -204,7 +210,7 @@ export default async function processDailyData() {
     searchTerms()
     screenWidths()
     outputSiteFullJson()
-    
+
     if (!prodEnvironment) {
         console.log(`Data Process Runtime: ${String(dayjs().diff(today, 'minute')).padStart(2, '0')}:${String(dayjs().diff(today, 'second')).padStart(2, '0')}.${String(dayjs().diff(today, 'millisecond')).substring(0, 2)}`)
         exec('say \'done\'')
@@ -540,7 +546,7 @@ function screenWidths() {
 // 14. outputSiteFullJson – write final JSON with metadata
 function outputSiteFullJson() {
     const dt = dayjs().tz('America/Los_Angeles')
-    siteStatsFull.metadata = {
+    wip.metadata = {
         updatedDateTime: dt.format(),
         timezone: dt.format('z')
     }

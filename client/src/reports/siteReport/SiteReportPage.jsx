@@ -1,25 +1,28 @@
 import React, {useContext} from 'react'
-import useWindowSize from '../../util/useWindowSize'
 import DataContext from '../../context/DataContext.jsx'
 import AuthContext from '../../app/AuthContext.jsx'
 import MustBeLoggedIn from '../../shared/MustBeLoggedIn.jsx'
-import DBContext from '../../app/DBContext.jsx'
 import LoadingDisplay from '../../misc/LoadingDisplay.jsx'
 import dayjs from 'dayjs'
 import FirstVisitsLastSevenTable from './FirstVisitsLastSevenTable.jsx'
-import SiteTrafficSummary from './SiteTrafficSummary.jsx'
 import PageTrackingTable from './PageTrackingTable.jsx'
+import SiteTraffic28DaysLine from './SiteTraffic28DaysLine.jsx'
+import url from 'url'
 
 export default function SiteReportPage() {
-    const {siteStats = {}, loading, error, countryCodeCountries} = useContext(DataContext)
+    const {siteStats = {}, loading, error} = useContext(DataContext)
     const {authLoaded, isLoggedIn} = useContext(AuthContext)
-    const {profileLoaded, demoEnabled} = useContext(DBContext)
     const firstVisitCount = Object.entries(siteStats?.firstVisit || {}).filter(([_key, value]) => dayjs(value).isAfter(dayjs().subtract(7, 'day')))?.length
 
-
-    const {width, isMobile} = useWindowSize()
     const updateTime = loading ? '--'
-        : '(updated: ' + dayjs(siteStats?.updatedAt).format('MM/DD/YY hh:mm') + ')'
+        : '(updated: ' + dayjs(siteStats?.metadata?.updatedDateTime).format('MM/DD/YY hh:mm') + ')'
+
+    let baseUrl = 'https://coffee-tracker.com'
+    const fileRequested = '/i/bean.gif?page=https%3A%2F%2Fcoffee-tracker.com%2Freports&r=9iav6lb7&ref=https%3A%2F%2Fcoffee-tracker.com%2F&trk=reports&w=1512'
+    const url = new URL(fileRequested, baseUrl)
+    for (const [key, value] of url.searchParams) {
+        console.log(`${key}: ${value}`)
+    }
 
     const firstHeaderStyle = {
         margin: '26px 0px 8px 0px',
@@ -36,16 +39,6 @@ export default function SiteReportPage() {
         fontSize: '1.3rem',
         fontWeight: 700
     }
-
-    const pagePadding = !isMobile
-        ? '24px 24px 32px 24px'
-        : '8px 8px 32px 8px'
-
-    const tableWidth = width <= 560
-        ? width - 20
-        : 640
-
-    const nameLength = !isMobile ? 48 : 24
 
     if (authLoaded && !isLoggedIn) return (<MustBeLoggedIn actionText={'view reports'} style={{marginTop: 20}}/>)
     else if (loading) return <LoadingDisplay/>
@@ -65,7 +58,7 @@ export default function SiteReportPage() {
             }
 
             <div style={firstHeaderStyle}>Traffic Summary</div>
-            <SiteTrafficSummary/>
+            <SiteTraffic28DaysLine/>
 
             <div style={firstHeaderStyle}>Page Tracking</div>
             <PageTrackingTable/>

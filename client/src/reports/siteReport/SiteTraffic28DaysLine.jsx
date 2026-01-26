@@ -5,7 +5,7 @@ import useWindowSize from '../../util/useWindowSize'
 import DataContext from '../../context/DataContext.jsx'
 import {setDeepPush} from '../../util/setDeep'
 
-const SiteTraffic28DaysLine = ({height}) => {
+const SiteTraffic28DaysLine = () => {
     const {siteStats} = useContext(DataContext)
     const {last28days} = siteStats
 
@@ -20,28 +20,15 @@ const SiteTraffic28DaysLine = ({height}) => {
         {id:'page views', data:lineData.pageViews}
     ]
 
-    const {isMobile, width} = useWindowSize()
-    const mobileSmall = width <= 360
-    const mobileMedium = width <= 395
-    const mobileLarge = width <= 428  // but test also at 412
-    const smallWindow = width <= 560
-    const midWindow = width <= 820
-
-    const chartWidth = isMobile ? 350 : 600
-
-    const chartHeight =
-        mobileSmall ? 200
-            : mobileMedium ? 200
-                : mobileLarge ? 210
-                    : midWindow ? 230
-                        : 350
-
+    const {isMobile} = useWindowSize()
+    const chartHeight = isMobile ? 300 : 450
+    const chartWidth = isMobile ? 350 : 800
     const chartMargin = !isMobile
         ? {top: 25, right: 20, bottom: 75, left: 50}
         : {top: 10, right: 20, bottom: 50, left: 50}
 
     return (
-        <div style={{height: height-100, width:chartWidth}}>
+        <div style={{height: chartHeight-100, width:chartWidth}}>
             <ResponsiveLine
                 theme={primaryTheme}
                 data={fullLineData}
@@ -50,7 +37,7 @@ const SiteTraffic28DaysLine = ({height}) => {
                 colors={['#5265ed', '#082fd1', '#4fa720']}
                 lineWidth={3}
                 margin={chartMargin}
-                height={chartHeight}
+                height={chartHeight-100}
                 curve='natural'
                 yScale={{
                     type: 'linear',
