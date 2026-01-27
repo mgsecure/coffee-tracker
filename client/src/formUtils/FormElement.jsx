@@ -8,6 +8,17 @@ import Radio from '@mui/material/Radio'
 import RatingTable from '../misc/RatingTable.jsx'
 import {useTheme} from '@mui/material/styles'
 
+const FORM_DEFAULTS = {
+    margin: '0px 20px 32px 0px',
+    labelStyle: {fontSize: '1.0rem', fontWeight: 700},
+    descriptionStyle: {fontSize: '1.0rem', fontWeight: 400},
+    sectionHeaderStyle: {fontSize: '1.5rem', fontWeight: 700},
+    sectionHeaderInfoStyle: {fontSize: '1.0rem', fontWeight: 400, marginLeft: 10},
+    inputWidth: 80,
+    inputSize: 'small',
+    color: 'info'
+}
+
 export default function FormElement({
                                         fieldType = 'TextField',
                                         fieldName,
@@ -21,39 +32,31 @@ export default function FormElement({
                                         otherOptionField,
                                         defaultValue,
                                         form = {},
-                                        handleFormChange,
-                                        formDefaults = {
-                                            margin: '0px 20px 32px 0px',
-                                            labelStyle: {fontSize: '1.0rem', fontWeight: 700},
-                                            descriptionStyle: {fontSize: '1.0rem', fontWeight: 400},
-                                            inputWidth: 80,
-                                            inputSize: 'small',
-                                            color: 'info'
-                                        }
+                                        formDefaults = FORM_DEFAULTS
                                     }) {
 
-    const settings = {...formDefaults, ...fieldSettings}
     const theme = useTheme()
+    const settings = {...formDefaults, ...fieldSettings}
 
     const [showOtherField, setShowOtherField] = useState(false)
+
     const handleRadioSelect = useCallback((event) => {
         const {value} = event.target
-        if (value === 'other') {
+        if (value === 'Other') {
             setShowOtherField(true)
         } else {
             setShowOtherField(false)
             if (otherOptionField) {
-                handleFormChange({target: {name: otherOptionField, action: 'delete'}})
+                form.update({target: {name: otherOptionField, action: 'delete'}})
             }
         }
-        handleFormChange(event)
-    }, [handleFormChange, otherOptionField])
+        form.update(event)
+    }, [form, otherOptionField])
 
     const handleRatingChange = useCallback(({dimension, rating}) => {
         console.log('Rating changed: ', {dimension, rating})
-        //setRatings({...ratings, [dimension]: rating})
-        //setRatingsChanged(true)
-    }, [])
+        form.update({target: {name: dimension, value: rating}})
+    }, [form])
 
     return (
         <>
@@ -72,8 +75,8 @@ export default function FormElement({
                                fullWidth
                                rows={rows}
                                size={settings.inputSize}
-                               onChange={handleFormChange}
-                               value={form[fieldName] || ''}
+                               onChange={form.update}
+                               value={form.form[fieldName] || ''}
                                color={settings.color}/>
                 </div>
             }
@@ -88,8 +91,9 @@ export default function FormElement({
                     }
                     <FormControl style={{marginLeft: 6}}>
                         <RadioGroup
-                            defaultValue={defaultValue}
+                            defaultValue={defaultValue || null}
                             name={fieldName}
+                            value={form.form[fieldName] || null}
                             onChange={(e) => handleRadioSelect(e)}
                         >
                             {options.map(option =>
@@ -114,8 +118,8 @@ export default function FormElement({
                                                    name={otherOptionField}
                                                    style={{width: settings.inputWidth}}
                                                    size={settings.inputSize}
-                                                   onChange={handleFormChange}
-                                                   value={form[otherOptionField] || ''}
+                                                   onChange={form.update}
+                                                   value={form.form[otherOptionField] || ''}
                                                    color={settings.color}/>
                                     }
                                 </div>
@@ -128,24 +132,35 @@ export default function FormElement({
             {fieldType === 'StarRating' &&
                 <div style={{margin: settings.margin}}>
                     {label &&
-                        <div style={{...settings.labelStyle, marginBottom: 2}}>{label}</div>
+                        <div style={{marginBottom: 2, ...settings.labelStyle}}>{label}</div>
                     }
                     {description &&
-                        <div style={{...settings.descriptionStyle, marginBottom: 2}}>{description}</div>
+                        <div style={{marginBottom: 2, ...settings.descriptionStyle}}>{description}</div>
                     }
                     <div style={{display: 'flex', placeItems: 'center', flexGrow: 0, margin: '6px 0px 0px 6px'}}>
-                        <div style={{fontSize: '0.9rem', textAlign: 'right'}}>Not Satisfied</div>
+                        <div style={{fontSize: '0.9rem', textAlign: 'right'}}>{options[0]}</div>
                         <div style={{margin: '0px 16px'}}>
-                            <RatingTable ratingDimensions={[fieldName]} onRatingChange={handleRatingChange}
-                                         ratings={{}} emptyColor={alpha(theme.palette.text.secondary, 0.2)}
+                            <RatingTable ratingDimensions={{[fieldName]: '_'}}
+                                         onRatingChange={handleRatingChange}
+                                         ratings={{[fieldName]: form.form[fieldName] || 0}}
+                                         emptyColor={alpha(theme.palette.text.secondary, 0.2)}
                                          showLabel={false}
                                          fontSize={'0.9rem'} size={25} paddingData={0} iconsCount={5}/>
                         </div>
-                        <div style={{fontSize: '0.85rem'}}>Extremely Satisfied</div>
-
+                        <div style={{fontSize: '0.85rem'}}>{options[1]}</div>
                     </div>
                 </div>
             }
-        </>
+
+            {fieldType === 'SectionHeader' &&
+                <div style={{margin: '42px 0px 24px'}}>
+                    <hr style={{margin: '0px 0px 4px', borderColor: '#ccc'}}/>
+                    <span style={settings.sectionHeaderStyle}>{label}</span>
+                    <span style={settings.sectionHeaderInfoStyle}>(Section {options[0]} of {options[1]})</span>
+                    <hr style={{margin: '4px 0px 0px', borderColor: '#ccc'}}/>
+                </div>
+            }
+
+            </>
     )
 }

@@ -27,7 +27,7 @@ import cleanObject from '../util/cleanObject'
 const DBContext = React.createContext({})
 
 export function DBProvider({children}) {
-    const {authLoaded, isLoggedIn, user ={}, userClaims} = useContext(AuthContext)
+    const {authLoaded, isLoggedIn, user = {}, userClaims} = useContext(AuthContext)
     const [userProfile, setUserProfile] = useState({})
     const [profileLoaded, setProfileLoaded] = useState(false)
     const [dbError, setDbError] = useState(null)
@@ -146,6 +146,23 @@ export function DBProvider({children}) {
         }
     }, [dbError, user?.uid, userProfile])
 
+    const saveSurveySubmission = useCallback(async (form) => {
+        if (dbError) return false
+        const cleanForm = cleanObject(form)
+        const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss')
+        const id = dayjs().format('YYYY-MM-DD_HH-mm-ss')
+        cleanForm.addedAt = cleanForm.addedAt || timestamp
+        cleanForm.modifiedAt = timestamp
+        cleanForm.id = id
+        const ref = doc(db, 'survey-submissions', id)
+        try {
+            await setDoc(ref, cleanForm, {merge: true})
+        } catch (error) {
+            console.error('Error saving survey submission:', error)
+            enqueueSnackbar('Error saving survey submission, please try back later. Sorry!', {variant: 'error'})
+        }
+    }, [dbError])
+
 
     // Equipment DB
 
@@ -168,6 +185,7 @@ export function DBProvider({children}) {
         const value = await getDoc(ref)
         return value.data()
     }, [])
+
 
     /*
     // Equipment Subscription
@@ -240,14 +258,24 @@ export function DBProvider({children}) {
         setDemo: handleSetDemo,
         demoEnabled,
         calculator,
-        setCalculator: handleSetCalculator
-    }), [demoEnabled, userProfile, profileLoaded, updateProfileField, deleteAllUserData, updateCollection, addToEquipment, getEquipment, adminRole, removeFromLockCollection, getProfile, updateProfileDisplayName, qaUserRole, demo, handleSetDemo, calculator, handleSetCalculator])
+        setCalculator: handleSetCalculator,
+        saveSurveySubmission
+    }), [demoEnabled, userProfile, profileLoaded, updateProfileField, deleteAllUserData, updateCollection, addToEquipment, getEquipment, adminRole, removeFromLockCollection, getProfile, updateProfileDisplayName, qaUserRole, demo, handleSetDemo, calculator, handleSetCalculator, saveSurveySubmission])
 
     return (
         <DBContext.Provider value={value}>
             {children}
         </DBContext.Provider>
     )
+}
+
+function genHexString(len) {
+    const hex = '0123456789ABCDEF'
+    let output = ''
+    for (let i = 0; i < len; ++i) {
+        output += hex.charAt(Math.floor(Math.random() * hex.length))
+    }
+    return output.toLowerCase()
 }
 
 export default DBContext

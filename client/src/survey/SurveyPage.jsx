@@ -1,179 +1,340 @@
-import React, {useCallback, useContext, useMemo, useState} from 'react'
+// noinspection JSValidateTypes
+
+import React, {useContext, useEffect, useMemo} from 'react'
 import FormElement from '../formUtils/FormElement.jsx'
-import AuthContext from '../app/AuthContext.jsx'
 import useWindowSize from '../util/useWindowSize.jsx'
+import {openInNewTab} from '../util/openInNewTab'
+import Link from '@mui/material/Link'
+import Button from '@mui/material/Button'
+import LoadingDisplayWhiteSmall from '../misc/LoadingDisplayWhiteSmall.jsx'
+import useForm from '../formUtils/useForm.jsx'
+import DBContext from '../app/DBContext.jsx'
+import Dialog from '@mui/material/Dialog'
 
 export default function SurveyPage() {
-    const {isLoggedIn} = useContext(AuthContext)
+
+    const {saveSurveySubmission} = useContext(DBContext)
 
     const baseForm = useMemo(() => {
-        return {
-            required: []
-        }
+        return {}
     }, [])
-    const [form, setForm] = useState(baseForm)
-    const [formChanged, setFormChanged] = useState(false)
-    const [updating, setUpdating] = useState(false)
+    const form = useForm({baseForm, handleSubmit: saveSurveySubmission})
 
-    const saveEnabled = useMemo(() => {
-        return isLoggedIn && (form.required.reduce((acc, field) => acc && form[field], true)) && !updating
-    }, [form, isLoggedIn, updating])
-
-    const handleFormChange = useCallback((event) => {
-        const {name, value, action} = event.target
-        if (action === 'delete') {
-            setForm((prevForm) => {
-                const newForm = {...prevForm}
-                delete newForm[name]
-                return newForm
+    useEffect(() => {
+        if (!form.intialized) {
+            form.initialize({
+                requiredFields: []
             })
-        } else setForm((prevForm) => ({...prevForm, [name]: value}))
-        setFormChanged(true)
-    }, [])
-
-    console.log('render survey form', form)
+        }
+    }, [form])
 
     const {isMobile} = useWindowSize()
 
     return (
-        <div style={{padding: isMobile ? '0px 12px' : '0px 20px'}}>
-            <div style={{margin: '16px 0px 6px', fontSize: '1.6rem', fontWeight: 700}}>Record Keeping Survey</div>
-            <div style={{margin: '0px 0px 36px', fontSize: '1.1rem', lineHeight: '1.5rem', fontWeight: 400}}>
-                We’d love to hear your opinions about keeping track of your
-                coffees, brews, and recipes. Here is a brief (approximately
-                X minutes) survey to give your feedback. All questions are
-                optional and the survey is entirely anonymous. Responses
-                will be summarized and shared with the community.
+        <>
+            <div style={{padding: isMobile ? '0px 12px' : '0px 20px'}}>
+                <div style={{margin: '16px 0px 6px', fontSize: '1.6rem', fontWeight: 700}}>Record Keeping Survey</div>
+                <div style={{margin: '0px 0px 36px', fontSize: '1.1rem', lineHeight: '1.5rem', fontWeight: 400}}>
+                    We’d love to hear your opinions about keeping track of your
+                    coffees, brews, and recipes.
+                    Here is a brief survey to give your feedback.
+                    All questions are optional and the survey is entirely anonymous.
+                    Responses will be summarized and shared with the community.
+                </div>
+
+                <FormElement fieldType={'SectionHeader'}
+                             label={'A Little About You'}
+                             options={[1, 3]}/>
+
+                <FormElement fieldType={'RadioGroup'}
+                             fieldName={'userExperienceLevel'}
+                             description={'How would you characterize your experience level with coffee?'}
+                             options={['Novice', 'Enthusiast', 'Well experienced', 'Expert', 'Guru']}
+                             fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}}}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+                <FormElement fieldType={'RadioGroup'}
+                             fieldName={'userGenerallyShop'}
+                             description={'Where do you generally get your coffee?'}
+                             options={['Supermarket', 'Local roaster/coffee shop', 'National/international roaster', 'Home roasted']}
+                             otherOptionField={'generallyShopOther'}
+                             fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}, inputWidth: 200}}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+                <FormElement fieldType={'RadioGroup'}
+                             fieldName={'userSubscription'}
+                             description={'Do you currently use a coffee subscription (or have used one in the past)?'}
+                             options={['Yes', 'No']}
+                             fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}, inputWidth: 200}}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+                <FormElement fieldType={'RadioGroup'}
+                             fieldName={'userRecordsDetails'}
+                             description={'Do you record details of your coffees and/or brew parameters?'}
+                             options={['Yes', 'No']}
+                             fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}, inputWidth: 200}}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+                <FormElement fieldType={'SectionHeader'}
+                             label={'Keeping Track'}
+                             options={[2, 3]}/>
+
+                <FormElement fieldType={'RadioGroup'}
+                             fieldName={'trackingMethod'}
+                             description={'If so, what do you use?'}
+                             options={['Paper notebook', 'Notes app', 'Dedicated coffee app', 'Website']}
+                             otherOptionField={'trackingMethodOther'}
+                             fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}, inputWidth: 220}}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+                <FormElement fieldType={'StarRating'}
+                             fieldName={'trackingSatisfaction'}
+                             description={'How satisfied are you with that method of record keeping?'}
+                             options={['Not Satisfied', 'Very Satisfied']}
+                             fieldSettings={{
+                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 500, marginBottom: 0},
+                                 inputWidth: 220
+                             }}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+                <FormElement fieldType={'TextField'}
+                             fieldName={'trackingFavoriteFeatures'}
+                             description={'What are your favorite aspects/features of it?'}
+                             fieldSettings={{
+                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                 margin: '0px 0px 16px 0px',
+                                 inputWidth: '100%'
+                             }}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+                <FormElement fieldType={'TextField'}
+                             fieldName={'trackingNeedsImprovement'}
+                             description={'What could be improved?'}
+                             fieldSettings={{
+                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                 margin: '0px 0px 16px 0px',
+                                 inputWidth: '100%'
+                             }}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+                <FormElement fieldType={'TextField'}
+                             fieldName={'trackingFeaturesRequested'}
+                             description={'Are there specific “features” you would like to have?'}
+                             fieldSettings={{
+                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                 margin: '0px 0px 16px 0px',
+                                 inputWidth: '100%'
+                             }}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+                <FormElement fieldType={'TextField'}
+                             fieldName={'trackingGeneralComments'}
+                             description={'Any general thoughts or comments?'}
+                             multiline={true}
+                             rows={4}
+                             fieldSettings={{
+                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                 inputWidth: '100%'
+                             }}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+
+                <FormElement fieldType={'SectionHeader'}
+                             label={'A Little About Us'}
+                             options={[3, 3]}/>
+
+                <div style={{margin: '0px 0px 36px', fontSize: '1.1rem', lineHeight: '1.5rem', fontWeight: 400}}>
+                    We’ve launched this free – and ad-free – site (coffee-trackers.com)
+                    to help the community record the details of their coffees/brews. We&apos;re
+                    asking folks for concrete feedback (either positive or negative).
+                    You don’t need to actually use the site if you don’t want to.
+                    We’ve assembled <Link onClick={() => openInNewTab('/screenshots')}>screenshots</Link> or
+                    you can use the site in “<Link onClick={() => openInNewTab('/coffees?demo=true')}>demo mode</Link>”,
+                    with sample data already filled in.
+                </div>
+
+                <FormElement fieldType={'StarRating'}
+                             fieldName={'siteRateOverall'}
+                             description={'How would you rate the site overall?'}
+                             options={['Bad', 'Very Good']}
+                             fieldSettings={{
+                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 500, marginBottom: 0},
+                                 inputWidth: 220
+                             }}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+                <FormElement fieldType={'TextField'}
+                             fieldName={'siteFavoriteFeatures'}
+                             description={'What are your favorite aspects/features of it?'}
+                             fieldSettings={{
+                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                 margin: '0px 0px 16px 0px',
+                                 inputWidth: '100%'
+                             }}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+                <FormElement fieldType={'TextField'}
+                             fieldName={'siteNeedsImprovement'}
+                             description={'What could be improved?'}
+                             fieldSettings={{
+                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                 margin: '0px 0px 16px 0px',
+                                 inputWidth: '100%'
+                             }}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+                <div style={{margin: '30px 0px 16px', fontSize: '1.1rem', lineHeight: '1.5rem', fontWeight: 500}}>
+                    Here are some additional features we are considering,
+                    how would you rate your interest in them:
+                </div>
+
+                <div style={{marginLeft: 24}}>
+                    <FormElement fieldType={'StarRating'}
+                                 fieldName={'siteFeatureShareProfile'}
+                                 description={'Share a snapshot of your coffee history with others.'}
+                                 options={['Not Interested', 'Very Interested']}
+                                 fieldSettings={{
+                                     descriptionStyle: {fontSize: '1.1rem', fontWeight: 500, marginBottom: 0},
+                                     margin: '0px 20px 24px 0px'
+                                 }}
+                                 form={form}
+                                 formDefaults={formDefaults}/>
+
+                    <FormElement fieldType={'StarRating'}
+                                 fieldName={'siteFeatureShareData'}
+                                 description={'Share data (anonymously) to build up a database of recipes/ratings across the community.'}
+                                 options={['Not Interested', 'Very Interested']}
+                                 fieldSettings={{
+                                     descriptionStyle: {fontSize: '1.1rem', fontWeight: 500, marginBottom: 0},
+                                     margin: '0px 20px 24px 0px'
+                                 }}
+                                 form={form}
+                                 formDefaults={formDefaults}/>
+
+                    <FormElement fieldType={'StarRating'}
+                                 fieldName={'siteFeaturePhotoUploads'}
+                                 description={'Upload photos of bags, labels, beans, etc.'}
+                                 options={['Not Interested', 'Very Interested']}
+                                 fieldSettings={{
+                                     descriptionStyle: {fontSize: '1.1rem', fontWeight: 500, marginBottom: 0},
+                                     margin: '0px 20px 24px 0px'
+                                 }}
+                                 form={form}
+                                 formDefaults={formDefaults}/>
+
+                    <FormElement fieldType={'StarRating'}
+                                 fieldName={'siteFeatureResources'}
+                                 description={'More resources about coffees, equipment, and roasters.'}
+                                 options={['Not Interested', 'Very Interested']}
+                                 fieldSettings={{
+                                     descriptionStyle: {fontSize: '1.1rem', fontWeight: 500, marginBottom: 0},
+                                     margin: '0px 20px 24px 0px'
+                                 }}
+                                 form={form}
+                                 formDefaults={formDefaults}/>
+
+                    <FormElement fieldType={'StarRating'}
+                                 fieldName={'siteFeatureContent'}
+                                 description={'Coffee content: community reviews, recommendations, YouTube channels, etc.'}
+                                 options={['Not Interested', 'Very Interested']}
+                                 fieldSettings={{
+                                     descriptionStyle: {fontSize: '1.1rem', fontWeight: 500, marginBottom: 0},
+                                     margin: '0px 20px 24px 0px'
+                                 }}
+                                 form={form}
+                                 formDefaults={formDefaults}/>
+                </div>
+
+                <FormElement fieldType={'TextField'}
+                             fieldName={'siteFeaturesRequested'}
+                             description={'Are there any other specific features you would like to have?'}
+                             fieldSettings={{
+                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                 margin: '0px 0px 16px 0px',
+                                 inputWidth: '100%'
+                             }}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+                <FormElement fieldType={'TextField'}
+                             fieldName={'siteOverallComments'}
+                             description={'Any overall thoughts or comments about the site?'}
+                             multiline={true}
+                             rows={4}
+                             fieldSettings={{
+                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                 inputWidth: '100%'
+                             }}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+                <FormElement fieldType={'TextField'}
+                             fieldName={'userPlatformName'}
+                             description={'Reddit or Discord username. Completely optional. It will never be published but we may use it to reach out for more detail about your responses.'}
+                             fieldSettings={{
+                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 400},
+                                 margin: '24px 0px 16px 0px',
+                                 inputWidth: '100%'
+                             }}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginTop: 24,
+                    fontSize: '1.1rem',
+                    fontWeight: 700
+                }}>
+                    Thank you for taking the time to complete this survey!
+                </div>
+                <div style={{display: 'flex', justifyContent: 'center', marginTop: 24, marginBottom: 16}}>
+                    <Button onClick={form.submit} variant='contained' color='info'
+                            disabled={!form.canSave} style={{boxShadow: 'none'}}>
+                        {form.updating
+                            ? <LoadingDisplayWhiteSmall size={'small'}/>
+                            : 'SUBMIT'
+                        }
+                    </Button>
+                </div>
             </div>
 
-
-            <div style={{margin: '16px 0px 16px'}}>
-                <span style={{fontSize: '1.5rem', fontWeight: 700}}>A Little About You</span>
-                <span style={{fontSize: '1.0rem', fontWeight: 400, marginLeft:10}}>(Part 1 of 3)</span>
-            </div>
-
-
-            <FormElement fieldType={'RadioGroup'}
-                         fieldName={'experienceLevel'}
-                         description={'How would you characterize your experience level with coffee?'}
-                         options={['Novice', 'Enthusiast', 'Well experienced', 'Expert', 'Guru']}
-                         fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}}}
-                         form={form}
-                         formDefaults={formDefaults}
-                         handleFormChange={handleFormChange}/>
-
-            <FormElement fieldType={'RadioGroup'}
-                         fieldName={'generallyShop'}
-                         description={'Where do you generally get your coffee?'}
-                         options={['Supermarket', 'Local roaster/coffee shop', 'National/international roaster', 'Home roasted']}
-                         otherOptionField={'generallyShopOther'}
-                         fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}, inputWidth: 200}}
-                         form={form}
-                         formDefaults={formDefaults}
-                         handleFormChange={handleFormChange}/>
-
-            <FormElement fieldType={'RadioGroup'}
-                         fieldName={'subscription'}
-                         description={'Do you currently use a coffee subscription (or have used one in the past)?'}
-                         options={['Yes', 'No']}
-                         fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}, inputWidth: 200}}
-                         form={form}
-                         formDefaults={formDefaults}
-                         handleFormChange={handleFormChange}/>
-
-            <FormElement fieldType={'RadioGroup'}
-                         fieldName={'recordDetails'}
-                         description={'Do you record details of your coffees and/or brew parameters?'}
-                         options={['Yes', 'No']}
-                         fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}, inputWidth: 200}}
-                         form={form}
-                         formDefaults={formDefaults}
-                         handleFormChange={handleFormChange}/>
-
-            <div style={{margin: '24px 0px 16px'}}>
-                <span style={{fontSize: '1.5rem', fontWeight: 700}}>Keeping Track</span>
-                <span style={{fontSize: '1.0rem', fontWeight: 400, marginLeft:10}}>(Part 2 of 3)</span>
-            </div>
-
-
-
-            <FormElement fieldType={'RadioGroup'}
-                         fieldName={'trackingMethod'}
-                         description={'If so, what do you use?'}
-                         options={['Paper notebook', 'Notes app', 'Dedicated coffee app', 'Website']}
-                         otherOptionField={'trackingMethodOther'}
-                         fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}, inputWidth: 220}}
-                         form={form}
-                         formDefaults={formDefaults}
-                         handleFormChange={handleFormChange}/>
-
-            <FormElement fieldType={'StarRating'}
-                         fieldName={'trackingSatisfaction'}
-                         description={'How satisfied are you with that method of record keeping?'}
-                         fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}, inputWidth: 220}}
-                         form={form}
-                         formDefaults={formDefaults}
-                         handleFormChange={handleFormChange}/>
-
-            <FormElement fieldType={'TextField'}
-                         fieldName={'favoriteFeatures'}
-                         description={'What are your favorite aspects/features of it?'}
-                         fieldSettings={{
-                             descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
-                             margin: '0px 0px 16px 0px',
-                             inputWidth: '100%'
-                         }}
-                         form={form}
-                         formDefaults={formDefaults}
-                         handleFormChange={handleFormChange}/>
-
-            <FormElement fieldType={'TextField'}
-                         fieldName={'needsImprovement'}
-                         description={'What could be improved?'}
-                         fieldSettings={{
-                             descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
-                             margin: '0px 0px 16px 0px',
-                             inputWidth: '100%'
-                         }}
-                         form={form}
-                         formDefaults={formDefaults}
-                         handleFormChange={handleFormChange}/>
-
-            <FormElement fieldType={'TextField'}
-                         fieldName={'featuresRequested'}
-                         description={'Are there specific “features” you would like to have?'}
-                         fieldSettings={{
-                             descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
-                             margin: '0px 0px 16px 0px',
-                             inputWidth: '100%'
-                         }}
-                         form={form}
-                         formDefaults={formDefaults}
-                         handleFormChange={handleFormChange}/>
-
-            <FormElement fieldType={'TextField'}
-                         fieldName={'featuresRequested'}
-                         description={'Any general thoughts or comments?'}
-                         multiline={true}
-                         rows={4}
-                         fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}, inputWidth: '100%'}}
-                         form={form}
-                         formDefaults={formDefaults}
-                         handleFormChange={handleFormChange}/>
-
-
-            <hr style={{margin: '24px 0px'}}/>
-
-            <FormElement fieldType={'TextField'}
-                         fieldName={'grindSetting'}
-                         label={'Grind'}
-                         form={form}
-                         fieldSettings={{inputWidth: 180}}
-                         formDefaults={formDefaults}
-                         handleFormChange={handleFormChange}/>
-
-
-        </div>
+            <Dialog open={form.submitted} slotProps={{
+                backdrop: {style: {backgroundColor: '#000', opacity: 0.8}}
+            }}>
+                <div style={{display: 'flex'}}>
+                    <div style={{backgroundColor: '#444', marginLeft: 'auto', marginRight: 'auto', padding: 40}}>
+                        <div style={{
+                            fontSize: '1.7rem',
+                            fontWeight: 500,
+                            marginBottom: 60,
+                            textAlign: 'center'
+                        }}>Thank you for your feedback!
+                        </div>
+                        <div style={{width: '100%', textAlign: 'center'}}>
+                            <Button onClick={form.reload} variant='contained' color='success'
+                                    style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                                OK
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </Dialog>
+        </>
     )
 }
 
@@ -181,6 +342,8 @@ const formDefaults = {
     margin: '0px 0px 32px 0px',
     labelStyle: {fontSize: '1.0rem', fontWeight: 700},
     descriptionStyle: {fontSize: '1.0rem', fontWeight: 400},
+    sectionHeaderStyle: {},
+    sectionHeaderInfoStyle: {},
     inputWidth: 80,
     inputSize: 'small',
     color: 'info'
