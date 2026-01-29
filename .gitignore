@@ -38,11 +38,13 @@ client/public/sitemap.xml
 client/public/data/*
 client/.env.keys
 client/scripts/keys
+client/stats.html
+/client/distBackup
+/client/src/alice
 server/keys
 /server/src/apacheLogAnalysis/logs
 /server/src/apacheLogAnalysis/dailyData
 /server/src/apacheLogAnalysis/errorLogs
-client/stats.html
-/client/distBackup
 /server/src/apacheLogAnalysis/logsTemp
-/client/src/alice
+/server/src/userProfiles/backups/
+/server/src/userProfiles/export/

@@ -1,6 +1,6 @@
 import React from 'react'
 import StarRating from '../misc/StarRating.jsx'
-import DisplayTable from './DisplayTable.jsx'
+import DataTable from './DataTable.jsx'
 
 export default function RatingTable({
                                         ratingDimensions,
@@ -40,10 +40,10 @@ export default function RatingTable({
     return (
         <React.Fragment>
             {useTable
-                ? <DisplayTable tableData={tableData} showHeader={false} alternateRows={false}
-                                colorData={'#ddd'} fontSize={fontSize} fontWeightData={fontWeight}
-                                paddingData={paddingData} backgroundColor={backgroundColor}
-                                bodyStyle={{paddingRight:5}}/>
+                ? <DataTable tableData={tableData} showHeader={false} alternateRows={false}
+                             colorData={'#ddd'} fontSize={fontSize} fontWeightData={fontWeight}
+                             paddingData={paddingData} backgroundColor={backgroundColor}
+                             bodyStyle={{paddingRight:5}}/>
                 : <div style={{display: 'flex', justifyContent: 'center', flexGrow: 1}} id='notTable'>
                     {rows.map((row, index) => (
                         <div key={index} style={{
