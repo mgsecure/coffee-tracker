@@ -7,7 +7,6 @@ import dayjs from 'dayjs'
 import FirstVisitsLastSevenTable from './FirstVisitsLastSevenTable.jsx'
 import PageTrackingTable from './PageTrackingTable.jsx'
 import SiteTraffic28DaysLine from './SiteTraffic28DaysLine.jsx'
-import url from 'url'
 
 export default function SiteReportPage() {
     const {siteStats = {}, loading, error} = useContext(DataContext)
@@ -16,13 +15,6 @@ export default function SiteReportPage() {
 
     const updateTime = loading ? '--'
         : '(updated: ' + dayjs(siteStats?.metadata?.updatedDateTime).format('MM/DD/YY hh:mm') + ')'
-
-    let baseUrl = 'https://coffee-tracker.com'
-    const fileRequested = '/i/bean.gif?page=https%3A%2F%2Fcoffee-tracker.com%2Freports&r=9iav6lb7&ref=https%3A%2F%2Fcoffee-tracker.com%2F&trk=reports&w=1512'
-    const url = new URL(fileRequested, baseUrl)
-    for (const [key, value] of url.searchParams) {
-        console.log(`${key}: ${value}`)
-    }
 
     const firstHeaderStyle = {
         margin: '26px 0px 8px 0px',
@@ -60,7 +52,7 @@ export default function SiteReportPage() {
             <div style={firstHeaderStyle}>Traffic Summary</div>
             <SiteTraffic28DaysLine/>
 
-            <div style={firstHeaderStyle}>Page Tracking</div>
+            <div style={headerStyle}>Page Tracking</div>
             <PageTrackingTable/>
 
         </React.Fragment>

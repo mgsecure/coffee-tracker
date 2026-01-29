@@ -11,7 +11,12 @@ const SiteTraffic28DaysLine = () => {
 
     const lineData = Object.keys(last28days).reduce((acc, date) => {
         setDeepPush(acc, ['visitors'], {x:`${date} 23:59:59`, y:last28days[date].visitors || 0})
-        setDeepPush(acc, ['pageViews'], {x:`${date} 23:59:59`, y:last28days[date].pageViews?.total || 0})
+        const pageViews = Object.keys(last28days[date].pageViews).reduce((acc2, page) => {
+            acc2 = (acc2 || 0 ) + last28days[date].pageViews[page] || 0
+            return acc2
+        },0)
+        setDeepPush(acc, ['pageViews'], {x:`${date} 23:59:59`, y:pageViews || 0})
+
         return acc
     },[])
 
@@ -38,7 +43,7 @@ const SiteTraffic28DaysLine = () => {
                 lineWidth={3}
                 margin={chartMargin}
                 height={chartHeight-100}
-                curve='natural'
+                curve='basis'
                 yScale={{
                     type: 'linear',
                     min: 0,

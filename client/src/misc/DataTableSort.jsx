@@ -1,10 +1,17 @@
 import React, {useCallback, useState} from 'react'
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material'
+import Paper from '@mui/material/Paper'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
 import Link from '@mui/material/Link'
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import IconButton from '@mui/material/IconButton'
 import useWindowSize from '../util/useWindowSize.jsx'
+import {setDeepAdd} from '../util/setDeep.js'
 
 const DataTableSort = ({
                            tableData,
@@ -13,13 +20,25 @@ const DataTableSort = ({
                            linkFunction
                        }) => {
 
-    const {rows, columns, defaultSort = 'name', sortable, wrap = false} = tableData
+    const {rows = [], columns = [], defaultSort = 'name', sortable, wrap = false, showTotals = false} = tableData
     const [sort, setSort] = useState(defaultSort)
     const [ascending, setAscending] = useState(!tableData.columns.find(c => c.id === defaultSort)?.descending)
 
     const overflowStyle = wrap
         ? {whiteSpace: 'inherit'}
         : {whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}
+
+    const totalsRow = showTotals
+        ? rows.reduce((acc, row) => {
+            Object.keys(row).forEach(key => {
+                if (key !== columns[0].id && Number.isFinite(row[key])) {
+                    setDeepAdd(acc, [key], row[key])
+                }
+            })
+            return acc
+        }, {})
+        : undefined
+    if (totalsRow) totalsRow[columns[0].id] = 'Total'
 
     const sortRows = useCallback(({rows, sort, defaultSort, ascending}) => {
         const list = (rows || []).slice()
@@ -63,6 +82,7 @@ const DataTableSort = ({
     const finalRows = sort && sort !== defaultSort
         ? [...activeRows, ...inactiveRows]
         : sortedRowsFull
+    if (totalsRow) finalRows.push(totalsRow)
 
     const displayData = {columns: columns, data: finalRows}
     displayData.columns.filter(x => x?.id && x?.align)
@@ -90,6 +110,18 @@ const DataTableSort = ({
         ? <ArrowDropUpIcon/>
         : <ArrowDropDownIcon/>
 
+    const alternateRowStyle = {
+            '&:nth-of-type(even) td, &:nth-of-type(even) th': {backgroundColor: '#191919'},
+            'td, th': {}
+        }
+    const totalsRowStyle = showTotals
+        ? {
+            '&:nth-last-of-type(1) td, &:nth-last-of-type(1) th': {backgroundColor: '#111'},
+            'td, th': {}
+        }
+        : undefined
+
+
     const {width} = useWindowSize()
     const mobile360 = width <= 360
     const mobile395 = width <= 395
@@ -105,7 +137,7 @@ const DataTableSort = ({
                         : '.95rem'
 
 
-    const leftMargins = {left: 14, center: 0, right: 0}
+    const leftMargins = {left: 14, center: 0, right: 5}
     const rightMargins = {left: 0, center: 0, right: 20}
 
     return (
@@ -147,7 +179,8 @@ const DataTableSort = ({
                                                 <nobr>{column.name}</nobr>
                                             </Link>
                                             {sort === column.id
-                                                ? <IconButton onClick={() => handleSort(column.id)} style={{padding: 0}}>
+                                                ?
+                                                <IconButton onClick={() => handleSort(column.id)} style={{padding: 0}}>
                                                     {sortIcon}</IconButton>
                                                 : <div style={{width: 24}}/>
                                             }
@@ -167,10 +200,7 @@ const DataTableSort = ({
                     <TableBody>
                         {displayData.data.map((row, index) =>
                             <TableRow key={index} index={index}
-                                      sx={{
-                                          '&:nth-of-type(even) td, &:nth-of-type(even) th': {backgroundColor: '#191919'},
-                                          'td, th': {}
-                                      }}>
+                                      sx={{...alternateRowStyle, ...totalsRowStyle}}>
                                 {displayData.columns.map((column, index) =>
                                     column.id !== 'spacer'
                                         ? <TableCell key={index + 1}

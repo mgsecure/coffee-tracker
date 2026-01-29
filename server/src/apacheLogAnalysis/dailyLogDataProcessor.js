@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// noinspection JSFileReferences
+
 'use strict'
 
 import fs from 'fs/promises'
@@ -45,24 +47,9 @@ const siteStatsFullJsonFile = path.join(serverPath, 'statsSiteFull.json')
 
 // --- DATA AGGREGATION OBJECTS ---
 let wip = {} // work-in-progress aggregates
-wip.totals = {}
-wip.totals.numDays = 0
-wip.totals.visits = 0
-wip.totals.visitors = 0
 
-wip.days = {}         // keyed by date string "YYYY-MM-DD"
-wip.weeks = {}        // keyed by first day of week (YYYY-MM-DD)
-wip.visitsByCountry = {}
-wip.firstVisit = {}   // country => first date seen
-wip.lockViewsByCountry = {}
-wip.states = {}
 wip.completedSearches = {}
-wip.lockViewsBySearch = {}
-wip.lockViewsByWidth = {}
-wip.referrerWelcomeViews = {}
-wip.referrerLockViews = {}
 wip.referrerViews = {}
-wip.seoLockById = {}
 wip.browsers = {}
 wip.platforms = {}
 wip.crawlerAgentRequests = {}
@@ -100,28 +87,34 @@ export default async function processDailyData() {
             continue
         }
 
-        // Determine week key using week number and first day of week
+        // Determine the week key using the week number and first day of the week
         const firstDay = dayjs(requestDate).startOf('week').format('YYYY-MM-DD')
 
         setDeepAdd(wip, ['totals', 'numDays'], 1)
         setDeepAdd(wip, ['weeks', firstDay, 'numDays'], 1)
 
-        setDeep(wip, ['last28days', dateString, 'visits'], dayData.visits)
-        setDeepAdd(wip, ['weeks', firstDay, 'visits'], dayData.visits)
-        setDeepAdd(wip, ['weeks', 'totals', 'visits'], dayData.visits)
+        // TODO: calculate this from log files using requests separated by X time?
+        // setDeep(wip, ['last28days', dateString, 'visits'], dayData.visits)
+        // setDeepAdd(wip, ['weeks', firstDay, 'visits'], dayData.visits)
+        // setDeepAdd(wip, ['totals', 'visits'], dayData.visits)
 
         setDeep(wip, ['last28days', dateString, 'visitors'], dayData.visitors)
         setDeepAdd(wip, ['weeks', firstDay, 'visitors'], dayData.visitors)
-        setDeepAdd(wip, ['weeks', 'totals', 'visitors'], dayData.visitors)
+        setDeepAdd(wip, ['totals', 'visitors'], dayData.visitors)
 
         if (dayData.pageViews) {
             for (const key in dayData.pageViews) {
-                if (key !== 'undefined') setDeepAdd(wip, ['last28days', dateString, 'pageViews', key], dayData.pageViews[key])
+                if (key !== 'undefined') {
+                    setDeepAdd(wip, ['last28days', dateString, 'pageViews', key], dayData.pageViews[key])
+                    setDeepAdd(wip, ['last28days', dateString, 'totalPageViews'], dayData.pageViews[key])
+                }
+                setDeepAdd(wip, ['totals', 'pageViews'], dayData.pageViews[key])
             }
         }
         if (dayData.errorPages) {
             for (const key in dayData.errorPages) {
                 setDeepAdd(wip, ['errorPages', key], dayData.errorPages[key])
+                setDeepAdd(wip, ['totals', 'errors'], dayData.pageViews[key])
             }
         }
         if (dayData.pageViewsByContinent) {
@@ -199,7 +192,7 @@ export default async function processDailyData() {
     //console.log(JSON.stringify(wip, null, 2))
 
 
-// --- EXECUTE REPORT BUILDING FUNCTIONS ---
+    // --- EXECUTE REPORT BUILDING FUNCTIONS ---
     trafficByDate()
     trafficByWeek()
     popularCountries()
@@ -217,7 +210,6 @@ export default async function processDailyData() {
     }
 
 }
-
 
 function getDateStringFromFilename(filename) {
     const match = filename.match(/(\d{4}-\d{2}-\d{2})/)
@@ -285,16 +277,17 @@ function trafficByDate() {
     jsonTotals.data = [
         {label: 'Lock Views', value: wip.totals.totalLockViews},
         {label: 'Site Vists', value: wip.totals.visits},
-        {label: 'Countries', value: Object.keys(wip.visitsByCountry).length}
+        {label: 'Countries', value: Object.keys(wip.pageViewsByCountry).length}
     ]
     siteStatsFull.totals = jsonTotals
 }
+
 
 // 6. trafficByWeek
 function trafficByWeek() {
     let jsonLockViewPoints = []
     for (const weekKey of Object.keys(wip.weeks).sort()) {
-        // Skip partial weeks by comparing difference with endDate
+        // Skip partial weeks by comparing the difference with endDate
         const diff = dayjs(endDate.format('YYYY-MM-DD')).diff(dayjs(weekKey, 'YYYY-MM-DD'), 'day')
         if (diff > 5) {
             jsonLockViewPoints.push({x: weekKey, y: wip.weeks[weekKey].totalLockViews || 0})
@@ -310,15 +303,15 @@ function trafficByWeek() {
 function popularCountries() {
     let countryAreas = []
     let europeanCountryAreas = []
-    for (const key of Object.keys(wip.visitsByCountry).sort((a, b) => {
+    for (const key of Object.keys(wip.pageViewsByCountry).sort((a, b) => {
         // Descending order by visits
-        return (wip.visitsByCountry[b] || 0) - (wip.visitsByCountry[a] || 0) || a.localeCompare(b)
+        return (wip.pageViewsByCountry[b] || 0) - (wip.pageViewsByCountry[a] || 0) || a.localeCompare(b)
     })) {
         if (key === 'Europe') continue
-        countryAreas.push({area: key, visits: wip.visitsByCountry[key]})
+        countryAreas.push({area: key, visits: wip.pageViewsByCountry[key]})
         // If countryTZ mapping for this country indicates Europe
         if (countryTZ[key] && countryTZ[key][1] === 'Europe') {
-            europeanCountryAreas.push({area: key, visits: wip.visitsByCountry[key]})
+            europeanCountryAreas.push({area: key, visits: wip.pageViewsByCountry[key]})
         }
     }
     let popularAreasJson = {}
@@ -326,8 +319,8 @@ function popularCountries() {
     popularAreasJson.popularEuropeanCountries = {description: 'Popular European Countries', data: europeanCountryAreas}
 
     let stateAreas = []
-    for (const key of Object.keys(wip.states).sort((a, b) => (wip.states[b] || 0) - (wip.states[a] || 0) || a.localeCompare(b))) {
-        stateAreas.push({area: key, visits: wip.states[key]})
+    for (const key of Object.keys(wip.pageViewsByState).sort((a, b) => (wip.pageViewsByState[b] || 0) - (wip.pageViewsByState[a] || 0) || a.localeCompare(b))) {
+        stateAreas.push({area: key, pageViews: wip.pageViewsByState[key]})
     }
     popularAreasJson.popularStates = {description: 'Popular US States', data: stateAreas}
 
@@ -436,7 +429,7 @@ function pageTracking() {
         }
         dataArray.push(pagesDayData)
     }
-    // Add total row
+    // Add a total row
     let pagesTotalData = {date: 'total'}
     for (const page of pages) {
         pagesTotalData[page] = filteredTotals[page] || 0
@@ -551,8 +544,8 @@ function outputSiteFullJson() {
         timezone: dt.format('z')
     }
     //fs.writeFile(siteStatsFullJsonFile, JSON.stringify(siteStatsFull, null, 2), 'utf8')
-    fs.writeFile(siteStatsFullJsonFile, JSON.stringify(wip, null, 2), 'utf8')
-    fs.writeFile('./statsSiteFull.json', JSON.stringify(wip, null, 2), 'utf8')
+    fs.writeFile(siteStatsFullJsonFile, JSON.stringify(wip, null, 2), 'utf8').then()
+    fs.writeFile('./statsSiteFull.json', JSON.stringify(wip, null, 2), 'utf8').then()
 
 }
 

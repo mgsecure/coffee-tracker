@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// noinspection JSFileReferences
+
 'use strict'
 
 // REQUIRED MODULES
@@ -11,8 +13,6 @@ import {countries} from './tzCountryList.js'
 import {localUser} from '../../keys/users.js'
 import {setDeep, setDeepAdd, setDeepUnique} from '../util/setDeep.js'
 
-const prodEnvironment = localUser !== process.env.USER
-
 import {fileURLToPath} from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -20,6 +20,12 @@ const __dirname = path.dirname(__filename)
 const componentsDir = path.resolve(__dirname)
 const logsPath = path.resolve(__dirname, 'logs')
 const dataDir = path.resolve(__dirname, 'dailyData')
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+    analyzeLogs().then()
+}
+
+const prodEnvironment = localUser !== process.env.USER
 
 // DAYJS SETUP WITH PLUGINS
 import dayjs from 'dayjs'
@@ -52,16 +58,26 @@ let crawlerAgents = []
 let crawlerAgentNames = {}
 let dataFiles = []
 
-
 export default async function analyzeLogs() {
 
     let allLogFiles = await fs.readdir(logsPath)
     let logFiles = allLogFiles
         .filter(file => file.match(/^access/i))
-        .filter(file => !ignoreFiles.includes(file)).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+        .filter(file => !ignoreFiles.includes(file))
+        .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
 
     getCrawlerUserAgents(path.join(componentsDir, 'crawler-user-agents.json')).then()
     getCrawlerUserAgents(path.join(componentsDir, 'crawler-user-agents-local.json')).then()
+
+    // DELETE any json files fom today
+    const dateString = dayjs().format('YYYY-MM-DD')
+    let allDailyFiles = await fs.readdir(dataDir)
+    let todaysDailyFiles = allDailyFiles
+        .filter(file => file.includes(dateString) && file.match(/\.json$/i))
+    for (const file of todaysDailyFiles) {
+        deleteFile(path.join(dataDir, file)).then()
+    }
+    //console.log(`Deleting ${todaysDailyFiles.length} daily files from ${dateString}`, todaysDailyFiles)
 
     // READ DATA FILE NAMES from dataDir (we only need the date portion from filenames)
     let allDataFiles = await fs.readdir(dataDir)
@@ -149,10 +165,6 @@ async function processLogFile(logFileName) {
         if (today.diff(requestDate, 'day') > daysToReport) return
         if (dataFiles.includes(requestDateText) && requestDateText !== dayjs().format('YYYY-MM-DD')) return
 
-
-        setDeepAdd(stats, [requestDateText, 'logEntries'], 1)
-
-
         // Update min and max times
         if (!temp[requestDateText]?.minTime || requestDateTimeFull.isBefore(temp[requestDateText].minTime))
             setDeep(temp, [requestDateText, 'minTime'], requestDateTimeFull)
@@ -215,10 +227,10 @@ async function processLogFile(logFileName) {
         if (cleanReferrerString) {
             setDeepAdd(stats, [requestDateText, 'referrerViews', cleanReferrerString], 1)
         }
+
         if (fileRequested.match(/\/i\/bean\.gif/i)) {
             setDeepAdd(stats, [requestDateText, 'beacons'], 1)
             setDeepAdd(stats, [requestDateText, 'pageViews', trkString], 1)
-            setDeepAdd(stats, [requestDateText, 'pageViews', 'total'], 1)
 
             setDeepAdd(stats, [requestDateText, 'pageViewsByCountry', requestCountry], 1)
             setDeepAdd(stats, [requestDateText, 'pageViewsByContinent', requestContinent], 1)
@@ -230,16 +242,19 @@ async function processLogFile(logFileName) {
                 setDeepAdd(stats, [requestDateText, 'pageViewsByWidth', screenWidthString], 1)
             }
 
-            if (pageString) {
-                if (trkString === 'error') {
-                    setDeepAdd(stats, [requestDateText, 'errorPages', cleanPage], 1)
-                }
-            }
             if (searchTerm) {
                 setDeepAdd(stats, [requestDateText, 'pageViewsBySearchTerm', cleanPage, searchTerm], 1)
             }
 
-        } else if (fileRequested.match(/\/i\/clear\.gif/i)) {
+            if (trkString === 'error') {
+                setDeepAdd(stats, [requestDateText, 'errorPages', cleanPage], 1)
+            }
+
+        } else if (fileRequested.match(/\/i\/srch\.gif/i)) {
+            setDeepAdd(stats, [requestDateText, 'completedSearches', cleanPage, searchTerm], 1)
+        }
+
+        else if (fileRequested.match(/\/i\/clear\.gif/i)) {
             stats[requestDateText].lockViewsByIP = stats[requestDateText].lockViewsByIP || {}
             stats[requestDateText].lockViewsByIP[clientAddress] = (stats[requestDateText].lockViewsByIP[clientAddress] || 0) + 1
             if (cleanReferrerString) {
@@ -254,11 +269,6 @@ async function processLogFile(logFileName) {
             if (cleanReferrerString) {
                 stats[requestDateText].referrerWelcomeViews = stats[requestDateText].referrerWelcomeViews || {}
                 stats[requestDateText].referrerWelcomeViews[cleanReferrerString] = (stats[requestDateText].referrerWelcomeViews[cleanReferrerString] || 0) + 1
-            }
-        } else if (fileRequested.match(/\/i\/srch\.gif/i)) {
-            if (searchTerm && requestDate.isAfter(dayjs('2025-10-30', 'YYYY-MM-DD'))) {
-                stats[requestDateText].completedSearches = stats[requestDateText].completedSearches || {}
-                stats[requestDateText].completedSearches[searchTerm] = (stats[requestDateText].completedSearches[searchTerm] || 0) + 1
             }
         }
 
@@ -287,7 +297,7 @@ async function writeDailyFiles() {
                 }, {})
     })
 
-// WRITE JSON OUTPUT FILES per date
+    // WRITE JSON OUTPUT FILES per date
     Object.keys(temp).forEach(requestDateText => {
         let minTimeStr = temp[requestDateText].minTime.format('HHmm')
         let maxTimeStr = temp[requestDateText].maxTime.format('HHmm')
@@ -308,5 +318,18 @@ async function getCrawlerUserAgents(jsonPath) {
         })
     } catch (err) {
         console.error('Error reading crawler user agents from', jsonPath, err)
+    }
+}
+
+async function deleteFile(filePath) {
+    try {
+        await fs.unlink(filePath)
+        console.log(`File deleted successfully: ${filePath}`)
+    } catch (err) {
+        if (err.code === 'ENOENT') {
+            console.log('File does not exist')
+        } else {
+            console.error('Error deleting file:', err)
+        }
     }
 }

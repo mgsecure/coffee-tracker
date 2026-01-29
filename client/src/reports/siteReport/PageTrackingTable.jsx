@@ -22,19 +22,29 @@ const PageTrackingTable = () => {
                 .forEach(page => {
                 setDeepAdd(totals, [page], last28days[date].pageViews[page])
             })
-            acc.push({dateString: date, visitors: (last28days[date].visitors || 0), ...last28days[date].pageViews})
+            setDeepAdd(totals, ['visitors'], last28days[date].visitors)
+            setDeepAdd(totals, ['views'], last28days[date].totalPageViews)
+
+            acc.push(
+                {dateString: date,
+                visitors: (last28days[date].visitors || 0),
+                views: (last28days[date].totalPageViews || 0),
+                ...last28days[date].pageViews})
             return acc
         }, [])
         .map(day => (day))
-
     const pageColumns = Object.keys(totals)
-        .filter(x => x !== 'total')
+        .filter(x => x !== 'views')
         .sort((a, b) => totals[b] - totals[a])
         .map(page => ({id: page, name: page, align: 'center'}))
     const columns = [
-        {id: 'dateString', name: 'Date', align: 'left'}, {id: 'visitors', name: 'Visitors', align: 'center'}, {id: 'total', name: 'Views', align: 'center'}, ...pageColumns
+        {id: 'dateString', name: 'Date', align: 'right'},
+        {id: 'visitors', name: 'Visitors', align: 'center'},
+        {id: 'views', name: 'Views', align: 'center'},
+        ...pageColumns
     ]
-    const tableData = {columns: columns, rows: sortedDays}
+
+    const tableData = {columns: columns, rows: [...sortedDays], showTotals: true, sortable: true}
 
     const linkFunction = useCallback((_id, string) => {
         return string
