@@ -10,6 +10,7 @@ export const roasterSchema = Joi.array().items(
         Link: Joi.string().allow('').uri(),
         'Pourover Votes': Joi.number().allow(''),
         'Roastful Ranking': Joi.number().allow(''),
+        'Added At': Joi.string().allow(''),
         Source: Joi.string().allow('')
     }).unknown()
 )

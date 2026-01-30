@@ -28,7 +28,7 @@ async function exportUserProfiles() {
     const userProfileCollection = await dbProd.collection('user-profiles').get()
     const userProfiles = userProfileCollection.docs.map(doc => {
         return {docId: doc.id, ...doc.data()}
-    })
+    }).sort((a, b) => dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf())
     const metadata = {
         collection: 'userProfiles',
         date: dayjs().format(),

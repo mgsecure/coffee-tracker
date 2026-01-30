@@ -10,6 +10,7 @@ export default function SelectBox({
                                       variant = 'outlined',
                                       size = 'small',
                                       width = 350,
+                                      style = {},
                                       changeHandler,
                                       multiple = false,
                                       defaultValue,
@@ -25,7 +26,7 @@ export default function SelectBox({
 
     return (
         <FormControl id={`${name}FormControl`} size={size} color='info'
-                     style={{marginBottom: 0, width: width || 'auto'}}>
+                     style={{marginBottom: 0, width: width || 'auto', ...style}}>
             {label && <InputLabel style={{color: '#bbb'}}>{label}</InputLabel>}
             <Select
                 id={`${name}Select`}
@@ -42,9 +43,9 @@ export default function SelectBox({
             >
                 {optionsList.map((option, index) =>
                     optionsList[index] === 'divider'
-                    ? <Divider key={index}/>
-                    : <MenuItem key={index}
-                              value={optionsList[index]}>{optionsList[index]}</MenuItem>
+                        ? <Divider key={index}/>
+                        : <MenuItem key={index}
+                                    value={optionsList[index]}>{optionsList[index]}</MenuItem>
                 )}
             </Select>
         </FormControl>

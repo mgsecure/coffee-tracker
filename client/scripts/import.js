@@ -7,6 +7,15 @@ import {
 import fetch from 'node-fetch'
 import validate from './importValidate.js'
 import {DATA_SHEET_ID} from '../../keys/importKeys.js'
+import {fileURLToPath} from 'url'
+import path from 'path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const dataDir = path.join(__dirname, '/../src/data/')
+const serverDataDir = path.join(__dirname, '/../../server/src/data/')
+
+console.log('Starting import...', serverDataDir)
 
 // Helper to load and validate a file
 const importValidate = async (tab, schema) => {
@@ -44,6 +53,7 @@ console.log('Processing main data...')
 const jsonData = roasterData
     .map(datum => {
         const id = datum['ID']
+        const addedAt = datum['Added At']
         const name = datum.Roaster
         const city = datum.City
         const stateRegion = datum['State/Region']
@@ -55,6 +65,7 @@ const jsonData = roasterData
 
         const value = {
             id,
+            addedAt,
             name,
             city,
             stateRegion,
@@ -78,8 +89,8 @@ const jsonData = roasterData
     })
 
 console.log('Writing roasters.json...')
-fs.writeFileSync('../src/data/roasters.json', JSON.stringify(jsonData, null, 2))
-
+fs.writeFileSync(`${dataDir}/roasters.json`, JSON.stringify(jsonData, null, 2))
+fs.writeFileSync(`${serverDataDir}/roasters.json`, JSON.stringify(jsonData, null, 2))
 
 console.log('Processing equipment data...')
 const equipment = equipmentData
@@ -107,48 +118,10 @@ const equipment = equipmentData
     })
 
 console.log('Writing equipment.json...')
-fs.writeFileSync('../src/data/equipment.json', JSON.stringify(equipment, null, 2))
+fs.writeFileSync(`${dataDir}/equipment.json`, JSON.stringify(equipment, null, 2))
+fs.writeFileSync(`${serverDataDir}/equipment.json`, JSON.stringify(equipment, null, 2))
 
 console.log('Complete.')
-
-
-
-
-
-/*
-// Find any added or deleted entries
-const historicalData = JSON.parse(fs.readFileSync('./src/data/historicalData.json', 'utf8'))
-let changedEntries = 0
-jsonData.forEach(entry => {
-    const previousEntry = originalData.find(e => e.id === entry.id)
-    if (!previousEntry && !historicalData[entry.id]) {
-        historicalData[entry.id] = {...entry, name, dateAdded: dayjs().toISOString()}
-        changedEntries++
-    } else if (historicalData[entry.id]) {
-        delete historicalData[entry.id].dateDeleted
-        historicalData[entry.id] = {...historicalData[entry.id], ...entry, name}
-    }
-    entry.dateAdded = historicalData[entry.id].dateAdded
-})
-originalData.forEach(entry => {
-    const currentEntry = jsonData.find(e => e.id === entry.id)
-    if (!currentEntry) {
-        historicalData[entry.id] = {...historicalData[entry.id], dateDeleted: dayjs().toISOString()}
-        changedEntries++
-    }
-})
-
-// Save historical data & deleted entries
-console.log('Writing historicalData.json')
-console.log(`${changedEntries} additions or deletions found`)
-fs.writeFileSync('./src/data/historicalData.json', JSON.stringify(historicalData, null, 2))
-
-console.log('Writing deletedEntries.json')
-const deletedEntries = Object.values(historicalData).filter(entry => entry.dateDeleted) || []
-fs.writeFileSync('./src/data/deletedEntries.json', JSON.stringify(deletedEntries, null, 2))
-*/
-
-// Write out to src location for usage
 
 function splitCommaValues(string) {
     if (!string) return []

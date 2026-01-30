@@ -13,7 +13,7 @@ import Link from '@mui/material/Link'
 import YieldCalculatorButton from '../brews/YieldCalculatorButton.jsx'
 import {useTheme} from '@mui/material/styles'
 
-function Nav({extras, extrasTwo, title, titleMobile}) {
+function Nav({extras, extrasTwo, title, titleMobile, hideMenu}) {
     const {isFiltered, clearAdvancedFilterGroups} = useContext(FilterContext)
     const theme = useTheme()
     const navigate = useNavigate()
@@ -47,7 +47,7 @@ function Nav({extras, extrasTwo, title, titleMobile}) {
                 <Toolbar style={{marginTop: 6, minHeight: 40}}>
                     <div style={{display: flexStyle, width: '100%'}}>
                         <div style={{display: 'flex', flexGrow: 1, marginBottom: 8}}>
-                            <MainMenu/>
+                            {!hideMenu && <MainMenu/>}
                             <VersionChecker/>
                             <div style={{
                                 flexGrow: 1,
@@ -61,10 +61,13 @@ function Nav({extras, extrasTwo, title, titleMobile}) {
                                     <React.Fragment>
                                         {menuItem && !isRootPath
                                             ?
-                                            <Link onClick={handleClickTitle} style={{color: theme.palette.text.primary, whiteSpace: 'nowrap'}} sx={linkSx}>
+                                            <Link onClick={handleClickTitle}
+                                                  style={{color: theme.palette.text.primary, whiteSpace: 'nowrap'}}
+                                                  sx={linkSx}>
                                                 {isMobile ? (titleMobile || title) : title}
                                             </Link>
-                                            : <div style={{whiteSpace: 'nowrap'}}>{isMobile ? (titleMobile || title) : title}</div>
+                                            : <div
+                                                style={{whiteSpace: 'nowrap'}}>{isMobile ? (titleMobile || title) : title}</div>
                                         }
                                     </React.Fragment>
                                 }
@@ -74,7 +77,8 @@ function Nav({extras, extrasTwo, title, titleMobile}) {
                             {!isMobile && extrasTwo &&
                                 extrasTwo
                             }
-                            <YieldCalculatorButton/>
+                            {!hideMenu && <YieldCalculatorButton/>}
+
                             <UserMenu/>
                         </div>
                         {isMobile && extrasTwo &&

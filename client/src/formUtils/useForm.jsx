@@ -1,6 +1,6 @@
 import {useCallback, useState} from 'react'
 
-export default function useForm({baseForm, handleSubmit}) {
+export default function useForm({baseForm, processChange, processSubmit, handleSubmit}) {
     const [form, setForm] = useState(baseForm)
     const [intialized, setInitialized] = useState(false)
     const [required, setRequired] = useState([])
@@ -15,8 +15,6 @@ export default function useForm({baseForm, handleSubmit}) {
         && (required.reduce((acc, field) => acc && form[field], true))
         && !submitting
 
-    //console.log('form', form)
-
     const initialize = useCallback((params) => {
         setRequired(params.requiredFields)
         setInitialized(true)
@@ -27,7 +25,10 @@ export default function useForm({baseForm, handleSubmit}) {
     }, [])
 
     const update = useCallback((event) => {
+        processChange && processChange(event)
         const {name, value, action} = event.target
+        console.log('update', {name, value, action})
+
         if (action === 'delete') {
             setForm((prevForm) => {
                 const newForm = {...prevForm}
@@ -36,7 +37,7 @@ export default function useForm({baseForm, handleSubmit}) {
             })
         } else setForm((prevForm) => ({...prevForm, [name]: value}))
         setChanged(true)
-    }, [])
+    }, [processChange])
 
     const reload = useCallback(() => {
         setInitialized(false)
@@ -50,13 +51,10 @@ export default function useForm({baseForm, handleSubmit}) {
                 behavior: 'smooth'
             })
         }, 100)
-
     }, [baseForm])
 
-    const submit = useCallback(async () => {
-        setSubmitting(true)
-        console.log('submitting', {form, required})
-
+    const submitForm = useCallback(async (form) => {
+        console.log('submitting', form)
         try {
             await handleSubmit(form)
             setSubmitted(true)
@@ -64,9 +62,15 @@ export default function useForm({baseForm, handleSubmit}) {
             setError(ex)
             console.error('Error submitting form:', ex)
         }
+    }, [handleSubmit])
 
-        setSubmitting(false)
-    }, [form, handleSubmit, required])
+    const submit = useCallback(async () => {
+        setSubmitting(true)
+        const newForm = processSubmit
+            ? processSubmit(form) || form
+            : form
+        await submitForm(newForm).then(() => setSubmitting(false))
+    }, [form, processSubmit, submitForm])
 
     return {
         initialize,

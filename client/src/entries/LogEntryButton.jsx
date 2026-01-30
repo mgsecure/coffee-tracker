@@ -12,7 +12,7 @@ export default function LogEntryButton({entry, size='medium', entryType, style})
 
     const handleClick = useCallback(async () => {
         const name =  entryName({entry, entryType})
-        jsonIt(name, entry)
+        jsonIt(name ? name : entryType, entry)
     }, [entry, entryType])
 
     if (!adminEnabled) return null

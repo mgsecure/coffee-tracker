@@ -150,7 +150,7 @@ export function DBProvider({children}) {
         if (dbError) return false
         const cleanForm = cleanObject(form)
         const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss')
-        const id = dayjs().format('YYYY-MM-DD_HH-mm-ss')
+        const id = dayjs().format('YYYY-MM-DD_HH:mm:ss')
         cleanForm.addedAt = cleanForm.addedAt || timestamp
         cleanForm.modifiedAt = timestamp
         cleanForm.id = id

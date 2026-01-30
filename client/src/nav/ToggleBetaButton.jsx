@@ -5,11 +5,13 @@ import IconButton from '@mui/material/IconButton'
 import AppContext from '../app/AppContext'
 
 function ToggleBetaButton() {
-    const {beta, setBeta} = useContext(AppContext)
+    const {beta, setBeta, adminEnabled} = useContext(AppContext)
 
     const handleClick = useCallback(() => {
         setBeta(!beta)
     }, [beta, setBeta])
+
+    if (!adminEnabled) return null
 
     const color = beta ? '#82c70a' : '#3b3b3b'
     return (

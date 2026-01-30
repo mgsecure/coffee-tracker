@@ -1,6 +1,6 @@
 // noinspection JSValidateTypes
 
-import React, {useContext, useEffect, useMemo} from 'react'
+import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react'
 import FormElement from '../formUtils/FormElement.jsx'
 import useWindowSize from '../util/useWindowSize.jsx'
 import {openInNewTab} from '../util/openInNewTab'
@@ -10,15 +10,49 @@ import LoadingDisplayWhiteSmall from '../misc/LoadingDisplayWhiteSmall.jsx'
 import useForm from '../formUtils/useForm.jsx'
 import DBContext from '../app/DBContext.jsx'
 import Dialog from '@mui/material/Dialog'
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
+import LogEntryButton from '../entries/LogEntryButton.jsx'
+import {Collapse} from '@mui/material'
 
 export default function SurveyPage() {
 
     const {saveSurveySubmission} = useContext(DBContext)
+    const [keepsTrack, setKeepsTrack] = useState(true)
+
+    const processChange = useCallback((event) => {
+        const {name, value} = event.target
+        if (name === 'userRecordsDetails') {
+            if (value === 'Yes') {
+                setKeepsTrack(true)
+            } else {
+                setKeepsTrack(false)
+            }
+            setKeepsTrack(value !== 'No')
+        }
+    }, [])
 
     const baseForm = useMemo(() => {
         return {}
     }, [])
-    const form = useForm({baseForm, handleSubmit: saveSurveySubmission})
+
+
+    const processSubmit = useCallback((form) => {
+        const notTrackFields = ['trackingNotReason', 'trackingNotReasonOther',
+            'trackingNotSatisfaction', 'trackingNotFeaturesRequested', 'trackingNotGeneralComments']
+        const trackFields = ['trackingMethod', 'trackingSatisfaction', 'trackingFavoriteFeatures',
+            'trackingNeedsImprovement', 'trackingFeaturesRequested', 'trackingGeneralComments']
+        const newForm = {...form}
+        if (keepsTrack) {
+            notTrackFields.forEach(field => delete newForm[field])
+        } else {
+            trackFields.forEach(field => delete newForm[field])
+        }
+        console.log('processing', newForm)
+        return newForm
+    }, [keepsTrack])
+
+    const form = useForm({baseForm, processChange, processSubmit, handleSubmit: saveSurveySubmission})
 
     useEffect(() => {
         if (!form.intialized) {
@@ -31,16 +65,17 @@ export default function SurveyPage() {
     const {isMobile} = useWindowSize()
 
     return (
-        <>
+        <React.Fragment>
             <div style={{padding: isMobile ? '0px 12px' : '0px 20px'}}>
-                <div style={{margin: '16px 0px 6px', fontSize: '1.6rem', fontWeight: 700}}>Record Keeping Survey</div>
-                <div style={{margin: '0px 0px 36px', fontSize: '1.1rem', lineHeight: '1.5rem', fontWeight: 400}}>
+                <Typography variant='h4' sx={{margin: '16px 0px 6px', fontSize: '1.6rem', fontWeight: 700}}>Record
+                    Keeping Survey</Typography>
+                <Typography sx={{margin: '0px 0px 36px', fontSize: '1.1rem', lineHeight: '1.5rem', fontWeight: 400}}>
                     We’d love to hear your opinions about keeping track of your
                     coffees, brews, and recipes.
                     Here is a brief survey to give your feedback.
                     All questions are optional and the survey is entirely anonymous.
                     Responses will be summarized and shared with the community.
-                </div>
+                </Typography>
 
                 <FormElement fieldType={'SectionHeader'}
                              label={'A Little About You'}
@@ -58,16 +93,25 @@ export default function SurveyPage() {
                              fieldName={'userGenerallyShop'}
                              description={'Where do you generally get your coffee?'}
                              options={['Supermarket', 'Local roaster/coffee shop', 'National/international roaster', 'Home roasted']}
-                             otherOptionField={'generallyShopOther'}
+                             otherOptionField={'userGenerallyShopOther'}
                              fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}, inputWidth: 200}}
                              form={form}
                              formDefaults={formDefaults}/>
 
-                <FormElement fieldType={'RadioGroup'}
-                             fieldName={'userSubscription'}
-                             description={'Do you currently use a coffee subscription (or have used one in the past)?'}
-                             options={['Yes', 'No']}
+                <FormElement fieldType={'Checkboxes'}
+                             fieldName={'userMethods'}
+                             description={'Which brewing methods do you use regularly?'}
+                             options={['Espresso', 'Pour Over', 'French Press', 'Drip', 'Stovetop']}
+                             otherOptionField={'userMethodsOther'}
                              fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}, inputWidth: 200}}
+                             form={form}
+                             formDefaults={formDefaults}/>
+
+                <FormElement fieldType={'SelectBox'}
+                             fieldName={'userCoffeesPerDay'}
+                             description={'How many coffees do you generally make per day?'}
+                             options={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10 or more']}
+                             fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}, inputWidth: 140}}
                              form={form}
                              formDefaults={formDefaults}/>
 
@@ -79,74 +123,128 @@ export default function SurveyPage() {
                              form={form}
                              formDefaults={formDefaults}/>
 
+
                 <FormElement fieldType={'SectionHeader'}
                              label={'Keeping Track'}
                              options={[2, 3]}/>
 
-                <FormElement fieldType={'RadioGroup'}
-                             fieldName={'trackingMethod'}
-                             description={'If so, what do you use?'}
-                             options={['Paper notebook', 'Notes app', 'Dedicated coffee app', 'Website']}
-                             otherOptionField={'trackingMethodOther'}
-                             fieldSettings={{descriptionStyle: {fontSize: '1.1rem', fontWeight: 500}, inputWidth: 220}}
-                             form={form}
-                             formDefaults={formDefaults}/>
+                <Collapse in={keepsTrack}>
+                    <FormElement fieldType={'RadioGroup'}
+                                 fieldName={'trackingMethod'}
+                                 description={'If you do keep records, what do you use?'}
+                                 options={['Paper notebook', 'Notes app', 'Dedicated coffee app', 'Website']}
+                                 otherOptionField={'trackingMethodOther'}
+                                 fieldSettings={{
+                                     descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                     inputWidth: 220
+                                 }}
+                                 form={form}
+                                 formDefaults={formDefaults}/>
 
-                <FormElement fieldType={'StarRating'}
-                             fieldName={'trackingSatisfaction'}
-                             description={'How satisfied are you with that method of record keeping?'}
-                             options={['Not Satisfied', 'Very Satisfied']}
-                             fieldSettings={{
-                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 500, marginBottom: 0},
-                                 inputWidth: 220
-                             }}
-                             form={form}
-                             formDefaults={formDefaults}/>
+                    <FormElement fieldType={'StarRating'}
+                                 fieldName={'trackingSatisfaction'}
+                                 description={'How satisfied are you with that method of record keeping?'}
+                                 options={['Not Satisfied', 'Very Satisfied']}
+                                 fieldSettings={{
+                                     descriptionStyle: {fontSize: '1.1rem', fontWeight: 500, marginBottom: 0},
+                                     inputWidth: 220
+                                 }}
+                                 form={form}
+                                 formDefaults={formDefaults}/>
 
-                <FormElement fieldType={'TextField'}
-                             fieldName={'trackingFavoriteFeatures'}
-                             description={'What are your favorite aspects/features of it?'}
-                             fieldSettings={{
-                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
-                                 margin: '0px 0px 16px 0px',
-                                 inputWidth: '100%'
-                             }}
-                             form={form}
-                             formDefaults={formDefaults}/>
+                    <FormElement fieldType={'TextField'}
+                                 fieldName={'trackingFavoriteFeatures'}
+                                 description={'What are your favorite aspects/features of it?'}
+                                 fieldSettings={{
+                                     descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                     margin: '0px 0px 16px 0px',
+                                     inputWidth: '100%'
+                                 }}
+                                 form={form}
+                                 formDefaults={formDefaults}/>
 
-                <FormElement fieldType={'TextField'}
-                             fieldName={'trackingNeedsImprovement'}
-                             description={'What could be improved?'}
-                             fieldSettings={{
-                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
-                                 margin: '0px 0px 16px 0px',
-                                 inputWidth: '100%'
-                             }}
-                             form={form}
-                             formDefaults={formDefaults}/>
+                    <FormElement fieldType={'TextField'}
+                                 fieldName={'trackingNeedsImprovement'}
+                                 description={'What could be improved?'}
+                                 fieldSettings={{
+                                     descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                     margin: '0px 0px 16px 0px',
+                                     inputWidth: '100%'
+                                 }}
+                                 form={form}
+                                 formDefaults={formDefaults}/>
 
-                <FormElement fieldType={'TextField'}
-                             fieldName={'trackingFeaturesRequested'}
-                             description={'Are there specific “features” you would like to have?'}
-                             fieldSettings={{
-                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
-                                 margin: '0px 0px 16px 0px',
-                                 inputWidth: '100%'
-                             }}
-                             form={form}
-                             formDefaults={formDefaults}/>
+                    <FormElement fieldType={'TextField'}
+                                 fieldName={'trackingFeaturesRequested'}
+                                 description={'Are there specific “features” you would like to have?'}
+                                 fieldSettings={{
+                                     descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                     margin: '0px 0px 16px 0px',
+                                     inputWidth: '100%'
+                                 }}
+                                 form={form}
+                                 formDefaults={formDefaults}/>
 
-                <FormElement fieldType={'TextField'}
-                             fieldName={'trackingGeneralComments'}
-                             description={'Any general thoughts or comments?'}
-                             multiline={true}
-                             rows={4}
-                             fieldSettings={{
-                                 descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
-                                 inputWidth: '100%'
-                             }}
-                             form={form}
-                             formDefaults={formDefaults}/>
+                    <FormElement fieldType={'TextField'}
+                                 fieldName={'trackingGeneralComments'}
+                                 description={'Any general thoughts or comments?'}
+                                 multiline={true}
+                                 rows={4}
+                                 fieldSettings={{
+                                     descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                     inputWidth: '100%'
+                                 }}
+                                 form={form}
+                                 formDefaults={formDefaults}/>
+                </Collapse>
+
+                <Collapse in={keepsTrack === false}>
+                    <FormElement fieldType={'RadioGroup'}
+                                 fieldName={'trackingNotReason'}
+                                 description={'If you don\'t keep records, what\'s the main reason?'}
+                                 options={['Paper notebook', 'Notes app', 'Dedicated coffee app', 'Website']}
+                                 otherOptionField={'trackingNotReasonOther'}
+                                 fieldSettings={{
+                                     descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                     inputWidth: 220
+                                 }}
+                                 form={form}
+                                 formDefaults={formDefaults}/>
+
+                    <FormElement fieldType={'StarRating'}
+                                 fieldName={'trackingNotSatisfaction'}
+                                 description={'How satisfied are you with not keeping records?'}
+                                 options={['Not Satisfied', 'Very Satisfied']}
+                                 fieldSettings={{
+                                     descriptionStyle: {fontSize: '1.1rem', fontWeight: 500, marginBottom: 0},
+                                     inputWidth: 220
+                                 }}
+                                 form={form}
+                                 formDefaults={formDefaults}/>
+
+                    <FormElement fieldType={'TextField'}
+                                 fieldName={'trackingNotFeaturesRequested'}
+                                 description={'Is there anything an app or website could offer to make coffee easier or more enjoyable?'}
+                                 fieldSettings={{
+                                     descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                     margin: '0px 0px 16px 0px',
+                                     inputWidth: '100%'
+                                 }}
+                                 form={form}
+                                 formDefaults={formDefaults}/>
+
+                    <FormElement fieldType={'TextField'}
+                                 fieldName={'trackingNotGeneralComments'}
+                                 description={'Any general thoughts or comments?'}
+                                 multiline={true}
+                                 rows={4}
+                                 fieldSettings={{
+                                     descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},
+                                     inputWidth: '100%'
+                                 }}
+                                 form={form}
+                                 formDefaults={formDefaults}/>
+                </Collapse>
 
 
                 <FormElement fieldType={'SectionHeader'}
@@ -154,7 +252,8 @@ export default function SurveyPage() {
                              options={[3, 3]}/>
 
                 <div style={{margin: '0px 0px 36px', fontSize: '1.1rem', lineHeight: '1.5rem', fontWeight: 400}}>
-                    We’ve launched this free – and ad-free – site (coffee-trackers.com)
+                    We’ve launched a free – and ad-free – site (<Link
+                    onClick={() => openInNewTab('/')}>coffee-tracker.com</Link>)
                     to help the community record the details of their coffees/brews. We&apos;re
                     asking folks for concrete feedback (either positive or negative).
                     You don’t need to actually use the site if you don’t want to.
@@ -293,15 +392,15 @@ export default function SurveyPage() {
                              formDefaults={formDefaults}/>
 
 
-                <div style={{
+                <Typography sx={{
                     display: 'flex',
                     justifyContent: 'center',
-                    marginTop: 24,
+                    marginTop: '24px',
                     fontSize: '1.1rem',
                     fontWeight: 700
                 }}>
-                    Thank you for taking the time to complete this survey!
-                </div>
+                    Thank you for taking the time to share your perspective!
+                </Typography>
                 <div style={{display: 'flex', justifyContent: 'center', marginTop: 24, marginBottom: 16}}>
                     <Button onClick={form.submit} variant='contained' color='info'
                             disabled={!form.canSave} style={{boxShadow: 'none'}}>
@@ -313,28 +412,34 @@ export default function SurveyPage() {
                 </div>
             </div>
 
+            <div style={{display: 'flex', justifyContent: 'center', marginTop: 24, marginBottom: 16}}>
+                <LogEntryButton entry={form.form} entryType={'Survey'} size={'small'}
+                                style={{}}/>
+
+            </div>
+
             <Dialog open={form.submitted} slotProps={{
                 backdrop: {style: {backgroundColor: '#000', opacity: 0.8}}
             }}>
                 <div style={{display: 'flex'}}>
-                    <div style={{backgroundColor: '#444', marginLeft: 'auto', marginRight: 'auto', padding: 40}}>
-                        <div style={{
+                    <Paper sx={{marginLeft: 'auto', marginRight: 'auto', padding: '40px'}}>
+                        <Typography sx={{
                             fontSize: '1.7rem',
                             fontWeight: 500,
-                            marginBottom: 60,
+                            marginBottom: '60px',
                             textAlign: 'center'
                         }}>Thank you for your feedback!
-                        </div>
+                        </Typography>
                         <div style={{width: '100%', textAlign: 'center'}}>
                             <Button onClick={form.reload} variant='contained' color='success'
                                     style={{marginLeft: 'auto', marginRight: 'auto'}}>
                                 OK
                             </Button>
                         </div>
-                    </div>
+                    </Paper>
                 </div>
             </Dialog>
-        </>
+        </React.Fragment>
     )
 }
 

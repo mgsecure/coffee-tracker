@@ -63,7 +63,6 @@ export default function EquipmentForm({machine, open, setOpen}) {
         }, {})
     }, [])
 
-
     const typeBrands = useMemo(() => {
         return Object.keys(machineTypeBrandModels[form.type] || {}).filter(x => x) || []
     }, [form.type, machineTypeBrandModels])
