@@ -18,10 +18,12 @@ import {Collapse} from '@mui/material'
 export default function SurveyPage() {
 
     const {saveSurveySubmission} = useContext(DBContext)
+
     const [keepsTrack, setKeepsTrack] = useState(true)
 
     const processChange = useCallback((event) => {
         const {name, value} = event.target
+        let events = [event]
         if (name === 'userRecordsDetails') {
             if (value === 'Yes') {
                 setKeepsTrack(true)
@@ -30,12 +32,12 @@ export default function SurveyPage() {
             }
             setKeepsTrack(value !== 'No')
         }
+        return events
     }, [])
 
     const baseForm = useMemo(() => {
         return {}
     }, [])
-
 
     const processSubmit = useCallback((form) => {
         const notTrackFields = ['trackingNotReason', 'trackingNotReasonOther',
@@ -48,7 +50,6 @@ export default function SurveyPage() {
         } else {
             trackFields.forEach(field => delete newForm[field])
         }
-        console.log('processing', newForm)
         return newForm
     }, [keepsTrack])
 
@@ -202,7 +203,7 @@ export default function SurveyPage() {
                     <FormElement fieldType={'RadioGroup'}
                                  fieldName={'trackingNotReason'}
                                  description={'If you don\'t keep records, what\'s the main reason?'}
-                                 options={['Paper notebook', 'Notes app', 'Dedicated coffee app', 'Website']}
+                                 options={['Don’t change parameters often', 'I can remember it all', 'Too cumbersome', 'I used to, but fell out of the habit']}
                                  otherOptionField={'trackingNotReasonOther'}
                                  fieldSettings={{
                                      descriptionStyle: {fontSize: '1.1rem', fontWeight: 500},

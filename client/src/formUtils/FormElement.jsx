@@ -10,7 +10,6 @@ import {useTheme} from '@mui/material/styles'
 
 import Typography from '@mui/material/Typography'
 import SelectBox from './SelectBox.jsx'
-import {machineTypes} from '../data/equipmentBeans.js'
 
 const FORM_DEFAULTS = {
     margin: '0px 20px 32px 0px',
@@ -36,7 +35,6 @@ export default function FormElement({
                                         otherOptionField,
                                         defaultValue,
                                         form = {},
-                                        handleChange,
                                         formDefaults = FORM_DEFAULTS
                                     }) {
 
@@ -51,7 +49,7 @@ export default function FormElement({
             setShowOtherField(true)
         } else {
             setShowOtherField(false)
-            if (form.otherOptionField) {
+            if (otherOptionField) {
                 form.update({target: {name: otherOptionField, action: 'delete'}})
             }
         }
@@ -62,16 +60,16 @@ export default function FormElement({
         const {name, value, checked} = event.target
         const selectedOptions = form.form[name] || []
 
-        if (checked === true) {
+        if (checked===true) {
             selectedOptions.push(value)
         } else {
             selectedOptions.splice(selectedOptions.indexOf(value), 1)
         }
         form.update({target: {name, value: selectedOptions}})
 
-        if (value === 'Other' && checked === true) {
+        if (value === 'Other' && checked===true) {
             setShowOtherField(true)
-        } else if (value === 'Other' && checked === false) {
+        } else if (value === 'Other' && checked===false) {
             setShowOtherField(false)
             if (otherOptionField) {
                 form.update({target: {name: otherOptionField, action: 'delete'}})
@@ -201,13 +199,7 @@ export default function FormElement({
                         {options.map(option =>
                             <FormControlLabel key={option} value={option} label={option} control={
                                 <Checkbox size={settings.inputSize}
-                                          onChange={(e) => handleCheckboxSelect({
-                                              target: {
-                                                  name: fieldName,
-                                                  value: option,
-                                                  checked: e.target.checked
-                                              }
-                                          })}
+                                          onChange={(e) => handleCheckboxSelect({target: {name: fieldName, value: option, checked: e.target.checked}})}
                                           slotProps={{
                                               root: {style: {height: '36px', width: '36px', marginRight: '4px'}}
                                           }}/>}
@@ -217,13 +209,7 @@ export default function FormElement({
                             <div style={{display: 'flex', height: 40}}>
                                 <FormControlLabel key='Other' value='Other' label='Other' control={
                                     <Checkbox size={settings.inputSize}
-                                              onChange={(e) => handleCheckboxSelect({
-                                                  target: {
-                                                      name: fieldName,
-                                                      value: 'Other',
-                                                      checked: e.target.checked
-                                                  }
-                                              })}
+                                              onChange={(e) => handleCheckboxSelect({target: {name: fieldName, value: 'Other', checked: e.target.checked}})}
                                               slotProps={{
                                                   root: {style: {height: '36px', width: '36px', marginRight: '4px'}}
                                               }}/>

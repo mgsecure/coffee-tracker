@@ -60,6 +60,11 @@ export default [
         path: '/screenshots'
     },
     {
+        title: 'Survey',
+        icon: <CameraAltIcon fontSize='small'/>,
+        path: '/survey'
+    },
+    {
         title: 'Add A Roaster',
         icon: <AddCircleOutlineIcon fontSize='small'/>,
         path: '/info',

@@ -25,17 +25,20 @@ export default function useForm({baseForm, processChange, processSubmit, handleS
     }, [])
 
     const update = useCallback((event) => {
-        processChange && processChange(event)
-        const {name, value, action} = event.target
-        console.log('update', {name, value, action})
 
-        if (action === 'delete') {
-            setForm((prevForm) => {
-                const newForm = {...prevForm}
-                delete newForm[name]
-                return newForm
-            })
-        } else setForm((prevForm) => ({...prevForm, [name]: value}))
+        const events = processChange ? processChange(event) || event : event
+
+        for (const event of (Array.isArray(events) ? events : [events])) {
+            const {name, value, action} = event.target
+            //console.log('update', {name, value, action})
+            if (action === 'delete') {
+                setForm((prevForm) => {
+                    const newForm = {...prevForm}
+                    delete newForm[name]
+                    return newForm
+                })
+            } else setForm((prevForm) => ({...prevForm, [name]: value}))
+        }
         setChanged(true)
     }, [processChange])
 
