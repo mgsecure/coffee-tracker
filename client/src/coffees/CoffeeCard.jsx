@@ -29,15 +29,18 @@ import {useNavigate} from 'react-router-dom'
 import dayjs from 'dayjs'
 import {flagSort} from '../data/equipmentBeans'
 import cleanObject from '../util/cleanObject'
+import AppContext from '../app/AppContext.jsx'
 
 export default function CoffeeCard({entry = {}, expanded, onExpand}) {
-    const {updateCollection} = useContext(DBContext)
-    const {modeWeightUnit} = useContext(DataContext)
-    const {sort} = useContext(FilterContext)
-    const [scrolled, setScrolled] = useState(false)
     const ref = useRef(null)
     const navigate = useNavigate()
+    const {updateCollection} = useContext(DBContext)
+    const {modeWeightUnit} = useContext(DataContext)
+    const {filters} = useContext(FilterContext)
+    const {compactViewEnabled} = useContext(AppContext)
+    const [scrolled, setScrolled] = useState(false)
 
+    const {sort} = filters
     const action = 'edit'
     const ratings = useMemo(() => entry.ratings || {}, [entry])
     const ratingDimensions = {rating: 'rating'}
@@ -255,6 +258,7 @@ export default function CoffeeCard({entry = {}, expanded, onExpand}) {
                             </div>
                         }
                     </div>
+                    { !compactViewEnabled &&
                     <div style={{marginBottom: 10}}>
                         {latestBrew
                             ? <BrewCard
@@ -270,6 +274,7 @@ export default function CoffeeCard({entry = {}, expanded, onExpand}) {
                             </div>
                         }
                     </div>
+                    }
                 </div>
 
             </CardContent>

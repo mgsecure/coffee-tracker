@@ -21,12 +21,11 @@ function SortTextButton({sortValues, compactMode, expandAll}) {
     const {sort} = filters
     const {adminRole} = useContext(DBContext)
 
-    const {compact, setCompact} = useContext(AppContext)
-
-    const handleCompactClick = useCallback(value => () => {
+    const {compactViewEnabled, toggleCompactView} = useContext(AppContext)
+    const handleCompactClick = useCallback(() => {
         handleClose()
-        setCompact(value)
-    }, [handleClose, setCompact])
+        toggleCompactView()
+    }, [handleClose, toggleCompactView])
 
     const handleClick = useCallback(value => () => {
         handleClose()
@@ -38,6 +37,8 @@ function SortTextButton({sortValues, compactMode, expandAll}) {
     const {width} = useWindowSize()
     const smallWidth = width <= 500
 
+    const buttonText = compactMode ? 'View' : 'Sort'
+
     return (
         <React.Fragment>
             <Tooltip title='View Options' arrow disableFocusListener>
@@ -48,7 +49,7 @@ function SortTextButton({sortValues, compactMode, expandAll}) {
                         invisible={!sort}
                         anchorOrigin={badgeAnchor}
                     >
-                        {!smallWidth ? 'SORT' : <SortIcon/>}
+                        {!smallWidth ? buttonText : <SortIcon/>}
                     </Badge>
                 </Button>
             </Tooltip>
@@ -77,8 +78,8 @@ function SortTextButton({sortValues, compactMode, expandAll}) {
                     <div>
                         <Divider/>
                         <div style={{marginLeft: 5, marginTop: 5, padding: 5, fontWeight: 700}}>MODE</div>
-                        <MenuItem onClick={handleCompactClick(false)} selected={!compact}>Normal</MenuItem>
-                        <MenuItem onClick={handleCompactClick(true)} selected={compact}>Compact</MenuItem>
+                        <MenuItem onClick={() => handleCompactClick()} selected={!compactViewEnabled}>Normal</MenuItem>
+                        <MenuItem onClick={() => handleCompactClick()} selected={compactViewEnabled}>Compact</MenuItem>
                     </div>
                 }
 

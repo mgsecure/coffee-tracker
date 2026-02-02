@@ -35,7 +35,7 @@ export default function CoffeesPage() {
         <React.Fragment>
             <SearchBox label='Coffees' extraFilters={[]} keepOpen={false} entryCount={visibleEntries.length}/>
             <ViewFilterButtons entryType={'Coffee'} sortValues={coffeeSortFields} advancedEnabled={false}
-                               compactMode={false} resetAll={true} expandAll={false}/>
+                               compactMode={true} resetAll={true} expandAll={false}/>
             {!isMobile && <div style={{flexGrow: 1, minWidth: '10px'}}/>}
         </React.Fragment>
     )

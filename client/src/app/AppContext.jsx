@@ -8,6 +8,7 @@ export function AppProvider({children}) {
 
     const [adminEnabled, setAdminEnabled] = useLocalStorage('adminEnabled', false)
     const [beta, setBeta] = useLocalStorage('beta', false)
+    const [compactView, setCompactView] = useLocalStorage('compact', dayjs().subtract(1, 'day').format('YYYY-MM-DD'))
 
     const handleSetAdmin = useCallback(value => {
         setAdminEnabled(value)
@@ -16,6 +17,11 @@ export function AppProvider({children}) {
     const handleSetBeta = useCallback(value => {
         setBeta(value)
     }, [setBeta])
+
+    const handleToggleCompactView = useCallback(() => {
+        setCompactView(compactView => compactView === dayjs().subtract(1, 'day').format('YYYY-MM-DD')
+            ? dayjs().format('YYYY-MM-DD') : dayjs().subtract(1, 'day').format('YYYY-MM-DD'))
+    }, [setCompactView])
 
     const testing = false
     const verbose = false
@@ -74,11 +80,13 @@ export function AppProvider({children}) {
         setAdminEnabled: handleSetAdmin,
         beta,
         setBeta: handleSetBeta,
+        compactViewEnabled: dayjs().isSame(compactView, 'day'),
+        toggleCompactView: handleToggleCompactView,
         version: initial,
         updateRequired,
         updateAvailable,
         verbose
-    }), [ adminEnabled, beta, handleSetAdmin, handleSetBeta, initial, updateAvailable, updateRequired, verbose])
+    }), [adminEnabled, beta, compactView, handleSetAdmin, handleSetBeta, handleToggleCompactView, initial, updateAvailable, updateRequired, verbose])
 
     return (
         <AppContext.Provider value={value}>

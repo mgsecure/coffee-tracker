@@ -253,7 +253,7 @@ export default function SurveyPage() {
                              options={[3, 3]}/>
 
                 <div style={{margin: '0px 0px 36px', fontSize: '1.1rem', lineHeight: '1.5rem', fontWeight: 400}}>
-                    We’ve launched a free – and ad-free – site (<Link
+                    We’ve launched a completely free – and ad-free – site (<Link
                     onClick={() => openInNewTab('/')}>coffee-tracker.com</Link>)
                     to help the community record the details of their coffees/brews. We&apos;re
                     asking folks for concrete feedback (either positive or negative).

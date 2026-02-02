@@ -1,13 +1,13 @@
 import React, {useContext, useMemo} from 'react'
 import querystring from 'query-string'
-import AppContext from './AppContext'
+import AuthContext from './AuthContext.jsx'
 
 function Tracker({feature, ...extraParams}) {
-    const {adminEnabled} = useContext(AppContext) //eslint-disable-line
+    const {isAdmin} = useContext(AuthContext)
 
     // disable for rafl testing/reporting
-    //if (import.meta.env.DEV || adminEnabled) return null
-    if (import.meta.env.DEV) return null
+    if (import.meta.env.DEV || isAdmin) return null
+    //if (import.meta.env.DEV) return null
 
     const url = useMemo(() => {
         const randomStuff = (Math.random()).toString(36).substring(2, 10)

@@ -94,6 +94,7 @@ export function FilterProvider({children, filterFields = []}) {
         'debug',
         'preview',
         'single',
+        'view',
         'expandAll',
         'dataset',
         'scorecardId',

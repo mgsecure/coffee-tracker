@@ -27,7 +27,7 @@ function RoasterEntry({entry, expanded, onExpand}) {
     const [scrolled, setScrolled] = useState(false)
     const style = {width: '100%', maxWidth: 800, marginLeft: 'auto', marginRight: 'auto'}
     const ref = useRef(null)
-    const {isMobile} = useWindowSize()
+    const {isMobile, flexStyle} = useWindowSize()
     const theme = useTheme()
 
     const entryFullName = entry.name
@@ -43,8 +43,6 @@ function RoasterEntry({entry, expanded, onExpand}) {
             onExpand && onExpand(isExpanded ? entry.id : false)
         }
     }, [beta, entry.id, onExpand])
-
-
 
     useEffect(() => {
         if (expanded && ref && !scrolled && !expandAll) {
@@ -66,6 +64,7 @@ function RoasterEntry({entry, expanded, onExpand}) {
         }
     }, [expanded, entry, scrolled, expandAll, isMobile])
 
+    const accordionPadding = isMobile ? '0px 4px 0px 4px' : '0px 16px 0px 16px'
 
     // TODO - don't bring in FilterChip, just render here. Fix add filter for new style.
 
@@ -74,8 +73,8 @@ function RoasterEntry({entry, expanded, onExpand}) {
                    aria-label={entryFullName}>
             <AccordionSummary expandIcon={beta ? <ExpandMoreIcon/> : null}
                               sx={{
-                                  padding: '0px 16px 0px 16px', '.MuiAccordionSummary-content': {
-                                      margin: '8px 0px'
+                                  padding: accordionPadding, '.MuiAccordionSummary-content': {
+                                      margin: '1px 0px'
                                   }
                               }}>
                 <div style={{
@@ -87,28 +86,32 @@ function RoasterEntry({entry, expanded, onExpand}) {
                 }}>
 
                     <div style={{display: 'flex', alignItems: 'center', width: '100%'}}>
-                        <div style={{
-                            fontSize: '1.1rem',
-                            lineHeight: '1.4rem',
-                            fontWeight: 600,
-                            marginBottom: 4,
-                            marginRight: 16
-                        }}>
-                            {entry.name}
-                        </div>
-                        <div style={{
-                            fontSize: '0.85rem',
-                            lineHeight: '1.4rem',
-                            flexGrow: 1,
-                            textAlign: 'left',
-                            color: locationColor
-                        }}>
-                            <FilterChip value={entry.city} field='city' mode='text' linkColor={locationColor}/>
-                            {citySep}
-                            <FilterChip value={entry.stateRegion} field='stateRegion' mode='text'
-                                        linkColor={locationColor}/>
-                            {stateSep}
-                            <FilterChip value={entry.country} field='country' mode='text' linkColor={locationColor}/>
+                        <div style={{display: 'flex', flexDirection: isMobile ? 'column' : 'row',
+                            flexGrow: 1, width: isMobile ? '100%' : 'auto'}}>
+                            <div style={{
+                                fontSize: '1.1rem',
+                                lineHeight: '1.4rem',
+                                fontWeight: 600,
+                                marginBottom: 4,
+                                marginRight: 16,
+                            }}>
+                                {entry.name}
+                            </div>
+                            <div style={{
+                                fontSize: '0.85rem',
+                                lineHeight: '1.4rem',
+                                flexGrow: 1,
+                                textAlign: 'left',
+                                color: locationColor,
+                            }}>
+                                <FilterChip value={entry.city} field='city' mode='text' linkColor={locationColor}/>
+                                {citySep}
+                                <FilterChip value={entry.stateRegion} field='stateRegion' mode='text'
+                                            linkColor={locationColor}/>
+                                {stateSep}
+                                <FilterChip value={entry.country} field='country' mode='text'
+                                            linkColor={locationColor}/>
+                            </div>
                         </div>
                         <div style={{display: 'flex', alignItems: 'center'}}>
                             <FieldValue name='Roastful Rank'
@@ -118,7 +121,7 @@ function RoasterEntry({entry, expanded, onExpand}) {
                             <FieldValue name='Reddit Votes'
                                         value={entry.pouroverVotes}
                                         fallback={'--'}
-                                        style={{marginLeft: 0, marginRight: 20}}
+                                        style={{marginLeft: 0, marginRight: 10}}
                                         center={true}/>
                             <div style={{
                                 display: 'flex',

@@ -100,7 +100,7 @@ function EspressoBeanEntry({entry, expanded, onExpand}) {
                    aria-label={lockName}>
             <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                 <div style={{
-                    margin: '6px 0px 8px 6px',
+                    margin: isMobile ? '0px 4px 2px 0px' : '2px 4px 4px 0px',
                     width: makeModelWidth,
                     flexShrink: 0,
                     flexDirection: 'column',

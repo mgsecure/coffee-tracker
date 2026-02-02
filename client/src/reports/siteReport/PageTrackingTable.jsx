@@ -34,7 +34,7 @@ const PageTrackingTable = () => {
         }, [])
         .map(day => (day))
     const pageColumns = Object.keys(totals)
-        .filter(x => x !== 'views')
+        .filter(x => x && x !== 'views' && x !== 'visitors')
         .sort((a, b) => totals[b] - totals[a])
         .map(page => ({id: page, name: page, align: 'center'}))
     const columns = [
