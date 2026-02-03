@@ -2,10 +2,9 @@ import fs from 'node:fs/promises'
 import {fileURLToPath} from 'url'
 import dayjs from 'dayjs'
 import path from 'path'
-import {setDeep, setDeepAdd, setDeepPush} from '../util/setDeep.js'
+import {setDeep, setDeepAdd, setDeepPush, setDeepUnique} from '../util/setDeep.js'
 import {stateRegionSynonyms, countrySynonyms} from '../data/geoSynonyms.js'
 import equipment from '../data/equipment.json' with {type: 'json'}
-import {setDeepUnique} from '@starter/client/src/util/setDeep.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)

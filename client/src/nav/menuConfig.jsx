@@ -61,6 +61,8 @@ export default [
     },
     {
         title: 'Survey',
+        admin: true,
+        userClaims: ['admin'],
         icon: <CameraAltIcon fontSize='small'/>,
         path: '/survey'
     },

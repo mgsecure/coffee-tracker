@@ -7,7 +7,7 @@ import yieldTimer from './screens/ct-screens-yield-timer.png'
 
 function ScreenshotsPage() {
 
-    const boxShadow = '1px 3px 3px 0px rgba(0, 0, 0, 0.6), 1px 3px 4px 2px rgba(0, 0, 0, 0.4), 1px 3px 6px 4px rgba(0, 0, 0, 0.2)'
+    const boxShadow = '1px 3px 3px 0px rgba(0, 0, 0, 0.3), 1px 3px 4px 2px rgba(0, 0, 0, 0.2), 1px 3px 6px 4px rgba(0, 0, 0, 0.1)'
 
     return (
         <React.Fragment>

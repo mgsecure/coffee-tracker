@@ -187,9 +187,27 @@ export default [{
             path: '/survey',
             name: 'survey',
             lazy: async () => {
-                const {default: SurveyRoute} = await import('../survey/SurveyRoute')
-                return {element: <Suspense><SurveyRoute/></Suspense>}
-            }
+                const {default: SurveyParentRoute} = await import('../survey/SurveyParentRoute')
+                return {element: <Suspense><SurveyParentRoute/></Suspense>}
+            },
+            children: [
+                {
+                    path: '/survey',
+                    name: 'survey',
+                    lazy: async () => {
+                        const {default: SurveyRoute} = await import('../survey/SurveyRoute')
+                        return {element: <Suspense><SurveyRoute/></Suspense>}
+                    }
+                },
+                {
+                    path: '/survey/results',
+                    name: 'survey results',
+                    lazy: async () => {
+                        const {default: SurveyResultsRoute} = await import('../survey/surveyResults/SurveyResultsRoute.jsx')
+                        return {element: <Suspense><SurveyResultsRoute/></Suspense>}
+                    }
+                },
+            ]
         },
         {
             path: '/time',
