@@ -63,7 +63,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 
 export default async function processDailyData() {
 
-// --- MAIN PROCESSING: Read daily data files and aggregate ---
+    const lastNDays = 28
+
+    // --- MAIN PROCESSING: Read daily data files and aggregate ---
     const allDataFiles = await fs.readdir(dataDir)
     const dataFiles = allDataFiles.filter(file => !['.', '..', '.DS_Store', 'New Folder With Items'].includes(file))
         .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
@@ -98,13 +100,15 @@ export default async function processDailyData() {
         // setDeepAdd(wip, ['weeks', firstDay, 'visits'], dayData.visits)
         // setDeepAdd(wip, ['totals', 'visits'], dayData.visits)
 
-        setDeep(wip, ['last28days', dateString, 'visitors'], dayData.visitors)
+        if (today.diff(requestDate, 'day') < lastNDays) {
+            setDeep(wip, ['last28days', dateString, 'visitors'], dayData.visitors)
+        }
         setDeepAdd(wip, ['weeks', firstDay, 'visitors'], dayData.visitors)
         setDeepAdd(wip, ['totals', 'visitors'], dayData.visitors)
 
         if (dayData.pageViews) {
             for (const key in dayData.pageViews) {
-                if (key !== 'undefined') {
+                if (key !== 'undefined' && today.diff(requestDate, 'day') < lastNDays) {
                     setDeepAdd(wip, ['last28days', dateString, 'pageViews', key], dayData.pageViews[key])
                     setDeepAdd(wip, ['last28days', dateString, 'totalPageViews'], dayData.pageViews[key])
                 }
@@ -246,7 +250,7 @@ function trafficByDate() {
         totalVisitsDate += wip.days[date].visits || 0
         totalViewsDate += wip.days[date].totalLockViews || 0
         const thisDate = dayjs(date, 'YYYY-MM-DD')
-        if (thisDate.isBefore(endDate.subtract(daysToReportFiltered - 1, 'day'))) continue
+        if (!thisDate.isBefore(endDate.subtract(daysToReportFiltered - 1, 'day'))) return
         const weekend = (thisDate.day() === 0 || thisDate.day() === 6) ? 1 : 0
         dataArray.push({
             weekend: weekend,
@@ -400,8 +404,7 @@ function pageTracking() {
     let pages = new Set()
     for (const date in wip.days) {
         const dateObj = dayjs(date, 'YYYY-MM-DD')
-        if (dateObj.isBefore(endDate.subtract(daysToReportFiltered, 'day'))) continue
-        if (wip.days[date].pageViews) {
+        if (dateObj.isAfter(endDate.subtract(daysToReportFiltered, 'day')) && wip.days[date].pageViews) {
             for (const page in wip.days[date].pageViews) {
                 if (page && !pages.has(page)) {
                     pages.add(page)

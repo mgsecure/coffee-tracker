@@ -416,7 +416,6 @@ export default function SurveyPage() {
             <div style={{display: 'flex', justifyContent: 'center', marginTop: 24, marginBottom: 16}}>
                 <LogEntryButton entry={form.form} entryType={'Survey'} size={'small'}
                                 style={{}}/>
-
             </div>
 
             <Dialog open={form.submitted} slotProps={{

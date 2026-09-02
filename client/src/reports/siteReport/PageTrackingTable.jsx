@@ -17,7 +17,7 @@ const PageTrackingTable = () => {
             return dayjs(b).valueOf() - dayjs(a).valueOf()
         })
         .reduce((acc, date) => {
-            Object.keys(last28days[date].pageViews)
+            Object.keys(last28days[date].pageViews || {})
                 .filter(x => x !== 'undefined')
                 .forEach(page => {
                 setDeepAdd(totals, [page], last28days[date].pageViews[page])

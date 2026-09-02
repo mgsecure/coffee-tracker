@@ -56,6 +56,8 @@ export default [
     },
     {
         title: 'Screenshots',
+        admin: true,
+        userClaims: ['admin'],
         icon: <CameraAltIcon fontSize='small'/>,
         path: '/screenshots'
     },

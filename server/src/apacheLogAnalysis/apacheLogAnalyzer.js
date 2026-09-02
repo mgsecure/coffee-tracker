@@ -5,7 +5,6 @@
 
 // REQUIRED MODULES
 import fs from 'fs/promises'
-import path from 'path'
 import {useragent} from 'express-useragent'
 import {exec} from 'child_process'
 import geoip from 'geoip-lite'
@@ -13,6 +12,7 @@ import {countries} from './tzCountryList.js'
 import {localUser} from '../../keys/users.js'
 import {setDeep, setDeepAdd, setDeepUnique} from '../util/setDeep.js'
 
+import path from 'path'
 import {fileURLToPath} from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -174,15 +174,17 @@ async function processLogFile(logFileName) {
 
         // Process crawler agents based on clientSoftware
         if (clientSoftware.match(/google/i) || clientSoftware.match(/ahrefs/i) || clientSoftware.match(/facebookexternalhit/i)) {
-            const crawlerName = crawlerAgentNames[clientSoftware] || clientSoftware
-            stats[requestDateText].crawlerAgentRequests = stats[requestDateText].crawlerAgentRequests || {}
-            stats[requestDateText].crawlerAgentRequests[crawlerName] = (stats[requestDateText].crawlerAgentRequests[crawlerName] || 0) + 1
+            //const crawlerName = crawlerAgentNames[clientSoftware] || clientSoftware
+            //stats[requestDateText].crawlerAgentRequests = stats[requestDateText].crawlerAgentRequests || {}
+            //stats[requestDateText].crawlerAgentRequests[crawlerName] = (stats[requestDateText].crawlerAgentRequests[crawlerName] || 0) + 1
+            setDeepAdd(stats, [requestDateText, 'crawlerAgentRequests', crawlerAgentNames[clientSoftware]], 1)
             return
         }
         if (crawlerAgentNames[clientSoftware]) {
-            stats[requestDateText].crawlerAgentRequests = stats[requestDateText].crawlerAgentRequests || {}
-            const name = crawlerAgentNames[clientSoftware]
-            stats[requestDateText].crawlerAgentRequests[name] = (stats[requestDateText].crawlerAgentRequests[name] || 0) + 1
+            //stats[requestDateText].crawlerAgentRequests = stats[requestDateText].crawlerAgentRequests || {}
+            //const name = crawlerAgentNames[clientSoftware]
+            //stats[requestDateText].crawlerAgentRequests[name] = (stats[requestDateText].crawlerAgentRequests[name] || 0) + 1
+            setDeepAdd(stats, [requestDateText, 'crawlerAgentRequests', crawlerAgentNames[clientSoftware]], 1)
             return
         }
 
@@ -287,14 +289,17 @@ async function writeDailyFiles() {
     Object.keys(temp).forEach(requestDateText => {
         stats[requestDateText].minTime = temp[requestDateText].minTime.format()
         stats[requestDateText].maxTime = temp[requestDateText].maxTime.format()
-        stats[requestDateText].visitors = Object.keys(temp[requestDateText].ipAddresses).length
+        stats[requestDateText].visitors = temp[requestDateText].ipAddresses
+            ? Object.keys(temp[requestDateText].ipAddresses).length
+            : 0
         //         setDeepUnique(temp, [requestDateText, 'ipsByCountry', requestCountry], clientAddress)
-        stats[requestDateText].visitorsByCountry =
-            Object.keys(temp[requestDateText].ipsByCountry)
+        stats[requestDateText].visitorsByCountry = temp[requestDateText].ipsByCountry
+            ? Object.keys(temp[requestDateText].ipsByCountry)
                 .reduce((acc, requestCountry) => {
                     setDeep(acc, [requestCountry], temp[requestDateText].ipsByCountry[requestCountry].length)
                     return acc
                 }, {})
+            : {}
     })
 
     // WRITE JSON OUTPUT FILES per date
@@ -324,7 +329,9 @@ async function getCrawlerUserAgents(jsonPath) {
 async function deleteFile(filePath) {
     try {
         await fs.unlink(filePath)
-        console.log(`File deleted successfully: ${filePath}`)
+        if (!prodEnvironment) {
+            console.log(`File deleted successfully: ${filePath}`)
+        }
     } catch (err) {
         if (err.code === 'ENOENT') {
             console.log('File does not exist')

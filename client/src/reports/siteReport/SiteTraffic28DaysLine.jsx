@@ -9,20 +9,20 @@ const SiteTraffic28DaysLine = () => {
     const {siteStats} = useContext(DataContext)
     const {last28days} = siteStats
 
-    const lineData = Object.keys(last28days).reduce((acc, date) => {
-        setDeepPush(acc, ['visitors'], {x:`${date} 23:59:59`, y:last28days[date].visitors || 0})
-        const pageViews = Object.keys(last28days[date].pageViews).reduce((acc2, page) => {
-            acc2 = (acc2 || 0 ) + last28days[date].pageViews[page] || 0
+    const lineData = Object.keys(last28days || {}).reduce((acc, date) => {
+        setDeepPush(acc, ['visitors'], {x: `${date} 23:59:59`, y: last28days[date].visitors || 0})
+        const pageViews = Object.keys(last28days[date].pageViews || {}).reduce((acc2, page) => {
+            acc2 = (acc2 || 0) + last28days[date].pageViews[page] || 0
             return acc2
-        },0)
-        setDeepPush(acc, ['pageViews'], {x:`${date} 23:59:59`, y:pageViews || 0})
+        }, 0)
+        setDeepPush(acc, ['pageViews'], {x: `${date} 23:59:59`, y: pageViews || 0})
 
         return acc
-    },[])
+    }, [])
 
     const fullLineData = [
-        {id:'visitors', data:lineData.visitors},
-        {id:'page views', data:lineData.pageViews}
+        {id: 'visitors', data: lineData.visitors},
+        {id: 'page views', data: lineData.pageViews}
     ]
 
     const {isMobile} = useWindowSize()
@@ -33,7 +33,7 @@ const SiteTraffic28DaysLine = () => {
         : {top: 10, right: 20, bottom: 50, left: 50}
 
     return (
-        <div style={{height: chartHeight-100, width:chartWidth}}>
+        <div style={{height: chartHeight - 100, width: chartWidth}}>
             <ResponsiveLine
                 theme={primaryTheme}
                 data={fullLineData}
@@ -42,7 +42,7 @@ const SiteTraffic28DaysLine = () => {
                 colors={['#5265ed', '#082fd1', '#4fa720']}
                 lineWidth={3}
                 margin={chartMargin}
-                height={chartHeight-100}
+                height={chartHeight - 100}
                 curve='basis'
                 yScale={{
                     type: 'linear',

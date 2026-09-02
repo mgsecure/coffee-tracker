@@ -14,12 +14,15 @@ import RoasterEntry from './RoasterEntry.jsx'
 import Footer from '../nav/Footer.jsx'
 import FilterDisplayAdvanced from '../filters/FilterDisplayAdvanced.jsx'
 import IntroCopy from '../misc/IntroCopy.jsx'
+import {useTheme} from '@mui/material/styles'
+import {alpha} from '@mui/material'
 
 export default function RoastersPage() {
     const {visibleEntries, allEntriesCount, expandAll, loading} = useContext(DataContext)
-    const {filters, filterCount} = useContext(FilterContext)
+    const {filters} = useContext(FilterContext)
     const [expanded, setExpanded] = useState(filters.id)
     const {isMobile} = useWindowSize()
+    const theme = useTheme()
 
     const defExpanded = useDeferredValue(expanded)
 
@@ -67,6 +70,9 @@ export default function RoastersPage() {
                     />
                 )}
 
+                <div style={{fontSize: '0.85rem', textAlign: 'right', margin: '3px', color: alpha(theme.palette.text.primary, 0.7)}}>
+                    coffee-tracker.com
+                </div>
                 <Footer before={footerBefore}/>
 
             </div>
